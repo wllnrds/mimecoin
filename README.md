@@ -1,7 +1,7 @@
 # Conceito
 Uma plataforma de *Token as a Service* que qualquer pessoa possa criar seu próprio sistema monetário personalizado. A ideia é que cada sistema monetário criado seja gerenciado pelo serviço principal tratando cada um deles como se fossem moedas diferentes. Os gestores de sistemas monetário podem consumir as informações via API e criarem suas proprias aplicações e gerir contas de seus usuários e fazer o *mint* de novos tokens.
 
-## FuncionalidadesChave
+## Funcionalidades principais
 Ação | Usuário Gestor | Usuário final
 -- | -- | --
 Criar sistema monetário | sim | não
@@ -12,7 +12,7 @@ Fazer transferência | não | sim
 Ver saldo | sim | sim
 Ver extrato | sim | não
 
-## Pontos de Saída Principais
+## Pontos de saída principais
 Método | Caminho | Descrição
 -- | -- | --
 POST | /account/create | Cria uma conta dentro do sistema monetário
