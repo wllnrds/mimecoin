@@ -40,3 +40,10 @@ Exemplo de token decodificado (uso interno)
 ```
 
 Em ações que envolvam movimentação de conta é necessário a senha da conta de origem. 
+
+
+# Ideias
+- Rendimento na conta
+- Cashback no pagamento
+- Cotação entre sistemas monetários diferentes (com base em um sistema monetário pai)
+- Transferência entre sistemas monetários diferentes
