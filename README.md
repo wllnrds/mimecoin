@@ -31,12 +31,12 @@ O *Integration-Token* é o código de API do gerenciador do sistema.
 O *X-Resource-Token* é derivado do usuário logado.
 
 Exemplo de token decodificado (uso interno)
-ˋˋˋ
+```json
 {
     "account": "numero da conta",
     "bank": "codigo do sistema monetário",
     "expiresAt": "",
 }
-ˋˋˋ
+```
 
-Em ações que envolvam movimentação é necessário 
+Em ações que envolvam movimentação de conta é necessário a senha da conta de origem. 
