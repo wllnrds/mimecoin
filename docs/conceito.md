@@ -35,6 +35,7 @@ sequenceDiagram
 | Gerar chave de acesso | web | ➖ | ✔️ | A chave é usada para autenticar via API
 | Remover chave de acesso | web | ➖ | ✔️ | 
 ||
+| Definir limite de sistemas monetários | web | ✔️ | ❌ | Define o limite de sistemas que um usuário pode criar |
 | Definir oferta máxima de sistema | web | ✔️ | ❌ | A oferta se refere ao máximo de moeda que o sistema pode circular. O padrão é 10 mil. |
 | Definir precisão decimal | web | ✔️ | ❌ | Usar 2 opções: 0 onde o token não pode ser fracionado; e 2 para tokens monetários. |
 ||
