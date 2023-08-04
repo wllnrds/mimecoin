@@ -49,6 +49,7 @@ sequenceDiagram
 | Editar informações | api | ❌ | ✔️ | Quando logado com uma conta do sistema
 | Ver saldo | api | ❌ | ✔️ | Quando logado com uma conta do sistema
 | Ver extrato | api | ❌ | ✔️ | Quando logado com uma conta do sistema
+| Ver beneficiário | api | ❌ | ✔️ | Verifica quem é o titular da conta
 | Fazer depósito | api | ❌ | ✔️ | Quando logado com uma conta do sistema
 | Fazer transferencia | api | ❌ | ✔️ | Quando logado com uma conta do sistema
 | Fazer pagemento | api | ❌ | ✔️ | Quando logado com uma conta do sistema
