@@ -74,6 +74,38 @@ As ações que envolvem conta de um usuário as requisições preciam atender ao
     }
 ```
 
+## Estrutura dos dados
+
+Cada conta criada é composta por 3 dados principais:
+```[ Código do sistema monetário ] 0001 [ Número da conta ] [ Dígito verificador ]```
+
+O Código do sistema monetário funciona como o código do banco, o 0001 é a agencia, no caso ela é sempre 0001.
+O dígito verificador é calculado com base no algoritmo MOD11 onde os dígitos são dispostos numa unica linha e cada valor é individualmente multiplicado por um fator, todos os valores são somados e resto da divisão dele por 11 é o dígito verificador da conta.
+
+```
+	A = Digitos do código do sistema monetário
+	B = Digitos da conta
+
+	[ A1 A2 A3 ] [  0  0  0  1  ] [ B1 B2 B3 B4 B5 ]
+
+	A1 * 13
+	A2 * 12
+	A3 * 11
+
+	0 * 10
+	0 * 9
+	0 * 8
+	1 * 7
+
+	B1 * 6
+	B2 * 5
+	B3 * 4
+	B4 * 3
+	B5 * 2
+
+	Resultado % 11 = DV
+```
+
 ## Erros previstos
 
 ```
