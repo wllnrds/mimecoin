@@ -58,7 +58,7 @@ sequenceDiagram
 
 As ações que envolvem conta de um usuário as requisições preciam atender aos requisitos abaixo.
 
-```json
+```
     // No header da requisição
     {
         "account": "número da conta",
@@ -75,7 +75,7 @@ As ações que envolvem conta de um usuário as requisições preciam atender ao
 
 ## Erros previstos
 
-```json
+```
     [
         {
             code: 401,
