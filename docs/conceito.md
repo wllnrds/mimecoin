@@ -22,7 +22,7 @@ sequenceDiagram
 
 ### Gestão usuário do sistema
 
-| Ação | Interface | Notas | Admin | Usuário
+| Ação | Interface | Admin | Usuário | Notas
 | -- | :--: | :--: | :--: | :-- | 
 | Cadastro | web | ➖ | ✔️ | Acesso público
 | Editar informações | web | ➖ | ✔️ | Para o usuário logado
