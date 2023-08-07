@@ -21,33 +21,32 @@ CREATE TYPE "transaction_status" AS ENUM (
   'cancelled'
 );
 
-CREATE TYPE "payment_status" AS ENUM (
-  'pending',
-  'payed',
-  'cancelled',
-  'overdue'
-);
-
 CREATE TABLE "user" (
   "id" integer PRIMARY KEY,
   "name" varchar,
   "lastName" varchar,
   "email" varchar,
   "password" varchar,
-  "status" status
+  "status" status,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "user_limit" (
   "id" integer PRIMARY KEY,
   "id_user" integer,
   "max_namespaces" integer,
-  "expires_at" datetime,
-  "active" boolean DEFAULT true
+  "expires_at" timestamp,
+  "active" boolean DEFAULT true,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "user_namespace" (
   "id_user" integer,
   "id_namespace" integer,
+  "created_at" timestamp,
+  "updated_at" timestamp,
   PRIMARY KEY ("id_user", "id_namespace")
 );
 
@@ -57,17 +56,21 @@ CREATE TABLE "access_token" (
   "id_namespace" integer,
   "key" varchar,
   "secret" varchar,
-  "expiresAt" varchar
+  "expiresAt" varchar,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "customer" (
   "id" integer PRIMARY KEY,
   "name" varchar,
-  "birthdate" varchar,
+  "birthdate" date,
   "email" varchar,
   "document" varchar,
   "status" status,
-  "pin" varchar
+  "pin" varchar,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "namespace" (
@@ -76,15 +79,19 @@ CREATE TABLE "namespace" (
   "pic" varchar,
   "name" varchar,
   "status" status,
-  "precision" int
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "namespace_limit" (
   "id" integer PRIMARY KEY,
   "id_namespace" integer,
-  "max_offer" double,
-  "expires_at" datetime,
-  "active" boolean DEFAULT true
+  "max_offer" bigint,
+  "precision" int,
+  "expires_at" timestamp,
+  "active" boolean DEFAULT true,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "account" (
@@ -94,16 +101,17 @@ CREATE TABLE "account" (
   "account_number" varchar UNIQUE,
   "account_key" varchar,
   "account_password" varchar,
-  "balance" double,
-  "balance_extra" double,
-  PRIMARY KEY ("namespace_code", "account_number")
+  "balance" bigint,
+  "balance_extra" bigint,
+  "created_at" timestamp,
+  "updated_at" timestamp
 );
 
 CREATE TABLE "transaction" (
   "id" integer PRIMARY KEY,
   "type" transaction_type,
-  "date_transation" datetime,
-  "amount" double,
+  "date_transation" timestamp,
+  "amount" bigint,
   "headline" varchar,
   "details" text,
   "id_account" integer,
@@ -111,7 +119,9 @@ CREATE TABLE "transaction" (
   "id_account_origin" integer,
   "id_account_target" integer,
   "status" transaction_status,
-  "hash" varchar
+  "hash" varchar,
+  "created_at" timestamp,
+  "confirmed_at" timestamp
 );
 
 CREATE TABLE "payment_order" (
@@ -119,8 +129,9 @@ CREATE TABLE "payment_order" (
   "digits" varchar UNIQUE,
   "id_account_origin" integer,
   "due" date,
-  "amount" double,
-  "status" payment_status
+  "amount" bigint,
+  "status" transaction_status,
+  "created_at" timestamp
 );
 
 CREATE INDEX ON "user" ("email");
@@ -151,7 +162,7 @@ CREATE INDEX ON "namespace_limit" ("id_namespace");
 
 CREATE INDEX ON "namespace_limit" ("expires_at");
 
-CREATE UNIQUE INDEX ON "account" ("id_customer", "namespace_code");
+CREATE UNIQUE INDEX ON "account" ("namespace_code", "account_number");
 
 CREATE INDEX ON "account" ("id_customer");
 
@@ -183,11 +194,11 @@ COMMENT ON COLUMN "customer"."pin" IS 'hash do pin';
 
 COMMENT ON COLUMN "namespace"."code" IS 'O códio são 3 dígitos de 0 a 9';
 
-COMMENT ON COLUMN "namespace"."precision" IS 'Por padrão todo namespace tem 0 ou 2 de precisão decimal. Valor máximo é 9. ';
-
 COMMENT ON TABLE "namespace_limit" IS 'Cada namespace pode ter vários limites, o limite real é a soma dos limites ativos e não expirados.';
 
 COMMENT ON COLUMN "namespace_limit"."max_offer" IS 'Por padrão todo namespace tem 100000 de oferta maxima.';
+
+COMMENT ON COLUMN "namespace_limit"."precision" IS 'Por padrão todo namespace tem 0 ou 2 de precisão decimal. Valor máximo é 9. ';
 
 COMMENT ON COLUMN "namespace_limit"."expires_at" IS 'diz que um limite pode expirar';
 
@@ -219,7 +230,7 @@ ALTER TABLE "namespace_limit" ADD FOREIGN KEY ("id_namespace") REFERENCES "names
 
 ALTER TABLE "account" ADD FOREIGN KEY ("id_customer") REFERENCES "customer" ("id");
 
-ALTER TABLE "account" ADD FOREIGN KEY ("namespace_code") REFERENCES "namespace" ("id");
+ALTER TABLE "account" ADD FOREIGN KEY ("namespace_code") REFERENCES "namespace" ("code");
 
 ALTER TABLE "transaction" ADD FOREIGN KEY ("id_account") REFERENCES "account" ("id");
 
