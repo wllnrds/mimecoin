@@ -1,0 +1,742 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "0.0.2",
+        "title": "MimeCoin",
+        "description": ""
+    },
+    "tags": [
+        {
+            "name": "Core",
+            "description": "Ações globais."
+        },
+        {
+            "name": "Conta",
+            "description": "Ações para conta."
+        }
+    ],
+    "servers": [
+        {
+            "url": "http://localhost:3000/api",
+            "variables": {
+                "apiKey": {
+                    "description": "Api key",
+                    "default": "0"
+                },
+                "UserJWT": {
+                    "description": "JWT user",
+                    "default": "0"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/core/account": {
+            "post": {
+                "tags": [ "Core" ],
+                "summary": "Cria uma conta",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Customer"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Conta criada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Account"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [ "Core" ],
+                "summary": "Pega os dados de uma conta",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "description": "Número da conta",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "00000"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dados da conta.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountResume"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/core/order": {
+            "get": {
+                "tags": [ "Core" ],
+                "summary": "Pega os dados de uma cobrança",
+                "parameters": [
+                    {
+                        "name": "digits",
+                        "description": "Linha digitável",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "0000000000000000000000000000000000000000000000"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dados da cobrança.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/core/request/deposit": {
+            "post": {
+                "tags": [ "Core" ],
+                "summary": "Faz um depósito",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "description": "Dados da conta beneficiada",
+                                "properties": {
+                                    "account": { "type": "string" },
+                                    "description": { "type": "string" },
+                                    "amount": { "type": "number" },
+                                    "isBonus": { "type": "boolean" },
+                                    "signature": { "type": "string" }
+                                }
+                            },
+                            "examples": {
+                                "sample": {
+                                    "summary": "Teste de Deposito",
+                                    "description": "Realiza um deposito de teste",
+                                    "value": {
+                                        "account": "123456",
+                                        "description": "Depósito de teste",
+                                        "amount": 100,
+                                        "isBonus": false,
+                                        "signature": "SHA( Assinatura)"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comprovante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Transaction"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/core/transaction/confirm": {
+            "post": {
+                "tags": [ "Core" ],
+                "summary": "Confirma uma transação",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "transaction": { "type": "string" },
+                                    "pin": { "type": "string" },
+                                    "signature": { "type": "string" }
+                                }
+                            },
+                            "examples": {
+                                "Confirmação": {
+                                    "description": "Confirma uma transação",
+                                    "value": {
+                                        "transaction": "000000000000",
+                                        "pin": "000000",
+                                        "signature": "SHA( assinatura )"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comprovante de pagamento",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Transaction"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/login": {
+            "post": {
+                "tags": [ "Conta" ],
+                "summary": "Login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "description": "Account and password for login",
+                                "properties": {
+                                    "account": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "user": {
+                                    "summary": "Teste de Login",
+                                    "description": "Login com usuário teste",
+                                    "value": {
+                                        "account": "admin",
+                                        "password": "admin"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Account"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "X-Resource-Token": {
+                                "description": "User JWT",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/info": {
+            "get": {
+                "tags": [ "Conta" ],
+                "summary": "Informações da conta",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informações da conta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Account"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/balance": {
+            "get": {
+                "tags": [ "Conta" ],
+                "summary": "Saldo",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Saldo da conta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "description": "Saldo da conta",
+                                    "properties": {
+                                        "balance": {
+                                            "type": "number"
+                                        },
+                                        "balanceExtra": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/statement": {
+            "get": {
+                "tags": [ "Conta" ],
+                "summary": "Extrato",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    },
+                    {
+                        "name": "start",
+                        "description": "Data inicial",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "Agora": {
+                                "externalValue": "{{$timestamp}}"
+                            }
+                        }
+                    },
+                    {
+                        "name": "days",
+                        "description": "Dias após a data inicial",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "examples": {
+                            "30 dias": {
+                                "externalValue": "30"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Extrato do usuário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "description": "Extrato de transações do usuário",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Transaction"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/request/order": {
+            "post": {
+                "tags": [ "Conta" ],
+                "summary": "Gerar ordem de pagamento",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "amount": { "type": "number" },
+                                    "description": { "type": "string" },
+                                    "due": { "type": "integer", "description": "Quantos dias após a geração será o vencimento" }
+                                }
+                            },
+                            "examples": {
+                                "Boleto de 100": {
+                                    "description": "Gera uma cobrança de 100",
+                                    "value": {
+                                        "amount": 100,
+                                        "description": "Cobrança de teste",
+                                        "due": 10
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Dados de cobrança",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/request/transfer": {
+            "post": {
+                "tags": [ "Conta" ],
+                "summary": "Realiza uma transferencia",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "account": { "type": "string" },
+                                    "dv": { "type": "string" },
+                                    "description": { "type": "string" },
+                                    "amount": { "type": "number" },
+                                    "signature": { "type": "string" }
+                                }
+                            },
+                            "examples": {
+                                "Transferencia": {
+                                    "description": "Faz uma transferencia 100",
+                                    "value": {
+                                        "account": "00000",
+                                        "dv": "0" ,
+                                        "description": "Transferencia de teste",
+                                        "amount": 100,
+                                        "signature": "SHA( assinatura )"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comprovante de transferencia",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "confirm": { "type": "string" },
+                                        "transaction": {                                           
+                                            "$ref": "#/components/schemas/Transaction"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/request/payment": {
+            "post": {
+                "tags": [ "Conta" ],
+                "summary": "Realiza um pagamento de ordem",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "digits": { "type": "string" },
+                                    "signature": { "type": "string" }
+                                }
+                            },
+                            "examples": {
+                                "Transferencia": {
+                                    "description": "Paga uma ordem",
+                                    "value": {
+                                        "digits": "0000000000000000000000000000000000000000000000",
+                                        "signature": "SHA( assinatura )"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comprovante de pagamento",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "confirm": { "type": "string" },
+                                        "transaction": {                                           
+                                            "$ref": "#/components/schemas/Transaction"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/request/pending": {
+            "post": {
+                "tags": [ "Conta" ],
+                "summary": "Lista todas as transações pendentes",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de transações pendentes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "description": "Lista de transações pendentes",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "confirm": { "type": "string" },
+                                            "transaction": {                                           
+                                                "$ref": "#/components/schemas/Transaction"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+    },
+    "components": {
+        "schemas": {
+            "Order": {
+                "description": "Ordem de pagamento",
+                "type": "object",
+                "properties": {
+                    "beneficiary": { "$ref": "#/components/schemas/AccountResume" },
+                    "digits" : { "type": "string" },
+                    "due" : { "type": "string" },
+                    "amount" : { "type": "string" },
+                    "status" : { "type": "string", "enum": [ "pending","payed","cancelled","overdue" ] }
+                }
+            },
+            "Customer": {
+                "description": "Dados do cliente",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "document": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Account": {
+                "type": "object",
+                "description": "Dados da conta",
+                "properties": {
+                    "customer": {
+                        "$ref": "#/components/schemas/Customer"
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "number": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "key": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "balance": {
+                        "type": "number",
+                        "readOnly": true
+                    },
+                    "balanceExtra": {
+                        "type": "number",
+                        "readOnly": true
+                    }
+                }
+            },
+            "AccountResume": {
+                "type": "object",
+                "description": "Dados da conta resumidos",
+                "properties": {
+                    "customer": {
+                        "$ref": "#/components/schemas/Customer"
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "number": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "key": {
+                        "type": "string",
+                        "readOnly": true
+                    }
+                }
+            },
+            "Transaction": {
+                "type": "object",
+                "description": "Dados da conta",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "mint",
+                            "transfer",
+                            "deposit",
+                            "withdraw",
+                            "payment",
+                            "bonus",
+                            "cashback",
+                            "refund"
+                        ],
+                        "readOnly": true
+                    },
+                    "dateTransaction": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number"
+                    },
+                    "headline": {
+                        "type": "string"
+                    },
+                    "details": {
+                        "type": "string"
+                    },
+                    "accountOrigin": {
+                        "$ref": "#/components/schemas/AccountResume"
+                    },
+                    "accountTarget": {
+                        "$ref": "#/components/schemas/AccountResume"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "confirmed",
+                            "cancelled"
+                        ],
+                        "readOnly": true
+                    },
+                    "hash": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "code": {
+                        "description": "codigo do erro",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "description": "Mensagem do erro.",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "headers": {
+            "X-Resource-Token": {
+                "description": "User JWT",
+                "schema": {
+                    "type": "string"
+                }
+            }
+        },
+        "parameters": {
+            "UserJWT": {
+                "name": "X-Resource-Token",
+                "description": "Token JWT do usuário",
+                "in": "header",
+                "schema": {
+                    "type": "string"
+                }
+            }
+        },
+        "securitySchemes": {
+            "ApiKey": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Integration-Token"
+            }
+        }
+    },
+    "security": [
+        {
+            "ApiKey": []
+        }
+    ]
+}
