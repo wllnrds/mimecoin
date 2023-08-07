@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "version": "0.0.2",
+        "version": "0.0.3",
         "title": "MimeCoin",
         "description": ""
     },
@@ -335,7 +335,7 @@
                         },
                         "examples": {
                             "Agora": {
-                                "externalValue": "{{$timestamp}}"
+                                "value": "{{$timestamp}}"
                             }
                         }
                     },
@@ -348,7 +348,7 @@
                         },
                         "examples": {
                             "30 dias": {
-                                "externalValue": "30"
+                                "value": "30"
                             }
                         }
                     }
@@ -559,6 +559,50 @@
                 }
             }
         },
+        "/account/request/pin": {
+            "post": {
+                "tags": [ "Conta" ],
+                "summary": "Cadastrar pin",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/UserJWT"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "description": "Pin e Password",
+                                "properties": {
+                                    "pin": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "user": {
+                                    "summary": "Cadastro de pin",
+                                    "description": "Cadastra o pin do usuário",
+                                    "value": {
+                                        "pin": "0000",
+                                        "password": "admin"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pin cadastrado"
+                    }
+                }
+            }
+        }
     },
     "components": {
         "schemas": {
