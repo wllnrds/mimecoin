@@ -1,0 +1,194 @@
+Project MimeCoin {
+  database_type: 'PostgreSQL'
+}
+
+enum status{
+  active [note:"Ativo"]
+  deactive [note: "Desativado"]
+  blocked [note: "Bloqueado"]
+}
+
+Table user{
+  id integer [pk]
+  name varchar
+  lastName varchar
+  email varchar
+  password varchar
+  status status
+
+  indexes{
+    email
+    status
+  }
+}
+
+Table user_limit{
+  id integer [pk]
+  id_user integer [ref: > user.id]
+  max_namespaces integer [ note: "O máximo padrão é 1."]
+  expires_at datetime [note: "diz que um limite pode expirar"]
+  active boolean [ default: true ]
+
+  indexes{
+    id_user
+  }
+  
+  Note: "Cada usuário pode ter vários limites, o limite real é a soma dos limites ativos e não expirados."
+}
+
+Table user_namespace{
+  id_user integer [ref: > user.id]
+  id_namespace integer [ref: > namespace.id]
+
+  indexes{
+    (id_user, id_namespace) [pk]
+  }
+}
+
+Table access_token{
+  id integer pk
+  id_user integer [ref: > user.id ]
+  id_namespace integer [ref: > namespace.id ]
+
+  key varchar
+  secret varchar
+  expiresAt varchar
+
+  indexes{
+    id_user
+    id_namespace
+  }
+}
+
+Table customer{
+  id integer [pk]
+  name varchar
+  birthdate varchar
+  email varchar
+  document varchar
+  status status
+  pin varchar [note:"hash do pin"]
+
+  indexes{
+    name
+    document
+    email
+    status
+  }
+}
+
+Table namespace{
+  id integer [pk]
+  code varchar [ unique, note: "O códio são 3 dígitos de 0 a 9" ]
+  pic varchar
+  name varchar
+  status status
+  precision int [ note: "Por padrão todo namespace tem 0 ou 2 de precisão decimal. Valor máximo é 9. "]
+
+  indexes{
+    code
+    name
+    status
+  }
+}
+
+Table namespace_limit{
+  id integer [pk]
+  id_namespace integer [ref: > namespace.id]
+  max_offer double [ note: "Por padrão todo namespace tem 100000 de oferta maxima."]
+  expires_at datetime [note: "diz que um limite pode expirar"]
+  active boolean [ default: true ]
+  
+  indexes{
+    id_namespace
+    expires_at
+  }
+
+  Note: "Cada namespace pode ter vários limites, o limite real é a soma dos limites ativos e não expirados."
+}
+
+Table account{
+  id integer [pk]
+  id_customer integer [ref: - customer.id]
+
+  namespace_code varchar [ref: > namespace.id]
+  account_number varchar [unique, note:"número da conta sem digito verificador"]
+  account_key varchar [note:"digito verificador"]
+  account_password varchar [note:"hash da senha da conta"]
+
+  balance double
+  balance_extra double
+
+  indexes{
+    (namespace_code, account_number) [pk]
+    (id_customer, namespace_code) [unique]
+
+    id_customer
+    namespace_code
+    account_number
+  }
+}
+
+enum transaction_type{
+  mint [note:"Mint é crédito gerado"]
+  transfer [note: "Transferência entre contas"]
+  deposit [note: "Deposíto é a conversão de dinheiro real em virtual"]
+  withdraw [note: "É uma possível troca de moeda virtual em dinheiro real"]
+  payment [note: "Uso de moeda virtual para pagamento"]
+  bonus [note: "Crédito de bônus"]
+  cashback [note: "Crédito de cashback"]
+  refund [note: "Reembolso"]
+}
+
+enum transaction_status{
+  pending [note:"Pendente"]
+  confirmed [note: "Confirmada"]
+  cancelled [note: "Cancelada"]
+}
+
+Table transaction{
+  id integer [pk]
+  type transaction_type
+  date_transation datetime
+  amount double [note: "O valor é negativo sempre que for uma subtração da conta e positivo quando for uma adição"]
+  headline varchar
+  details text
+
+  id_account integer [ref: > account.id, note: "Cria um registro de transação para cada conta envolvida" ]
+  id_namespace integer [ref: > namespace.id ]
+  id_account_origin integer [ref: > account.id ]
+  id_account_target integer [ref: > account.id ]
+
+  status transaction_status
+  hash varchar [ note: "[id_namespace] + [id_account_origin] + [type] + [amount] + [id_account_target] + [ pin ]"]
+
+  indexes{
+    type
+    id_namespace
+    id_account_origin
+    id_account_target
+  }
+}
+
+enum payment_status{
+  pending [note:"Pendente"]
+  payed [note: "Pago"]
+  cancelled [note: "Cancelado"]
+  overdue [note: "Vencido"]
+}
+
+Table payment_order{
+  id integer [pk]
+  digits varchar [unique, note: "46 digitos"]
+
+  id_account_origin integer [ref: > account.id ]
+  due date
+  amount double
+  status payment_status 
+
+  indexes{
+    digits
+    id_account_origin
+    status
+  }
+}
