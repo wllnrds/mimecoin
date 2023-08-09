@@ -7,11 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db-schema": "kysely-codegen --dialect postgres --url postgres://postgres:1234@localhost:5432/mimecoin --out-file ./src/lib/database/db.d.ts"
+    "db:migrate": "cd ./migration && npm run build && npm run migrate && npm run db:schema",
+    "db:schema": "kysely-codegen --dialect postgres --url postgres://postgres:1234@localhost:5432/mimecoin --out-file ./src/lib/database/db.d.ts"
   },
   "dependencies": {
-    "@types/node": "20.4.8",
-    "@types/react": "18.2.18",
+    "@types/node": "^20.4.9",
+    "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "@vercel/postgres-kysely": "^0.4.1",
     "bcrypt": "^5.1.0",
@@ -21,7 +22,7 @@
     "rand-token": "^1.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.1.6"
+    "typescript": "^5.1.6"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

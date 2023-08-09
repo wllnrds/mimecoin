@@ -9,4 +9,5 @@ export const db = new Kysely<DB>({
         })
     })
 });
+
 export { sql } from 'kysely';
