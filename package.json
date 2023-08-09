@@ -6,15 +6,25 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db-schema": "kysely-codegen --dialect postgres --url postgres://postgres:1234@localhost:5432/mimecoin --out-file ./src/lib/database/db.d.ts"
   },
   "dependencies": {
     "@types/node": "20.4.8",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
+    "@vercel/postgres-kysely": "^0.4.1",
+    "bcrypt": "^5.1.0",
+    "kysely": "^0.26.1",
     "next": "13.4.13",
+    "pg": "^8.11.2",
+    "rand-token": "^1.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "kysely-codegen": "^0.10.1"
   }
 }
