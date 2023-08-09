@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
-import { TokenAuth } from './components/auth';
-import { Namespace } from './lib/controller/namespace';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
@@ -18,8 +16,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (request.nextUrl.pathname.startsWith('/api/account')) {
-    test.integration = true;
-    test.resource = true;
+    if(!request.nextUrl.pathname.startsWith('/api/account/login')){
+      test.integration = true;
+      test.resource = true;
+    }
   }
 
   if( test.integration == true && !request.headers.has('X-Integration-Token') ){
