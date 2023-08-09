@@ -48,15 +48,13 @@ export class User{
             }).returningAll().executeTakeFirstOrThrow();
 
             await trx.insertInto('user_limit').values({
-                active: true,
-                id_user: r?.id,
-                max_namespaces: 1  
+                id_user: r.id
             }).executeTakeFirstOrThrow();
 
             return r;
         });
 
-        return entry;
+        return User.DbToObj(entry);
     }
 
     async getLimit(){
@@ -83,7 +81,7 @@ export class User{
     }
 
     async getLimits(){
-        const limits = await db.selectFrom('user_limit').select('max_namespaces').where(({ eb , and, or })=>and([
+        const limits = await db.selectFrom('user_limit').select('max_namespace').where(({ eb , and, or })=>and([
             eb('id_user','=',this.id),
             eb('active','=',true),
             or([
@@ -92,7 +90,7 @@ export class User{
             ]),
         ])).execute();
 
-        const maxNamespaces = limits.reduce(( final, crr ) => final + ( crr.max_namespaces || 0 ), 0 );
+        const maxNamespaces = limits.reduce(( final, crr ) => final + ( crr.max_namespace || 0 ), 0 );
 
         const current = (await db.selectFrom('namespace').selectAll().where('created_by','=',this.id).execute()).length;
 

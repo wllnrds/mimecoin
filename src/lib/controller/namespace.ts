@@ -88,7 +88,7 @@ export class Namespace{
         };
     }
 
-    async createAcessToken( idUser : number | null, expires_at : Date | null ){
+    async createAcessToken( idUser : number, expires_at : Date | null ){
         let token : { key : string, secret : string } = { 
             key: `mimecoin_${ suid(8) }`,
             secret: suid(16)

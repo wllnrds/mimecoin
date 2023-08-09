@@ -1,5 +1,3 @@
-import bcrypt from 'bcrypt'
-
 import { Status } from "@/lib/database/db"
 import { db } from "@/lib/database"
 import { checkDigit } from '../core'
