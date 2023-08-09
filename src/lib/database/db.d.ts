@@ -34,6 +34,7 @@ export interface Account {
   balance_extra: Generated<number>;
   created_at: Generated<Timestamp>;
   updated_at: Generated<Timestamp>;
+  status: Generated<Status>;
 }
 
 export interface Customer {
