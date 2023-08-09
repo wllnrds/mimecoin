@@ -9,7 +9,8 @@ export async function POST(request: NextRequest){
     } catch ( error : any ) {
         return NextResponse.json({
             status: 401,
-            message : error.message
+            message : error.message,
+            timestamp: new Date().getTime()
         },{ status : 401 })
     }
 
@@ -51,24 +52,24 @@ export async function POST(request: NextRequest){
     }catch( error : any ){
         return NextResponse.json({
             status: 400,
-            message : error.message
+            message : error.message,
+            timestamp: new Date().getTime()
         },{ status : 400 })
     }
 
     try{
         const account = await auth.namespace.createAccount( name , email, document, birthday );
+        return NextResponse.json({
+            data: { ...auth, account },
+            status: 200,
+            message: "Request para a API account",
+            timestamp: new Date().getTime()
+        });
     }catch( error : any ){
         return NextResponse.json({
             status: 400,
-            message : error.message
+            message : error.message,
+            timestamp: new Date().getTime()
         },{ status : 400 })
     }
-
-    return NextResponse.json({
-        data: { ...auth, body : {
-            name , email, document, birthday
-        } },
-        message: "Request para a API account",
-        timestamp: new Date().getTime()
-    });
 }
