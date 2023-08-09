@@ -74,6 +74,8 @@ export class Account{
             }
         })
 
+        Mailer.Send('createAccountPassword', entry );
+
         return entry;
     }
 

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest){
     // Cria um namespace
     // const namespace = await user.createNamespace('wln','','Wlln Bank',0);
 
-    const limits = await user.getLimits();
+    const limits = await user.getLimit();
     const namespaces = await user.getNamespaces();
 
     // const token = await user.createAcessToken(namespaces[0].id, new Date('01/01/2025'))

@@ -7,14 +7,14 @@ import { Account } from './account'
 
 export class Namespace{
     id: number
-    code: string | null
-    pic: string | null
-    name: string | null
-    status: Status | null
-    created_at: Date | null
-    updated_at: Date | null
+    code: string
+    pic: string
+    name: string 
+    status: Status
+    created_at: Date
+    updated_at: Date
 
-    constructor( id: number, code: string | null, pic: string | null, name: string | null, status: Status | null, created_at: Date | null, updated_at: Date | null ){
+    constructor( id: number, code: string, pic: string, name: string, status: Status, created_at: Date, updated_at: Date ){
         this.id = id;
         this.code = code;
         this.pic = pic;

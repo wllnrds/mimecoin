@@ -58,29 +58,6 @@ export class User{
     }
 
     async getLimit(){
-        return await this.getLimits();
-    }
-
-    async createNamespace( code : string, pic : string | '', name: string, precision: number | 2 ){
-        const limit = await this.getLimits();
-
-        if( limit.current <= 0 ){
-            throw new Error("User with no limit to create news namespaces");
-        }
-
-        if( code.length != 3 ){
-            throw new Error("Namespace.code must to be length 3");
-        }
-
-        if( name.length < 4 ){
-            throw new Error("Namespace.name must to be at least length 4");
-        }
-
-        const entry = await Namespace.create( code, pic, name, precision, this.id );
-        return entry;
-    }
-
-    async getLimits(){
         const limits = await db.selectFrom('user_limit').select('max_namespace').where(({ eb , and, or })=>and([
             eb('id_user','=',this.id),
             eb('active','=',true),
@@ -101,6 +78,24 @@ export class User{
         };
     }
 
+    async createNamespace( code : string, pic : string | '', name: string, precision: number | 2 ){
+        const limit = await this.getLimit();
+
+        if( limit.current <= 0 ){
+            throw new Error("User with no limit to create news namespaces");
+        }
+
+        if( code.length != 3 ){
+            throw new Error("Namespace.code must to be length 3");
+        }
+
+        if( name.length < 4 ){
+            throw new Error("Namespace.name must to be at least length 4");
+        }
+
+        const entry = await Namespace.create( code, pic, name, precision, this.id );
+        return entry;
+    }
     async getNamespaces(){
         const namespaces = await db.selectFrom('namespace').innerJoin('user_namespace','user_namespace.id_namespace','namespace.id').selectAll().where('user_namespace.id_user','=',this.id).execute();       
         return namespaces.map( item => Namespace.DbToObj(item) );
