@@ -1,7 +1,8 @@
 CREATE TYPE "status" AS ENUM (
   'active',
   'deactive',
-  'blocked'
+  'blocked',
+  'new'
 );
 
 CREATE TYPE "transaction_type" AS ENUM (
@@ -22,116 +23,114 @@ CREATE TYPE "transaction_status" AS ENUM (
 );
 
 CREATE TABLE "user" (
-  "id" integer PRIMARY KEY,
-  "name" varchar,
-  "lastName" varchar,
-  "email" varchar,
-  "password" varchar,
+  "id" SERIAL PRIMARY KEY,
+  "name" VARCHAR,
+  "email" VARCHAR,
+  "password" VARCHAR,
   "status" status,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "user_limit" (
-  "id" integer PRIMARY KEY,
-  "id_user" integer,
-  "max_namespaces" integer,
-  "expires_at" timestamp,
-  "active" boolean DEFAULT true,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "id" SERIAL PRIMARY KEY,
+  "id_user" INTEGER,
+  "max_namespaces" INTEGER,
+  "expires_at" TIMESTAMP,
+  "active" BOOLEAN DEFAULT true,
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "user_namespace" (
-  "id_user" integer,
-  "id_namespace" integer,
-  "created_at" timestamp,
-  "updated_at" timestamp,
+  "id_user" INTEGER,
+  "id_namespace" INTEGER,
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY ("id_user", "id_namespace")
 );
 
 CREATE TABLE "access_token" (
-  "id" integer PRIMARY KEY,
-  "id_user" integer,
-  "id_namespace" integer,
-  "key" varchar,
-  "secret" varchar,
-  "expiresAt" varchar,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "id" SERIAL PRIMARY KEY,
+  "id_user" INTEGER,
+  "id_namespace" INTEGER,
+  "key" VARCHAR,
+  "secret" VARCHAR,
+  "expires_at" VARCHAR,
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "customer" (
-  "id" integer PRIMARY KEY,
-  "name" varchar,
-  "birthdate" date,
-  "email" varchar,
-  "document" varchar,
+  "id" SERIAL PRIMARY KEY,
+  "name" VARCHAR,
+  "birthday" DATE,
+  "email" VARCHAR,
+  "document" VARCHAR,
   "status" status,
-  "pin" varchar,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "pin" VARCHAR,
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "namespace" (
-  "id" integer PRIMARY KEY,
-  "code" varchar UNIQUE,
-  "pic" varchar,
-  "name" varchar,
+  "id" SERIAL PRIMARY KEY,
+  "code" VARCHAR UNIQUE,
+  "pic" VARCHAR,
+  "name" VARCHAR,
   "status" status,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "namespace_limit" (
-  "id" integer PRIMARY KEY,
-  "id_namespace" integer,
-  "max_offer" bigint,
-  "precision" int,
-  "expires_at" timestamp,
-  "active" boolean DEFAULT true,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "id" SERIAL PRIMARY KEY,
+  "id_namespace" INTEGER,
+  "max_offer" INTEGER,
+  "precision" INTEGER,
+  "expires_at" TIMESTAMP,
+  "active" BOOLEAN DEFAULT true,
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "account" (
-  "id" integer PRIMARY KEY,
-  "id_customer" integer,
-  "namespace_code" varchar,
-  "account_number" varchar UNIQUE,
-  "account_key" varchar,
-  "account_password" varchar,
-  "balance" bigint,
-  "balance_extra" bigint,
-  "created_at" timestamp,
-  "updated_at" timestamp
+  "id" SERIAL PRIMARY KEY,
+  "id_customer" INTEGER,
+  "namespace_code" VARCHAR,
+  "account_number" VARCHAR UNIQUE,
+  "account_key" VARCHAR,
+  "account_password" VARCHAR,
+  "balance" INTEGER,
+  "balance_extra" INTEGER,
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "transaction" (
-  "id" integer PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "type" transaction_type,
-  "date_transation" timestamp,
-  "amount" bigint,
-  "headline" varchar,
+  "amount" INTEGER,
+  "headline" VARCHAR,
   "details" text,
-  "id_account" integer,
-  "id_namespace" integer,
-  "id_account_origin" integer,
-  "id_account_target" integer,
+  "id_account" SERIAL,
+  "id_namespace" SERIAL,
+  "id_account_origin" INTEGER,
+  "id_account_target" INTEGER,
   "status" transaction_status,
-  "hash" varchar,
-  "created_at" timestamp,
-  "confirmed_at" timestamp
+  "hash" VARCHAR,
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP,
+  "confirmed_at" TIMESTAMP
 );
 
 CREATE TABLE "payment_order" (
-  "id" integer PRIMARY KEY,
-  "digits" varchar UNIQUE,
-  "id_account_origin" integer,
-  "due" date,
-  "amount" bigint,
+  "id" SERIAL PRIMARY KEY,
+  "digits" VARCHAR UNIQUE,
+  "id_account_origin" INTEGER,
+  "due" DATE,
+  "amount" INTEGER,
   "status" transaction_status,
-  "created_at" timestamp
+  "created_at" TIMESTAMP with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX ON "user" ("email");
