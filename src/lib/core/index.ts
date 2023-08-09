@@ -22,3 +22,14 @@ export function multiChain( chain : Array<string> ){
     const result = chain.map( item => addCheckDigit(item) )
     return addCheckDigit( result.join('') );
 }
+
+export function validateDigit( value:string ){
+    const _ = value.slice(-1)
+    const chain = value.slice(0,-1);
+    const digit = checkDigit( chain );
+    if( _ === digit ){
+        return chain;
+    }else{
+        return false;
+    }
+}
