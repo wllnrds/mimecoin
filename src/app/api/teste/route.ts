@@ -2,6 +2,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest){
+    return NextResponse.json({
+        message: "Funcionando",
+        timestamp: new Date().getTime()
+    });
     
     // Cria um usuário  
     // await User.create({
