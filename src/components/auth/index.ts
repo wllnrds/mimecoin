@@ -4,13 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function TokenAuth(request: NextRequest){
     let token = request.headers.get('X-Integration-Token');
     let secret = request.headers.get('X-Integration-Secret');
-
-    console.time("Token check");
-
     let result = await Namespace.CheckToken( token || '', secret || '');
-
-    console.timeEnd("Token check");
-
     return {
         namespace: result
     };

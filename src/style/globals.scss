@@ -1,22 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100&display=swap');
 
 :root {
   --font: 'Inter', sans-serif;
   --size: 16px;
-
-  --foreground-rgb: 38,38,38;
-  --background-rgb: 245,245,245;
-  --main-rgb: 255,204,0;
-
   font-size: var(--size);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-rgb: 38,38,38;
-    --main-rgb: 255,204,0;
-  }
 }
 
 * {
@@ -35,11 +26,11 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   font-weight: 400;
+  height: 100%;
 }
 
-body {
-  color: var(--foreground-rgb);
-  background: var(--background-rgb);
+body > *{
+  height: 100%;
 }
 
 a {

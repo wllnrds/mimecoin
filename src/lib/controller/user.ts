@@ -5,15 +5,15 @@ import { Status } from "@/lib/database/db"
 import { Namespace } from "./namespace";
 
 export class User{
-    id: number;
-    name: string | null
-    email: string | null
-    password: string | null
-    status: Status | null
-    created_at: Date | null
-    updated_at: Date | null
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    status: Status;
+    created_at: Date;
+    updated_at: Date;
 
-    constructor( id: number, name: string | null, email: string | null, password: string | null, status: Status | null, created_at: Date | null, updated_at: Date | null ){
+    constructor( id: string, name: string, email: string, password: string, status: Status, created_at: Date, updated_at: Date ){
         this.id = id;
         this.name = name;
         this.email = email;
@@ -23,8 +23,8 @@ export class User{
         this.updated_at = updated_at;
     }
 
-    static async get( id: number ){
-        const entry = await db.selectFrom('user').selectAll().where('id','=',id).executeTakeFirst();
+    static async get( id: string ){
+        const entry = await db.selectFrom('User').selectAll().where('id','=',id).executeTakeFirst();
 
         if(!entry){
             throw new Error("Entry not founded.");
@@ -40,15 +40,15 @@ export class User{
     }){
         const password = bcrypt.hashSync( user.password, bcrypt.genSaltSync( 10 ) )
         const entry = await db.transaction().execute( async (trx) => {
-            const r = await trx.insertInto('user').values({
+            const r = await trx.insertInto('User').values({
                 name: user.name,
                 email: user.email,
                 password,
                 status: "active"
             }).returningAll().executeTakeFirstOrThrow();
 
-            await trx.insertInto('user_limit').values({
-                id_user: r.id
+            await trx.insertInto('UserLimit').values({
+                idUser: r.id
             }).executeTakeFirstOrThrow();
 
             return r;
@@ -58,18 +58,18 @@ export class User{
     }
 
     async getLimit(){
-        const limits = await db.selectFrom('user_limit').select('max_namespace').where(({ eb , and, or })=>and([
-            eb('id_user','=',this.id),
+        const limits = await db.selectFrom('UserLimit').select('maxNamespace').where(({ eb , and, or })=>and([
+            eb('idUser','=',this.id),
             eb('active','=',true),
             or([
-                eb('expires_at','>',new Date()),
-                eb('expires_at','is', null),
+                eb('expiresAt','>',new Date()),
+                eb('expiresAt','is', null),
             ]),
         ])).execute();
 
-        const maxNamespaces = limits.reduce(( final, crr ) => final + ( crr.max_namespace || 0 ), 0 );
+        const maxNamespaces = limits.reduce(( final, crr ) => final + ( crr.maxNamespace || 0 ), 0 );
 
-        const current = (await db.selectFrom('namespace').selectAll().where('created_by','=',this.id).execute()).length;
+        const current = (await db.selectFrom('Namespace').selectAll().where('createdBy','=',this.id).execute()).length;
 
         return {
             max: maxNamespaces,
@@ -97,17 +97,17 @@ export class User{
         return entry;
     }
     async getNamespaces(){
-        const namespaces = await db.selectFrom('namespace').innerJoin('user_namespace','user_namespace.id_namespace','namespace.id').selectAll().where('user_namespace.id_user','=',this.id).execute();       
+        const namespaces = await db.selectFrom('Namespace').innerJoin('UserNamespace','UserNamespace.idNamespace','Namespace.id').selectAll().where('UserNamespace.idUser','=',this.id).execute();       
         return namespaces.map( item => Namespace.DbToObj(item) );
     }
 
-    async createAcessToken( idNamespace : number, expires_at : Date ){
-        const entry = await db.selectFrom('namespace')
-            .innerJoin('user_namespace','user_namespace.id_namespace','namespace.id')
+    async createAcessToken( idNamespace : string, expires_at : Date ){
+        const entry = await db.selectFrom('Namespace')
+            .innerJoin('UserNamespace','UserNamespace.idNamespace','Namespace.id')
             .selectAll()
             .where(({eb, and})=>and([
-                eb('user_namespace.id_user','=',this.id),
-                eb('user_namespace.id_namespace','=',idNamespace),
+                eb('UserNamespace.idUser','=',this.id),
+                eb('UserNamespace.idNamespace','=',idNamespace),
             ]))
             .executeTakeFirstOrThrow();
         const namespace = Namespace.DbToObj( entry );

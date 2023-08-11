@@ -4,6 +4,8 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
+export type Int8 = ColumnType<string, string | number | bigint, string | number | bigint>;
+
 export type Status = "active" | "blocked" | "deactive" | "new";
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
@@ -13,95 +15,119 @@ export type TransactionStatus = "cancelled" | "confirmed" | "pending";
 export type TransactionType = "bonus" | "cashback" | "deposit" | "mint" | "payment" | "refund" | "transfer" | "withdraw";
 
 export interface AccessToken {
-  id: Generated<number>;
-  id_user: number;
-  id_namespace: number;
+  id: Generated<string>;
+  idUser: string;
+  idNamespace: string;
   key: string;
   secret: string;
-  expires_at: Timestamp | null;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
+  expiresAt: Timestamp | null;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface Account {
-  id: Generated<number>;
-  id_customer: number;
-  namespace_code: string;
-  account_number: string;
-  account_key: string;
-  account_password: string | null;
-  balance: Generated<number>;
-  balance_extra: Generated<number>;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
-  status: Generated<Status>;
+  id: Generated<string>;
+  userId: string;
+  type: string;
+  provider: string;
+  providerAccountId: string;
+  refreshToken: string | null;
+  accessToken: string | null;
+  expiresAt: Int8 | null;
+  tokenType: string | null;
+  scope: string | null;
+  idToken: string | null;
+  sessionState: string | null;
 }
 
 export interface Customer {
-  id: Generated<number>;
+  id: Generated<string>;
   name: string;
   birthday: Timestamp;
   email: string;
   document: string;
   status: Generated<Status>;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface Namespace {
-  id: Generated<number>;
+  id: Generated<string>;
   code: string;
   pic: string | null;
   name: string;
   status: Generated<Status>;
-  created_by: number;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
+  createdBy: string;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface NamespaceAccount {
+  id: Generated<string>;
+  idCustomer: string;
+  namespaceCode: string;
+  accountNumber: string;
+  accountKey: string;
+  accountPassword: string | null;
+  balance: Generated<number>;
+  balanceExtra: Generated<number>;
+  status: Generated<Status>;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface NamespaceLimit {
-  id: Generated<number>;
-  id_namespace: number;
-  max_offer: Generated<number>;
+  id: Generated<string>;
+  idNamespace: string;
+  maxOffer: Generated<number>;
   precision: Generated<number>;
-  expires_at: Timestamp | null;
   active: Generated<boolean>;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
+  expiresAt: Timestamp | null;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface PaymentOrder {
-  id: Generated<number>;
+  id: Generated<string>;
   digits: string;
-  namespace_code: string;
-  id_account_origin: string;
+  namespaceCode: string;
+  namespaceAccountOrigin: string;
   due: Timestamp;
   amount: number;
   status: Generated<TransactionStatus>;
-  created_at: Generated<Timestamp>;
-  payed_at: Timestamp | null;
+  createdAt: Generated<Timestamp>;
+  payedAt: Timestamp | null;
+}
+
+export interface Session {
+  id: Generated<string>;
+  userId: string;
+  sessionToken: string;
+  expires: Timestamp;
 }
 
 export interface Transaction {
-  id: Generated<number>;
+  id: Generated<string>;
   type: TransactionType;
   amount: number;
   headline: Generated<string>;
   details: Generated<string>;
-  namespace_code: string;
-  id_account: string;
-  id_account_origin: string | null;
-  id_account_target: string;
+  namespaceCode: string;
+  namespaceAccount: string;
+  namespaceAccountOrigin: string | null;
+  namespaceAccountTarget: string;
   status: Generated<TransactionStatus>;
   hash: string | null;
-  created_at: Generated<Timestamp>;
-  confirmed_at: Timestamp | null;
+  createdAt: Generated<Timestamp>;
+  confirmedAt: Timestamp | null;
 }
 
 export interface User {
-  id: Generated<number>;
+  id: Generated<string>;
+  image: string | null;
   name: string;
   email: string;
+  emailVerified: Timestamp | null;
   password: string;
   status: Generated<Status>;
   created_at: Generated<Timestamp>;
@@ -109,31 +135,40 @@ export interface User {
 }
 
 export interface UserLimit {
-  id: Generated<number>;
-  id_user: number;
-  max_namespace: Generated<number>;
-  expires_at: Timestamp | null;
+  id: Generated<string>;
+  idUser: string;
+  maxNamespace: Generated<number>;
+  expiresAt: Timestamp | null;
   active: Generated<boolean>;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface UserNamespace {
-  id_user: number;
-  id_namespace: number;
-  created_at: Generated<Timestamp>;
-  updated_at: Generated<Timestamp>;
+  idUser: string;
+  idNamespace: string;
+  createdAt: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface VerificationToken {
+  identifier: string;
+  token: string;
+  expires: Timestamp;
 }
 
 export interface DB {
-  access_token: AccessToken;
-  account: Account;
-  customer: Customer;
-  namespace: Namespace;
-  namespace_limit: NamespaceLimit;
-  payment_order: PaymentOrder;
-  transaction: Transaction;
-  user: User;
-  user_limit: UserLimit;
-  user_namespace: UserNamespace;
+  AccessToken: AccessToken;
+  Account: Account;
+  Customer: Customer;
+  Namespace: Namespace;
+  NamespaceAccount: NamespaceAccount;
+  NamespaceLimit: NamespaceLimit;
+  PaymentOrder: PaymentOrder;
+  Session: Session;
+  Transaction: Transaction;
+  User: User;
+  UserLimit: UserLimit;
+  UserNamespace: UserNamespace;
+  VerificationToken: VerificationToken;
 }

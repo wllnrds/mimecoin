@@ -20,7 +20,7 @@ async function migrateToLatest() {
   const db = new Kysely<DB>({
     dialect: new PostgresDialect({
       pool: new Pool({
-          connectionString: ( process.env['DATABASE_URL'] || '' ) + '?sslmode=require'
+        connectionString: ( process.env['POSTGRES_URL'] || '' ) + ( process.env['POSTGRES_URL']?.includes('localhost') ? '' : '?sslmode=require' )
       })
     }),
   })

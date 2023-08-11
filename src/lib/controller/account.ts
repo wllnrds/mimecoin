@@ -6,29 +6,29 @@ export class Account{
     id: number
     id_customer: number | null
     namespace_code: string | null
-    account_number: string | null
-    account_key: string | null
-    account_password: string | null
+    accountNumber: string | null
+    accountKey: string | null
+    accountPassword: string | null
     balance: number | null
-    balance_extra: number | null
-    created_at: Date | null
-    updated_at: Date | null
+    balanceExtra: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
 
-    constructor( id: number, id_customer: number | null, namespace_code: string | null, account_number: string | null, account_key: string | null, account_password: string | null, balance: number | null, balance_extra: number | null, created_at: Date | null, updated_at: Date | null ){
+    constructor( id: number, id_customer: number | null, namespace_code: string | null, accountNumber: string | null, accountKey: string | null, accountPassword: string | null, balance: number | null, balanceExtra: number | null, createdAt: Date | null, updatedAt: Date | null ){
         this.id = id;
         this.id_customer = id_customer;
         this.namespace_code = namespace_code;
-        this.account_number = account_number;
-        this.account_key = account_key;
-        this.account_password = account_password;
+        this.accountNumber = accountNumber;
+        this.accountKey = accountKey;
+        this.accountPassword = accountPassword;
         this.balance = balance;
-        this.balance_extra = balance_extra;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.balanceExtra = balanceExtra;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    static async create( id_namespace: number, name: string, document: string, birthday: Date, email: string ){
-        const namespace = await db.selectFrom('namespace').select(['status','code']).where('id','=',id_namespace).executeTakeFirst();
+    static async create( idNamespace: string, name: string, document: string, birthday: Date, email: string ){
+        const namespace = await db.selectFrom('Namespace').select(['status','code']).where('id','=',idNamespace).executeTakeFirst();
 
         if(!namespace){
             throw new Error("Namespace not founded.")
@@ -38,7 +38,7 @@ export class Account{
             throw new Error("This namespace is not able to create accounts for now.")
         }
 
-        const preview = await db.selectFrom('customer').select('id').where( ({eb, or})=>or([
+        const preview = await db.selectFrom('Customer').select('id').where( ({eb, or})=>or([
             eb('document','=',document),
             eb('email','=',email)
         ])).execute();
@@ -48,7 +48,7 @@ export class Account{
         }
 
         const entry = await db.transaction().execute( async (trx) => {
-            const customer = await trx.insertInto('customer').values({
+            const customer = await trx.insertInto('Customer').values({
                 name,
                 document,
                 birthday,
@@ -56,16 +56,16 @@ export class Account{
                 status: 'new'
             }).returningAll().executeTakeFirstOrThrow();
 
-            const account_number = await Account.accountNumberGenerate();
-            const account_key = checkDigit( account_number );
+            const accountNumber = await Account.accountNumberGenerate();
+            const accountKey = checkDigit( accountNumber );
 
-            const account = await trx.insertInto('account').values({
-                id_customer: customer.id,
-                namespace_code: namespace.code,
-                account_number,
-                account_key,
+            const account = await trx.insertInto('NamespaceAccount').values({
+                idCustomer: customer.id,
+                namespaceCode: namespace.code,
+                accountNumber,
+                accountKey,
                 balance : 0,
-                balance_extra : 0
+                balanceExtra : 0
             }).returningAll().executeTakeFirstOrThrow();
 
             return {
@@ -82,12 +82,12 @@ export class Account{
     static async accountNumberGenerate(){
         let last = 10000;
 
-        await db.selectFrom('account')
-        .select('id')
-        .orderBy('id','asc')
+        await db.selectFrom('NamespaceAccount')
+        .select('accountNumber')
+        .orderBy('accountNumber','asc')
         .executeTakeFirstOrThrow()
         .then((result)=>{
-            last = result.id;
+            last = parseInt(result.accountNumber);
         }).catch(()=>{ });
 
         last += 1;
@@ -108,10 +108,10 @@ export class Customer{
     document: string
     status: Status
     pin: string
-    created_at: Date
-    updated_at: Date
+    createdAt: Date
+    updatedAt: Date
 
-    constructor( id: number, name: string, birthday: Date, email: string, document: string, status: Status, pin: string, created_at: Date, updated_at: Date ){
+    constructor( id: number, name: string, birthday: Date, email: string, document: string, status: Status, pin: string, createdAt: Date, updatedAt: Date ){
         this.id = id;
         this.name = name;
         this.birthday = birthday;
@@ -119,7 +119,7 @@ export class Customer{
         this.document = document;
         this.status = status;
         this.pin = pin;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

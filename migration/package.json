@@ -8,7 +8,6 @@
       "build": "tsc",
       "migrate": "node dist/index.js"
     },
-    "author": "Sami Koskimäki <sami@jakso.me>",
     "license": "MIT",
     "dependencies": {
       "dotenv": "^16.0.0",

@@ -1,12 +1,12 @@
-import { suid } from 'rand-token'
-import bcrypt from 'bcrypt'
+import { suid } from 'rand-token';
+import bcrypt from 'bcrypt';
 
-import { Status } from "@/lib/database/db"
-import { db } from "@/lib/database"
-import { Account } from './account'
+import { Status } from "@/lib/database/db";
+import { db } from "@/lib/database";
+import { Account } from './account';
 
 export class Namespace{
-    id: number
+    id: string
     code: string
     pic: string
     name: string 
@@ -14,7 +14,7 @@ export class Namespace{
     created_at: Date
     updated_at: Date
 
-    constructor( id: number, code: string, pic: string, name: string, status: Status, created_at: Date, updated_at: Date ){
+    constructor( id: string, code: string, pic: string, name: string, status: Status, created_at: Date, updated_at: Date ){
         this.id = id;
         this.code = code;
         this.pic = pic;
@@ -24,27 +24,27 @@ export class Namespace{
         this.updated_at = updated_at;
     }
 
-    static async create( code : string, pic : string | '', name: string, precision: number | 2, idUser : number ){
+    static async create( code : string, pic : string | '', name: string, precision: number | 2, idUser : string ){
         const entry = await db.transaction().execute( async (trx) => {
-            const newEntry = await trx.insertInto('namespace').values({
+            const newEntry = await trx.insertInto('Namespace').values({
                 code: code,
                 name: name,
                 pic: pic || '',
                 status: "active",
-                created_by: idUser
+                createdBy: idUser
             }).returningAll().executeTakeFirstOrThrow();
 
-            const limit = await trx.insertInto('namespace_limit').values({
+            const limit = await trx.insertInto('NamespaceLimit').values({
                 active: true,
-                expires_at: null,
-                id_namespace: newEntry.id,
+                expiresAt: null,
+                idNamespace: newEntry.id,
                 precision: precision,
-                max_offer: 100000 * Math.pow(10, precision)
+                maxOffer: 100000 * Math.pow(10, precision)
             }).returningAll().executeTakeFirstOrThrow();
 
-            await trx.insertInto('user_namespace').values({
-                id_namespace: newEntry.id,
-                id_user: idUser,
+            await trx.insertInto('UserNamespace').values({
+                idNamespace: newEntry.id,
+                idUser: idUser,
             }).executeTakeFirstOrThrow();
 
             return {
@@ -56,8 +56,8 @@ export class Namespace{
         return Namespace.DbToObj(entry);
     }
 
-    static async get( id:number ){
-        const entry = await db.selectFrom('namespace').selectAll().where('id','=',id).executeTakeFirst();
+    static async get( id:string ){
+        const entry = await db.selectFrom('Namespace').selectAll().where('id','=',id).executeTakeFirst();
 
         if(!entry){
             throw new Error("Entry not founded.");
@@ -67,19 +67,19 @@ export class Namespace{
     }
 
     async getLimits(){
-        const limits = await db.selectFrom('namespace_limit').selectAll().where(({ eb , and, or })=>and([
-            eb('id_namespace','=',this.id),
+        const limits = await db.selectFrom('NamespaceLimit').selectAll().where(({ eb , and, or })=>and([
+            eb('idNamespace','=',this.id),
             eb('active','=',true),
             or([
-                eb('expires_at','>',new Date()),
-                eb('expires_at','is', null),
+                eb('expiresAt','>',new Date()),
+                eb('expiresAt','is', null),
             ]),
         ])).execute();
 
-        const maxNamespaces = limits.reduce(( final, crr ) => final + ( crr.max_offer || 0 ), 0 );
+        const maxNamespaces = limits.reduce(( final, crr ) => final + ( crr.maxOffer || 0 ), 0 );
 
-        const balances = await db.selectFrom('account').select(['balance','balance_extra']).where('namespace_code','=',this.code).execute();
-        const current = balances.reduce( (prv,crr) => prv + ( crr.balance || 0 ) + ( crr.balance_extra || 0 ) , 0 );
+        const balances = await db.selectFrom('NamespaceAccount').select(['balance','balanceExtra']).where('namespaceCode','=',this.code).execute();
+        const current = balances.reduce( (prv,crr) => prv + ( crr.balance || 0 ) + ( crr.balanceExtra || 0 ) , 0 );
 
         return {
             max: maxNamespaces,
@@ -88,7 +88,7 @@ export class Namespace{
         };
     }
 
-    async createAcessToken( idUser : number, expires_at : Date | null ){
+    async createAcessToken( idUser : string, expires_at : Date | null ){
         let token : { key : string, secret : string } = { 
             key: `mimecoin_${ suid(8) }`,
             secret: suid(16)
@@ -96,12 +96,12 @@ export class Namespace{
 
         const secret = bcrypt.hashSync( token.secret, bcrypt.genSaltSync( 10 ) )
         
-        await db.insertInto('access_token').values({
-            id_user: idUser,
-            id_namespace: this.id,
+        await db.insertInto('AccessToken').values({
+            idUser: idUser,
+            idNamespace: this.id,
             key: token.key,
             secret: secret,
-            expires_at: expires_at?.toISOString()
+            expiresAt: expires_at?.toISOString()
         }).executeTakeFirstOrThrow()
 
         return token;
@@ -132,7 +132,7 @@ export class Namespace{
     }
 
     static async CheckToken( key: string, secret: string ){
-        const token = await db.selectFrom('access_token').selectAll().where('access_token.key', '=', key ).executeTakeFirst();
+        const token = await db.selectFrom('AccessToken').selectAll().where('AccessToken.key', '=', key ).executeTakeFirst();
 
         if( !token ){
             throw new Error('Token invalid.')
@@ -144,10 +144,10 @@ export class Namespace{
             throw new Error('Secret invalid.')
         }
 
-        if( token.expires_at != null && new Date( token.expires_at ) < new Date() ){
-            throw new Error(`Token expired on ${ new Date( token.expires_at ).toLocaleString() }`)
+        if( token.expiresAt != null && new Date( token.expiresAt ) < new Date() ){
+            throw new Error(`Token expired on ${ new Date( token.expiresAt ).toLocaleString() }`)
         }
 
-        return await Namespace.get( token.id_namespace || 0 ) ;
+        return await Namespace.get( token.idNamespace ) ;
     }
 }
