@@ -1,11 +1,11 @@
-import { TokenAuth } from "@/lib/auth/token";
+import { UserAuth } from "@/lib/auth/token";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest){
     let auth = null;
 
     try {
-        auth = await TokenAuth( request );
+        auth = await UserAuth( request );
     } catch ( error : any ) {
         return NextResponse.json({
             status: 401,
@@ -15,8 +15,7 @@ export async function GET(request: NextRequest){
     }
 
     return NextResponse.json({
-        data: { ...auth },
-        message: "Request para a API account",
+        data: await auth.namespace.getBalance( auth.account ),
         status: 200,
         timestamp: new Date().getTime()
     });

@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 import { db } from "../database";
 import { Account } from './account';
@@ -52,43 +51,40 @@ export class AuthAccount{
             throw new Error('Account number digit is not valid.');
         }
 
-        const data= await db
+        const data = await db
             .selectFrom('NamespaceAccount')
-            .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
-            .select((eb) => [
-                jsonObjectFrom( eb.selectFrom('NamespaceAccount').selectAll() ).as('account'),
-                jsonObjectFrom( eb.selectFrom('Customer').selectAll() ).as('customer')
-            ]).where(({eb,and})=>and([
+            .selectAll()
+            .where(({eb,and})=>and([
                 eb('accountNumber','=',account_number),
                 eb('namespaceCode','=',namespace_code)
-            ]))
-            .executeTakeFirst()
+            ])).executeTakeFirst()
 
-        if( !data || data?.account == null ){
+        if( !data ){
             throw new Error('Account not founded.');
         }
 
-        if( data.account.accountPassword == null ){
+        const customer = await db.selectFrom('Customer').selectAll().where('id','=',data?.idCustomer).executeTakeFirst();
+
+        if( data.accountPassword == null ){
             throw new Error('Account has not set a password.');
         }
 
-        const result = bcrypt.compareSync( password, data.account.accountPassword || '' )
+        const result = bcrypt.compareSync( password, data.accountPassword || '' )
 
         if( !result ){
             throw new Error('Password is invalid');
         }
 
         const token = {
-            code: data.account.namespaceCode,
-            numer: data.account.accountNumber,
-            digit: data.account.accountKey,
-            status: data.account.status,
+            code: data.namespaceCode,
+            number: data.accountNumber,
+            digit: data.accountKey,
             customer: {
-                name: data.customer?.name,
-                email: data.customer?.email,
-                document: data.customer?.document,
-                status: data.customer?.status,
-                birtday: data.customer?.birthday
+                name: customer?.name,
+                email: customer?.email,
+                document: customer?.document,
+                status: customer?.status,
+                birtday: customer?.birthday
             }
         }
 
@@ -97,7 +93,7 @@ export class AuthAccount{
         });
     }
 
-    static async SetPassword( namespaceCode : string, number:string, password : string, token: string ){
+    static async SetPassword( id:string, idCustomer:string, namespaceCode : string, number:string, password : string ){
         const accountNumber = validateDigit( number );
 
         if( !accountNumber ){
@@ -105,6 +101,8 @@ export class AuthAccount{
         }
 
         const account = await db.selectFrom('NamespaceAccount').selectAll().where(({eb,and})=>and([
+            eb('id','=',id),
+            eb('idCustomer','=',idCustomer),
             eb('accountNumber','=',accountNumber),
             eb('namespaceCode','=',namespaceCode)
         ])).executeTakeFirst()

@@ -96,8 +96,9 @@ export class User{
         const entry = await Namespace.create( code, pic, name, precision, this.id );
         return entry;
     }
+
     async getNamespaces(){
-        const namespaces = await db.selectFrom('Namespace').innerJoin('UserNamespace','UserNamespace.idNamespace','Namespace.id').selectAll().where('UserNamespace.idUser','=',this.id).execute();       
+        const namespaces = await db.selectFrom('Namespace').innerJoin('UserNamespace','UserNamespace.idNamespace','Namespace.id').selectAll('Namespace').where('UserNamespace.idUser','=',this.id).execute();  
         return namespaces.map( item => Namespace.DbToObj(item) );
     }
 
@@ -112,6 +113,33 @@ export class User{
             .executeTakeFirstOrThrow();
         const namespace = Namespace.DbToObj( entry );
         return await namespace.createAcessToken( this.id, expires_at );
+    }
+
+    static async login( email : string, password : string ){
+        const entry = await db.selectFrom('User').selectAll().where('email', '=', email).executeTakeFirst();
+        if( !entry ){
+            throw new Error("User not founded.")
+        }
+
+        const result = bcrypt.compareSync( password, entry.password );
+
+        if( !result ){
+            throw new Error("Wrong password.")
+        }
+
+        const user : User = User.DbToObj( entry );
+        const namespaces = await user.getNamespaces();
+        const limits = await user.getLimit();
+
+        return {
+            id: entry.id,
+            name: entry.name,
+            email: entry.email,
+            status: entry.status,
+            image: entry.image,
+            namespaces,
+            limits
+        }
     }
 
     static DbToObj( data: any ){

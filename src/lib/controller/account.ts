@@ -1,28 +1,34 @@
-import { Status } from "@/lib/database/db"
-import { db } from "@/lib/database"
 import { checkDigit } from '../core'
 
+import { Status } from "@/lib/database/db"
+import { db } from "@/lib/database"
+import { Mailer } from '@/lib/mail'
+
 export class Account{
-    id: number
-    id_customer: number | null
-    namespace_code: string | null
+    id: string
+    idCustomer: string | null
+    namespaceCode: string | null
     accountNumber: string | null
     accountKey: string | null
     accountPassword: string | null
     balance: number | null
     balanceExtra: number | null
+    status: Status | null
     createdAt: Date | null
     updatedAt: Date | null
 
-    constructor( id: number, id_customer: number | null, namespace_code: string | null, accountNumber: string | null, accountKey: string | null, accountPassword: string | null, balance: number | null, balanceExtra: number | null, createdAt: Date | null, updatedAt: Date | null ){
+    customer?: Customer
+
+    constructor( id: string, idCustomer: string | null, namespaceCode: string | null, accountNumber: string | null, accountKey: string | null, accountPassword: string | null, balance: number | null, balanceExtra: number | null, status: Status | null, createdAt: Date | null, updatedAt: Date | null ){
         this.id = id;
-        this.id_customer = id_customer;
-        this.namespace_code = namespace_code;
+        this.idCustomer = idCustomer;
+        this.namespaceCode = namespaceCode;
         this.accountNumber = accountNumber;
         this.accountKey = accountKey;
         this.accountPassword = accountPassword;
         this.balance = balance;
         this.balanceExtra = balanceExtra;
+        this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -98,28 +104,66 @@ export class Account{
 
         return last.toString().padStart(5,'0')
     }
+
+    async loadCustomer(){
+        const customer = await db.selectFrom('Customer').selectAll().where('id','=',this.idCustomer).executeTakeFirst();
+        if( !customer ){
+            throw new Error("Customer not founded for account");
+        }
+
+        this.customer = Customer.DbToObj( customer );
+
+        return customer;
+    }
+
+    static DbToObj( data: any ){
+        return new Account(
+            data.id,
+            data.idCustomer,
+            data.namespaceCode,
+            data.accountNumber,
+            data.accountKey,
+            data.accountPassword,
+            data.balance,
+            data.balanceExtra,
+            data.status,
+            data.createdAt,
+            data.updatedAt,
+        )
+    }
 }
 
 export class Customer{
-    id: number
+    id: string
     name: string
     birthday: Date
     email: string
     document: string
     status: Status
-    pin: string
     createdAt: Date
     updatedAt: Date
 
-    constructor( id: number, name: string, birthday: Date, email: string, document: string, status: Status, pin: string, createdAt: Date, updatedAt: Date ){
+    constructor( id: string, name: string, birthday: Date, email: string, document: string, status: Status, createdAt: Date, updatedAt: Date ){
         this.id = id;
         this.name = name;
         this.birthday = birthday;
         this.email = email;
         this.document = document;
         this.status = status;
-        this.pin = pin;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    static DbToObj( data: any ){
+        return new Customer(
+            data.id,
+            data.name,
+            data.birthday,
+            data.email,
+            data.document,
+            data.status,
+            data.createdAt,
+            data.updatedAt,
+        );
     }
 }

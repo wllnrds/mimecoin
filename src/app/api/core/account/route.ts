@@ -1,5 +1,7 @@
-import { TokenAuth } from "@/components/auth";
-import { NextResponse, type NextRequest } from "next/server";
+import { TokenAuth } from "@/lib/auth/token";
+import { validateDigit } from "@/lib/core";
+import { db } from "@/lib/database";
+import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(request: NextRequest){
     let auth = null;
@@ -71,5 +73,51 @@ export async function POST(request: NextRequest){
             message : error.message,
             timestamp: new Date().getTime()
         },{ status : 400 })
+    }
+}
+
+export async function GET(request: NextRequest){
+    let auth = null;
+
+    try {
+        auth = await TokenAuth( request );
+    } catch ( error : any ) {
+        return NextResponse.json({
+            status: 401,
+            message : error.message,
+            timestamp: new Date().getTime()
+        },{ status : 401 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const number = searchParams.get('account')
+
+    if( number == null || number == '' || number.length != 6 ){
+        return NextResponse.json({ 
+            message: "Missing or invalid account number."
+        }, {
+            status: 400
+        });
+    }
+
+    try {
+        const account = await auth.namespace.getAccount( number );
+        await account.loadCustomer();
+
+        return NextResponse.json({
+            code: account?.namespaceCode,
+            number: account?.accountNumber,
+            digit: account?.accountKey,
+            customer: account?.customer!.name,
+            document: account?.customer!.document
+        },{
+            status: 200
+        });
+    } catch (error : any) {
+        return NextResponse.json({ 
+            message: error.message
+        }, {
+            status: 400
+        });
     }
 }

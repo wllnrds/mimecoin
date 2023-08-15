@@ -113,9 +113,9 @@ export interface Transaction {
   headline: Generated<string>;
   details: Generated<string>;
   namespaceCode: string;
-  namespaceAccount: string;
+  namespaceAccount: string | null;
   namespaceAccountOrigin: string | null;
-  namespaceAccountTarget: string;
+  namespaceAccountTarget: string | null;
   status: Generated<TransactionStatus>;
   hash: string | null;
   createdAt: Generated<Timestamp>;

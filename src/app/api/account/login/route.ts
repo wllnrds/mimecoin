@@ -1,4 +1,4 @@
-import { TokenAuth } from "@/components/auth";
+import { TokenAuth } from "@/lib/auth/token";
 import { AuthAccount } from "@/lib/controller/auth";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -64,8 +64,6 @@ export async function POST(request: NextRequest){
         digit : string, 
         password : string
     } = await request.json();
-
-    
 
     try{
         const account_auth = await AuthAccount.Login( auth.namespace.code,account + digit, password );

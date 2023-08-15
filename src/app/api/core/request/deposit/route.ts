@@ -1,6 +1,5 @@
 import { TokenAuth } from "@/lib/auth/token";
-import { AuthAccount } from "@/lib/controller/auth";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(request: NextRequest){
     let auth = null;
@@ -15,29 +14,34 @@ export async function POST(request: NextRequest){
         },{ status : 401 })
     }
 
-    const { id, account, digit, password, idCustomer } : {
-        id: string, 
-        idCustomer: string,
+    const { account , description, amount } : {
         account : string ,
-        digit : string, 
-        password : string,
+        description : string, 
+        amount : number
     } = await request.json();
 
-    if(
-        id == null || id == '' || 
-        idCustomer == null || idCustomer == '' || 
-        account == null || account == '' ||
-        digit == null || digit == '' ||
-        password == null || password == ''
-    ){
-        throw new Error("All fields should be setted.");
+    try{
+        if( account == null || account == '' ){
+            throw new Error("All fields should be setted.");
+        }
+
+        if( amount <= 0 ){
+            throw new Error("Amount must be higher than 0");
+        }
+    }catch( error : any ){
+        return NextResponse.json({
+            status: 400,
+            message : error.message,
+            timestamp: new Date().getTime()
+        },{ status : 400 })
     }
 
     try{
-        await AuthAccount.SetPassword(id, idCustomer, auth.namespace.code, account+digit, password )
+        const data = await auth.namespace.deposit( account, amount, 'deposit', description );
         return NextResponse.json({
+            data,
             status: 200,
-            message: "Password setted.",
+            message: "Request para a API account",
             timestamp: new Date().getTime()
         });
     }catch( error : any ){
