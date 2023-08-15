@@ -15,7 +15,7 @@ export class Namespace{
     status: Status
     createdAt: Date
     updatedAt: Date
-    createdBy: id
+    createdBy: string
 
     constructor( id: string, code: string, pic: string, name: string, status: Status, createdAt: Date, updatedAt: Date, createdBy: string ){
         this.id = id;
