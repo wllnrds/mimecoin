@@ -14,8 +14,9 @@ export async function POST(request: NextRequest){
         },{ status : 401 })
     }
 
-    const { account , description, amount } : {
+    const { account , headline, description, amount } : {
         account : string ,
+        headline: string,
         description : string, 
         amount : number
     } = await request.json();
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest){
     }
 
     try{
-        const data = await auth.namespace.deposit( account, amount, 'deposit', description );
+        const data = await auth.namespace.deposit( account, amount, 'deposit', headline, description );
         return NextResponse.json({
             data,
             status: 200,

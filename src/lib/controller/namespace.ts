@@ -257,7 +257,7 @@ export class Namespace{
             }
 
             return and(q)
-        }).execute();
+        }).orderBy('Transaction.confirmedAt', 'desc').execute();
 
         for( const t of transactions ){
             t.amount = (t.amount / ( Math.pow(10, precision) )).toFixed( precision ).toString();
