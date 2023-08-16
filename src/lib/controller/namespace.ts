@@ -185,10 +185,11 @@ export class Namespace{
         headline : string = '', 
         details : string = ''){
 
-        
-        const { current } = await this.getLimits();
+        const { current, precision } = await this.getLimits();
 
-        if( current < amount ){
+        const fixedAmount = amount * ( Math.pow(10, precision) )
+
+        if( current < fixedAmount ){
             throw new Error("This namespace reached mint limit.");
         }
 
@@ -210,7 +211,7 @@ export class Namespace{
             throw new Error("Invalid account to deposit");
         }
         
-        const transaction = await Transaction.preBuilt( type, amount, headline, details, this.code, null, accountNumber );
+        const transaction = await Transaction.preBuilt( type, fixedAmount, headline, details, this.code, null, accountNumber );
         try {
             await transaction.Sign();
         } catch (error) {
