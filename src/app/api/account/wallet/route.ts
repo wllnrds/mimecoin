@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       "header": { "defaultValue": { "language": "pt-BR", "value": auth.account.customer?.name } },
       "textModulesData": [
         { "id": "namespace", "header": "namespace", "body": auth.namespace.name },
-        { "id": "code", "header": "", "body": auth.namespace.code },
+        { "id": "code", "header": "código", "body": auth.namespace.code },
         { "id": "conta", "header": "conta", "body": auth.account.accountNumber },
         { "id": "digito", "header": "digito", "body": auth.account.accountKey },
         { "id": "saldo", "header": "saldo", "body": `₼ ${ balances.balance }` }
@@ -71,6 +71,8 @@ export async function GET(request: NextRequest) {
           }
       }
   }
+
+  await update( genericObject, objectId );
 
   const claims = {
     iss: credentials.client_email,
@@ -93,6 +95,14 @@ export async function GET(request: NextRequest) {
   }, { status: 200 })
 }
 
+async function update( genericObject : any, resourceId : string ) {
+  await httpClient.request({
+    url: `${baseUrl}/genericObject/${ resourceId }`,
+    method: 'PUT',
+    data: genericObject
+  });
+}
+
 // const response = await httpClient.request({
 //   url: `${baseUrl}/genericClass/${classId}`,
 //   method: 'PUT',
@@ -105,94 +115,115 @@ export async function GET(request: NextRequest) {
 //   // data: genericClass
 // });
 
-// return NextResponse.json({
-//   data: response ,
-//   status: 200,
-//   timestamp: new Date().getTime()
-// }, { status: 200 })
+export async function POST(request: NextRequest) {
+  const response = await httpClient.request({
+    url: `${baseUrl}/genericObject?classId=${ classId }`,
+    method: 'GET',
+  });
 
-// const genericClass : any = {
-//   'id': `${classId}`,
-//   "classTemplateInfo": {
-//     "cardTemplateOverride": {
-//       "cardRowTemplateInfos": [
-//         {
-//           "twoItems": {
-//             "startItem": {
-//               "firstValue": {
-//                 "fields": [
-//                   {
-//                     "fieldPath": "object.textModulesData['namespace']"
-//                   }
-//                 ]
-//               }
-//             },
-//             "endItem": {
-//               "firstValue": {
-//                 "fields": [
-//                   {
-//                     "fieldPath": "object.textModulesData['code']"
-//                   }
-//                 ]
-//               }
-//             }
-//           }
-//         },
-//         {
-//           "threeItems": {
-//             "startItem": {
-//               "firstValue": {
-//                 "fields": [
-//                   {
-//                     "fieldPath": "object.textModulesData['conta']"
-//                   }
-//                 ]
-//               }
-//             },
-//             "middleItem": {
-//               "firstValue": {
-//                 "fields": [
-//                   {
-//                     "fieldPath": "object.textModulesData['digito']"
-//                   }
-//                 ]
-//               }
-//             },
-//             "endItem": {
-//               "firstValue": {
-//                 "fields": [
-//                   {
-//                     "fieldPath": "object.textModulesData['saldo']"
-//                   }
-//                 ]
-//               }
-//             }
-//           }
-//         }
-//       ]
-//     },
-//   },
-//   'imageModulesData': [
-//     {
-//       'mainImage': {
-//         'sourceUri': {
-//           'uri': 'https://mimecoin.vercel.app/static/hero.png'
-//         },
-//         'contentDescription': {
-//           'defaultValue': {
-//             'language': 'en-US',
-//             'value': 'Mimecoin'
-//           }
-//         }
-//       },
-//       'id': 'event_banner'
-//     }
-//   ],
-//   'textModulesData': [
-//     {
-//       'header': 'Mimecoin Token Service',
-//       'body': 'Mimecoin é uma plataforma que permite você criar seu próprio sistema monetário e use como serviço.',
-//       'id': 'mimecoin-test'
-//     }
-//   ],
-// }
+  return NextResponse.json({
+    data: response ,
+    status: 200,
+    timestamp: new Date().getTime()
+  }, { status: 200 })
+}
+
+export async function PATCH(request: NextRequest) {
+  const response = await httpClient.request({
+    url: `${baseUrl}/genericClass/${classId}`,
+    method: 'PUT',
+    data: genericClass
+  });
+
+  return NextResponse.json({
+    data: response ,
+    status: 200,
+    timestamp: new Date().getTime()
+  }, { status: 200 })
+}
+
+const genericClass : any = {
+  'id': `${classId}`,
+  "classTemplateInfo": {
+    "cardTemplateOverride": {
+      "cardRowTemplateInfos": [
+        {
+          "twoItems": {
+            "startItem": {
+              "firstValue": {
+                "fields": [
+                  {
+                    "fieldPath": "object.textModulesData['namespace']"
+                  }
+                ]
+              }
+            },
+            "endItem": {
+              "firstValue": {
+                "fields": [
+                  {
+                    "fieldPath": "object.textModulesData['code']"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "threeItems": {
+            "startItem": {
+              "firstValue": {
+                "fields": [
+                  {
+                    "fieldPath": "object.textModulesData['conta']"
+                  }
+                ]
+              }
+            },
+            "middleItem": {
+              "firstValue": {
+                "fields": [
+                  {
+                    "fieldPath": "object.textModulesData['digito']"
+                  }
+                ]
+              }
+            },
+            "endItem": {
+              "firstValue": {
+                "fields": [
+                  {
+                    "fieldPath": "object.textModulesData['saldo']"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+  },
+  'imageModulesData': [
+    {
+      'mainImage': {
+        'sourceUri': {
+          'uri': 'https://mimecoin.vercel.app/static/hero.png'
+        },
+        'contentDescription': {
+          'defaultValue': {
+            'language': 'en-US',
+            'value': 'Mimecoin'
+          }
+        }
+      },
+      'id': 'event_banner'
+    }
+  ],
+  'textModulesData': [
+    {
+      'header': 'Mimecoin Token Service',
+      'body': 'Mimecoin é uma plataforma que permite você criar seu próprio sistema monetário e use como serviço.',
+      'id': 'mimecoin-test'
+    }
+  ],
+}
