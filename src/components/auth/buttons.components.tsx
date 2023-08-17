@@ -14,7 +14,7 @@ export const LoginButton = () => {
   }
 
   return (
-    <button className={ button_menu + " bg-white hover:bg-foreground-600" } onClick={() => signIn()}>Login</button>
+    <button className={ button_menu + " bg-foreground-700 hover:bg-foreground-600" } onClick={() => signIn()}>Login</button>
   );
 };
 
@@ -53,5 +53,5 @@ export const ProfileButton = () => {
     return;
   }
 
-  return <Link href="/profile" className={ button_menu + " bg-white hover:bg-foreground-600" }>Seu perfil</Link>;
+  return <Link href="/dashboard/profile" className={ button_menu + " bg-foreground-700 hover:bg-foreground-600" }>Seu perfil</Link>;
 };

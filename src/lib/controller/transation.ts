@@ -48,7 +48,7 @@ export class Transaction{
         this.confirmedAt = confirmedAt
     }
 
-    private static DbToObj( data: any ){
+    static DbToObj( data: any ){
         return new Transaction(
             data.id,
             data.type,

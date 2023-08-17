@@ -265,4 +265,35 @@ export class Namespace{
 
         return transactions;
     }
+
+    async getRootTransactions( start? : Date, end? : Date ){
+        const { precision } = await this.getLimits();
+        const transactions : Array<any> = await db.selectFrom('Transaction').selectAll().where(({and,eb}) => {
+            const q = [
+                eb('Transaction.namespaceCode','=',this.code)
+            ];
+
+            if( start ){
+                if( !end ){
+                    end = new Date( start.setDate( start.getDate() + 30 ).toLocaleString() );
+                }
+
+                q.push( eb('Transaction.confirmedAt','>', start ) )
+                q.push( eb('Transaction.confirmedAt','<', end ) )
+            }
+
+            return and(q)
+        }).orderBy('Transaction.confirmedAt', 'desc').execute();
+
+        for( const t of transactions ){
+            t.amount = (t.amount / ( Math.pow(10, precision) )).toFixed( precision ).toString();
+        }
+
+        return transactions.map( t => Transaction.DbToObj( t ) );
+    }
+
+    async getAccounts(){
+        const accounts = await db.selectFrom('NamespaceAccount').innerJoin('Customer', 'Customer.id','NamespaceAccount.idCustomer').where('namespaceCode','=',this.code).selectAll().execute();
+        return accounts;
+    }
 }

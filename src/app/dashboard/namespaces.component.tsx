@@ -1,5 +1,4 @@
 import { User } from "@/lib/controller/user";
-import { Link } from "@nextui-org/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -29,7 +28,7 @@ export const Namespaces = async () => {
                     <div className={ `${ square_base } border-dashed` }>
                         <span className={ square_inner }></span>
                     </div> : namespaces.map( namespace => 
-                    <a href="/" className={ `${ square_base } hover:bg-primary-800` } title={ namespace.name }>
+                    <a href="/" className={ `${ square_base } hover:bg-primary-50` } title={ namespace.name }>
                         { namespace.pic ? <img src={ namespace.pic } /> : <span className={ square_inner }>{ namespace.code }</span>}
                     </a> )
             }
