@@ -55,3 +55,13 @@ export const ProfileButton = () => {
 
   return <Link href="/dashboard/profile" className={ button_menu + " bg-foreground-700 hover:bg-foreground-600" }>Seu perfil</Link>;
 };
+
+export const DashboardButton = () => {
+  const { status } = useSession();
+
+  if( status !== 'authenticated' ){
+    return;
+  }
+
+  return <Link href="/dashboard" className={ button_menu + " bg-foreground-700 hover:bg-foreground-600" }>Dashboard</Link>;
+};

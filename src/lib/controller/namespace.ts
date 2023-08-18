@@ -268,9 +268,9 @@ export class Namespace{
 
     async getRootTransactions( start? : Date, end? : Date ){
         const { precision } = await this.getLimits();
-        const transactions : Array<any> = await db.selectFrom('Transaction').selectAll().where(({and,eb}) => {
+        const transactions : Array<any> = await db.selectFrom('Transaction').selectAll().where(({and,eb,}) => {
             const q = [
-                eb('Transaction.namespaceCode','=',this.code)
+                eb('Transaction.namespaceCode','=',this.code),
             ];
 
             if( start ){
@@ -289,7 +289,7 @@ export class Namespace{
             t.amount = (t.amount / ( Math.pow(10, precision) )).toFixed( precision ).toString();
         }
 
-        return transactions.map( t => Transaction.DbToObj( t ) );
+        return transactions.map( t => ( t.namespaceAccount == null ) ? Transaction.DbToObj( t ) : undefined ).filter( t => !!t );
     }
 
     async getAccounts(){

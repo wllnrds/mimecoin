@@ -1,4 +1,5 @@
 import {
+  DashboardButton,
   LoginButton,
   LogoutButton,
   ProfileButton,
@@ -9,10 +10,11 @@ export default function Home() {
   return (
     <main className="h-full flex items-center justify-center">
       <div className="flex gap-3">
+        <ProfileButton />
+        <DashboardButton />
         <LoginButton />
         <RegisterButton />
         <LogoutButton />
-        <ProfileButton />
       </div>
     </main>
   );

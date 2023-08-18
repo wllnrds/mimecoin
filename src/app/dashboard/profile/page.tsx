@@ -15,6 +15,8 @@ export default async function Page() {
         return;
     }
 
+    if(user.password) delete user.password
+
     let namespaces = await user.getNamespaces();
     let user_limit = await user.getLimit();
     let namespace_limit = await namespaces[0].getLimits();
@@ -23,16 +25,18 @@ export default async function Page() {
     function TableData({ data } : { data : any }){
         const keys = Object.keys( data );
         return <div className="border flex-1 p-2 rounded-3xl">
-            <table>
+            <table className="w-max">
                 {
                     keys.map( key => {
                         if(typeof data[key] == 'function'){
                             return null;
                         }
                         return <tr key={ key + JSON.stringify( data[key] + Date.now ) }>
-                        <th className="text-left px-2 py-1">{ key }</th>
-                        <td className=" px-2 py-1">{ typeof data[key] == 'object' ? JSON.stringify( data[key] ) : data[key] }</td>
-                    </tr>
+                            <th className="text-left px-2 py-1">{ key }</th>
+                            <td className="px-2 py-1">
+                                <span className="text-ellipsis overflow-hidden truncate">{ typeof data[key] == 'object' ? JSON.stringify( data[key] ) : data[key] }</span>
+                            </td>
+                        </tr>
                     })
                 }
             </table>
@@ -41,7 +45,7 @@ export default async function Page() {
 
     return <div className="w-full flex-1 p-6 flex">
         <div className="flex-1 flex-col gap-6 bg-white rounded-3xl p-6 space-y-6">
-            <div className="flex gap-6">
+            <div className="flex gap-6 flex-col lg:flex-row">
                 <div className="flex flex-col flex-1 gap-6">
                     <h1 className="text-2xl">Usuário</h1>
                     <TableData data={ user } ></TableData>
@@ -51,7 +55,7 @@ export default async function Page() {
                     <TableData data={ user_limit } ></TableData>
                 </div>
             </div>
-            <div className="flex gap-6">
+            <div className="flex gap-6 flex-col lg:flex-row">
                 <div className="flex flex-col flex-1 gap-6">
                     <h2 className="text-2xl">Namespace</h2>
                     <TableData data={ namespaces[0] } ></TableData>

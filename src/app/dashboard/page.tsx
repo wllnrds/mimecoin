@@ -1,12 +1,10 @@
 import { Suspense } from "react";
 import { Accounts, AccountsSqueleton } from "./accounts.component";
-import { Limits } from "./limits";
-import { LimitsSqueleton } from "./limits.component";
 import { Transactions } from "./transactions";
 
 export default function Home() {
   return (
-    <div className="flex-1 w-full flex p-6 flex-row gap-6">
+    <div className="flex-1 w-full flex p-6 flex-col lg:flex-row gap-6 md:overflow-auto">
       <div className="flex gap-6 flex-col">
         {/* <Suspense fallback={ <LimitsSqueleton /> }>
           <Limits namespaceIndex={ 0 } />
@@ -20,7 +18,7 @@ export default function Home() {
       </div>
       <div className="flex flex-col flex-1 gap-6">
         <h2 className="font-bold">Transações</h2>
-        <div className="flex-1 bg-white rounded-2xl overflow-x-auto custom-roll p-2">
+        <div className="flex-1 bg-white rounded-2xl lg:overflow-x-auto p-2">
           <Suspense fallback={ <AccountsSqueleton /> }>
             <Transactions namespaceIndex={ 0 } />
           </Suspense>

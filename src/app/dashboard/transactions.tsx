@@ -31,6 +31,4 @@ export async function Transactions({ namespaceIndex = 0 }){
             </div>
         </div>
     </div>)
-
-    return <div>Transações</div>
 }
