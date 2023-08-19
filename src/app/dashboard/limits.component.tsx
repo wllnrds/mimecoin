@@ -1,21 +1,20 @@
 'use client';
 
-import { Card, CardBody, CardFooter, Chip, CircularProgress, Progress } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Chip, CircularProgress } from "@nextui-org/react";
 
 export function LimitsWidget({ precision = 0, total = 100, used = 0 }){
     const limit : number = used / Math.pow( 10, precision );
 
-    return <Card className="w-[240px] h-[240px] border-none bg-primary">
+    return <Card className="w-[240px] h-[240px] border-none bg-primary shadow">
     <CardBody className="justify-center items-center pb-0">
       <CircularProgress
         classNames={{
           svg: "w-36 h-36 drop-shadow-md",
           indicator: "stroke-white",
-          track: "stroke-white/10",
+          track: "stroke-white/20",
           value: "text-3xl font-semibold text-white",
         }}
         value={ (100 * used) / total }
-        strokeWidth={4}
         showValueLabel={true}
       />
     </CardBody>
@@ -27,14 +26,14 @@ export function LimitsWidget({ precision = 0, total = 100, used = 0 }){
         }}
         variant="bordered"
       >
-        Emissão de Token
+        Tokens emitidos
       </Chip>
     </CardFooter>
   </Card>
 }
 
 export function LimitsSqueleton(){
-    return <Card className="w-[240px] h-[240px] border-none bg-primary">
+    return <Card className="w-full h-[240px] border-none bg-primary shadow">
     <CardBody className="justify-center items-center pb-0">
       <CircularProgress
         classNames={{
@@ -44,7 +43,7 @@ export function LimitsSqueleton(){
           value: "text-3xl font-semibold text-white",
         }}
         isIndeterminate
-        strokeWidth={4}
+        strokeWidth={ 10 }
       />
     </CardBody>
     <CardFooter className="justify-center items-center pt-0">

@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   description: 'Token as a Service',
 }
 
+import * as moment from 'moment';
+import 'moment/locale/pt-br';
+
 export default function RootLayout({ children, }: { children: React.ReactNode }) {
   return (
     <html lang="en">

@@ -8,7 +8,7 @@ export class User{
     id: string;
     name: string;
     email: string;
-    password: string;
+    password?: string;
     status: Status;
     created_at: Date;
     updated_at: Date;
@@ -140,6 +140,11 @@ export class User{
             namespaces,
             limits
         }
+    }
+
+    async getTokens(){
+        const tokens = await db.selectFrom('AccessToken').innerJoin('Namespace','AccessToken.idNamespace','Namespace.id').selectAll().where('AccessToken.idUser','=',this.id).execute();
+        return tokens;
     }
 
     static DbToObj( data: any ){

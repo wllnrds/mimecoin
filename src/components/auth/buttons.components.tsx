@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
+import { usePathname } from 'next/navigation'
 
 const button_menu = "py-3 px-6 text-left rounded-2xl transition-background text-xs";
 
@@ -13,10 +14,9 @@ export const LoginButton = () => {
     return;
   }
 
-  return (
-    <button className={ button_menu + " bg-foreground-700 hover:bg-foreground-600" } onClick={() => signIn()}>Login</button>
-  );
+  return <button className={ button_menu + " hover:bg-foreground-600" } onClick={() => signIn()}>Login</button>;
 };
+
 
 export const RegisterButton = () => {
   const { status } = useSession();
@@ -26,7 +26,7 @@ export const RegisterButton = () => {
   }
 
   return (
-    <Link href="/register" className={ button_menu + " bg-primary text-primary-foreground hover:bg-primary-300" }>
+    <Link href="/register" className={ button_menu + " bg-primary text-primary-foreground hover:bg-primary-300" } prefetch={ false }>
       Cadastrar-se
     </Link>
   );
@@ -40,28 +40,32 @@ export const LogoutButton = () => {
   }
 
   return (
-    <button onClick={() => signOut()} className={ button_menu + " bg-secondary text-secondary-foreground hover:bg-secondary-300" }>
+    <button onClick={() => signOut()} className={ button_menu + " bg-primary text-primary-foreground hover:bg-primary-300" }>
       Logout
     </button>
   );
 };
 
-export const ProfileButton = () => {
-  const { status } = useSession();
-
-  if( status !== 'authenticated' ){
-    return;
-  }
-
-  return <Link href="/dashboard/profile" className={ button_menu + " bg-foreground-700 hover:bg-foreground-600" }>Seu perfil</Link>;
+export const DashboardButton = () => {
+  return <MenuLink auth="authenticated" href="/dashboard">Dashboard</MenuLink>;
 };
 
-export const DashboardButton = () => {
+export function MenuLink({ href, auth, children } : { href : string | any, auth : 'authenticated' | 'unauthenticated' | 'all', children : React.ReactNode }){
+  const pathname = usePathname()
   const { status } = useSession();
 
-  if( status !== 'authenticated' ){
-    return;
+  if( auth !== 'all'){
+    if( status != auth ){
+      return;
+    }
   }
 
-  return <Link href="/dashboard" className={ button_menu + " bg-foreground-700 hover:bg-foreground-600" }>Dashboard</Link>;
+  const active : boolean = pathname.toLowerCase() == href.toLowerCase();
+
+  return <Link href={ href } className={ `py-3 px-6 text-left rounded-2xl transition-background text-xs hover:bg-foreground-700 ${ active ? ' bg-foreground-700 cursor-default' : '' }` } prefetch={ false }>{ children }</Link>
+}
+
+
+export const SettingsButton = () => {
+  return <MenuLink auth="authenticated" href="/dashboard/settings">Configurações</MenuLink>;
 };

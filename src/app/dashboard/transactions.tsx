@@ -18,7 +18,7 @@ export async function Transactions({ namespaceIndex = 0 }){
     const namespace = namespaces[namespaceIndex];
     const transactions = await namespace.getRootTransactions();
 
-    return transactions.map( tra => <div className="p-2 rounded-2xl hover:bg-secondary-50 text-tiny">
+    return transactions.map( tra => tra != undefined && <div className="p-2 rounded-2xl hover:bg-secondary-50/80 text-tiny">
         <div className="flex space-x-4 items-center">
             <div className="rounded-full bg-secondary text-white h-8 w-8 flex items-center justify-center">{ tra.confirmedAt?.getDay() || "??" }</div>
             <div className="flex-1 py-1 space-y-1">

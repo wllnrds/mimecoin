@@ -71,3 +71,13 @@ a {
   border-radius: 10px;
   border: 3px solid transparent;
 }
+
+@layer components {
+  .content-card {
+    @apply flex flex-col gap-6 bg-white rounded-3xl p-6 shadow;
+  }
+
+  .content-list {
+    @apply flex-1 rounded-2xl lg:overflow-x-auto p-2 shadow bg-white ;
+  }
+}
