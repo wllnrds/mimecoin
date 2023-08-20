@@ -90,11 +90,13 @@ export class Account{
 
         await db.selectFrom('NamespaceAccount')
         .select('accountNumber')
-        .orderBy('accountNumber','asc')
+        .orderBy('accountNumber','desc')
         .executeTakeFirstOrThrow()
         .then((result)=>{
             last = parseInt(result.accountNumber);
         }).catch(()=>{ });
+
+        console.log( last )
 
         last += 1;
 

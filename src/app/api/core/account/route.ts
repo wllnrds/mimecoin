@@ -62,7 +62,7 @@ export async function POST(request: NextRequest){
     try{
         const account = await auth.namespace.createAccount( name , email, document, birthday );
         return NextResponse.json({
-            data: { ...auth, account },
+            data: { account },
             status: 200,
             message: "Request para a API account",
             timestamp: new Date().getTime()
