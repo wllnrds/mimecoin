@@ -1,10 +1,12 @@
 import { Suspense } from "react";
-import { Accounts, AccountsSqueleton } from "./accounts.component";
-import { Transactions } from "./transactions";
 import { getServerSession } from "next-auth";
-import { User } from "@/lib/controller/user";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+
+import { User } from "@/lib/controller/user";
+
+import { Transactions } from "./transactions";
+import { Accounts, AccountsSqueleton } from "./accounts.component";
 import { LimitsSqueleton } from "./limits.component";
 import { Limits } from "./limits";
 

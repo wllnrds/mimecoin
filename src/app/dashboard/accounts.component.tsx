@@ -19,7 +19,7 @@ export async function Accounts({ namespaceIndex = 0 }) {
     const namespace = namespaces[namespaceIndex];
     const accounts = await namespace.getAccounts();
 
-    return accounts.map( account => <div className="p-4 bg-white text-tiny rounded-2xl">
+    return accounts.map( account => <div key={`account-${ account.id }`} className="p-4 bg-white text-tiny rounded-2xl">
         <div className="flex space-x-4 items-center">
             <div className="rounded-full bg-secondary text-white h-8 w-8 flex items-center justify-center">{ account.name.split(" ").map( i => i[0] ).join("").substring(0,2) }</div>
             <div className="flex-1 py-1">

@@ -117,7 +117,7 @@ export class Transaction{
         }
     }
 
-    async Sign( originPassword? : string ){
+    async Sign({ originPassword, cancelIfFail = false } : { originPassword? : string, cancelIfFail: boolean } ){
         if( this.status != 'pending' ){        
             if( this.status == 'cancelled'){
                 throw new Error("Transaction was cancelled")
@@ -220,7 +220,12 @@ export class Transaction{
                 }).executeTakeFirstOrThrow();
             }
         }).catch( async (err)  => {
-            throw new Error("Fail to make transaction")
+            if( cancelIfFail ){
+                await db.updateTable('Transaction').set({ status: 'cancelled' }).where('id','=',this.id).executeTakeFirstOrThrow();
+            }
+            
+            console.error( err );
+            throw new Error("Fail to make transaction");
         });
 
         this.confirmedAt = confirmedAt;

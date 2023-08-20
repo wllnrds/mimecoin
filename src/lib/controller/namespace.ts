@@ -213,7 +213,7 @@ export class Namespace{
         
         const transaction = await Transaction.preBuilt( type, fixedAmount, headline, details, this.code, null, accountNumber );
         try {
-            await transaction.Sign();
+            await transaction.Sign({ cancelIfFail: true });
         } catch (error) {
             throw error
         }
@@ -278,12 +278,12 @@ export class Namespace{
                     end = new Date( start.setDate( start.getDate() + 30 ).toLocaleString() );
                 }
 
-                q.push( eb('Transaction.confirmedAt','>', start ) )
-                q.push( eb('Transaction.confirmedAt','<', end ) )
+                q.push( eb('Transaction.createdAt','>', start ) )
+                q.push( eb('Transaction.createdAt','<', end ) )
             }
 
             return and(q)
-        }).orderBy('Transaction.confirmedAt', 'desc').execute();
+        }).orderBy('Transaction.createdAt', 'desc').execute();
 
         for( const t of transactions ){
             t.amount = (t.amount / ( Math.pow(10, precision) )).toFixed( precision ).toString();
