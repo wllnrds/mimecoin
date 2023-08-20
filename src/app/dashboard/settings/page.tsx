@@ -5,6 +5,11 @@ import { Suspense } from "react";
 import { LimitsSqueleton, LimitsWidget } from "./limit.component";
 import { TokenWidget } from "./token.component";
 import { NamespaceWidget } from "./namespace.component";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'Settings',
+}
 
 export default async function Page() {
     const session = await getServerSession(authOptions);

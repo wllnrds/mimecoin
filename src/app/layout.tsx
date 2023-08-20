@@ -1,15 +1,17 @@
 import '@/style/globals.scss'
 
-import type { Metadata } from 'next'
 import Provider from './providers'
-
-export const metadata: Metadata = {
-  title: 'Mimecoin',
-  description: 'Token as a Service',
-}
-
+import type { Metadata } from 'next'
 import * as moment from 'moment';
 import 'moment/locale/pt-br';
+ 
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Mimecoin",
+    absolute: "Mimecoin",
+    default: "Dashboard"
+  }
+}
 
 export default function RootLayout({ children, }: { children: React.ReactNode }) {
   return (

@@ -9,6 +9,11 @@ import { Transactions } from "./transactions";
 import { Accounts, AccountsSqueleton } from "./accounts.component";
 import { LimitsSqueleton } from "./limits.component";
 import { Limits } from "./limits";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+}
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
