@@ -33,6 +33,18 @@ export class Account{
         this.updatedAt = updatedAt;
     }
 
+    static async get(id: string, idCustomer: string){
+        try {
+            const account = await db.selectFrom('NamespaceAccount').selectAll().where(({and, eb})=>and([
+                eb('id','=',id),
+                eb('NamespaceAccount.idCustomer','=',idCustomer)
+            ])).executeTakeFirstOrThrow();
+            return account;
+        } catch (error) {
+            return null;
+        }
+    }
+
     static async create( idNamespace: string, name: string, document: string, birthday: Date, email: string ){
         const namespace = await db.selectFrom('Namespace').select(['status','code']).where('id','=',idNamespace).executeTakeFirst();
 
