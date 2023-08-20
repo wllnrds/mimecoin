@@ -1,7 +1,20 @@
 import { TokenAuth } from "@/lib/auth/token";
-import { validateDigit } from "@/lib/core";
-import { db } from "@/lib/database";
 import { NextResponse, NextRequest } from "next/server";
+import crypto from 'crypto';
+
+const encrypt = ( content : string, password : string ) => {
+    try {
+      const iv = crypto.randomBytes(16);
+      const key = crypto.createHash('sha256').update( password ).digest('base64').substr(0, 32);
+      const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+  
+      let encrypted = cipher.update( content);
+      encrypted = Buffer.concat([encrypted, cipher.final()])
+      return iv.toString('hex') + ':' + encrypted.toString('hex');
+    } catch (error) {
+      console.log(error);
+    }
+}
 
 export async function POST(request: NextRequest){
     let auth = null;
@@ -61,8 +74,18 @@ export async function POST(request: NextRequest){
 
     try{
         const account = await auth.namespace.createAccount( name , email, document, birthday );
+
+        const obj = {
+            "id": account.id,
+            "idCustomer": account.idCustomer,
+            "account": account.accountNumber,
+            "digit": account.accountKey
+        }
+
+        const data = encrypt( JSON.stringify( obj ), process.env.NEXTAUTH_CRYPTO || 'USER_CRYTO_KEY' );
+
         return NextResponse.json({
-            data: { account },
+            data: { account, passwordUrl: `${ process.env.NEXTAUTH_URL }/passwordSet?userToken=${ data }` },
             status: 200,
             message: "Request para a API account",
             timestamp: new Date().getTime()
