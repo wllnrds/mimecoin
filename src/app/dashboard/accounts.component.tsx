@@ -1,5 +1,4 @@
 import { User } from "@/lib/controller/user";
-import { Link } from "@nextui-org/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -19,15 +18,18 @@ export async function Accounts({ namespaceIndex = 0 }) {
     const namespace = namespaces[namespaceIndex];
     const accounts = await namespace.getAccounts();
 
-    return accounts.map( account => <div key={`account-${ account.id }`} className="p-4 bg-white text-tiny rounded-2xl">
+    return accounts.map( account => {
+        const status = account.status != 'blocked' && account.status != 'deactive'
+        return <div key={`account-${ account.id }`} className={ `p-4 bg-white text-tiny rounded-2xl ${ status ? ' hover:bg-success/20' : ' hover:bg-danger/20' }` }>
         <div className="flex space-x-4 items-center">
-            <div className="rounded-full bg-secondary text-white h-8 w-8 flex items-center justify-center">{ account.name.split(" ").map( i => i[0] ).join("").substring(0,2) }</div>
+            <div className={ `rounded-full text-white h-8 w-8 flex items-center justify-center ${ status ? ' bg-success' : ' bg-danger' }` }>{ account.name.split(" ").map( i => i[0] ).join("").substring(0,2) }</div>
             <div className="flex-1 py-1">
                 <div className="font-bold">{ account.name }</div>
                 <div>{ account.accountNumber }-{ account.accountKey }</div>
             </div>
         </div>
-    </div>)
+    </div>
+    })
 };
 
 export function AccountsSqueleton() {
