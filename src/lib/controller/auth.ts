@@ -121,7 +121,8 @@ export class AuthAccount{
             const updated = await db.updateTable('NamespaceAccount')
                 .set({
                     accountPassword,
-                    updatedAt: new Date() 
+                    status: 'active',
+                    updatedAt: new Date()
                 })
                 .where('id','=',account.id)
                 .executeTakeFirstOrThrow();
