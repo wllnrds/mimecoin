@@ -8,6 +8,7 @@ import { Account } from './account';
 import { Transaction } from './transation';
 import { validateDigit } from '../core';
 import { PaymentOrder } from './paymentOrder';
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 export class Namespace{
     id: string
@@ -325,7 +326,42 @@ export class Namespace{
 
     async getTransactions( account : Account, start? : Date, end? : Date, transactionStatus : TransactionStatus | null = null){
         const { precision } = await this.getLimits();
-        const transactions : Array<any> = await db.selectFrom('Transaction').selectAll().where(({and,eb}) => {
+        const transactions : Array<any> = await db.selectFrom('Transaction').select((eb) => [
+            "Transaction.id",
+            "Transaction.type",
+            "Transaction.amount",
+            "Transaction.headline",
+            "Transaction.details",
+            "Transaction.namespaceCode",
+            "Transaction.namespaceAccountOrigin",
+            "Transaction.namespaceAccountTarget",
+            "Transaction.status",
+            "Transaction.hash",
+            "Transaction.createdAt",
+            "Transaction.confirmedAt",
+            jsonObjectFrom(
+                eb.selectFrom('NamespaceAccount')
+                    .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
+                    .select([
+                        'Customer.name',
+                        'Customer.document',
+                        'NamespaceAccount.accountNumber',
+                        'NamespaceAccount.accountKey'
+                    ])
+                    .whereRef('Transaction.namespaceAccountOrigin','=','NamespaceAccount.accountNumber')
+            ).as("originAccount"),
+            jsonObjectFrom(
+                eb.selectFrom('NamespaceAccount')
+                    .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
+                    .select([
+                        'Customer.name',
+                        'Customer.document',
+                        'NamespaceAccount.accountNumber',
+                        'NamespaceAccount.accountKey'
+                    ])
+                    .whereRef('Transaction.namespaceAccountTarget','=','NamespaceAccount.accountNumber')
+            ).as("targetAccount")
+        ]).where(({and,eb}) => {
             const q = [
                 eb('Transaction.namespaceCode','=',this.code),
                 eb('Transaction.namespaceAccount','=',account.accountNumber)
@@ -345,6 +381,8 @@ export class Namespace{
 
             return and(q)
         }).orderBy('Transaction.confirmedAt', 'desc').execute();
+
+        console.table( transactions );
 
         for( const t of transactions ){
             t.amount = (t.amount / ( Math.pow(10, precision) )).toFixed( precision ).toString();
