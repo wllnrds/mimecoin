@@ -1,11 +1,13 @@
 import { suid } from 'rand-token';
 import bcrypt from 'bcrypt';
 
-import { Status } from "@/lib/database/db";
+
+import { Status, TransactionStatus } from "@/lib/database/db";
 import { db } from "@/lib/database";
 import { Account } from './account';
 import { Transaction } from './transation';
 import { validateDigit } from '../core';
+import { PaymentOrder } from './paymentOrder';
 
 export class Namespace{
     id: string
@@ -180,6 +182,88 @@ export class Namespace{
         return account;
     }
 
+    async transfer(
+        source : string,
+        target : string,
+        amount : number,
+        headline : string = '', 
+        details : string = ''){
+            const { precision } = await this.getLimits();
+            const fixedAmount = amount * ( Math.pow(10, precision) );
+    
+            const account_source = await db
+                .selectFrom('NamespaceAccount')
+                .selectAll()
+                .where(({and, eb})=>and([
+                    eb('namespaceCode','=',this.code),
+                    eb('accountNumber','=', source)
+                ])).executeTakeFirst();
+    
+            if( !account_source ){
+                throw new Error("Invalid account source");
+            }
+
+            if( fixedAmount > account_source.balance ){
+                throw new Error("Source account has insuficient funds.");
+            }
+    
+            const accountTarget = validateDigit( target );
+    
+            if( !accountTarget ){
+                throw new Error("Invalid target account number");
+            }
+    
+            const account_target = await db
+                .selectFrom('NamespaceAccount')
+                .selectAll()
+                .where(({and, eb})=>and([
+                    eb('namespaceCode','=',this.code),
+                    eb('accountNumber','=', accountTarget)
+                ])).executeTakeFirst();
+    
+            if( !account_target ){
+                throw new Error("Invalid account target");
+            }
+            
+            const transaction = await Transaction.preBuilt( 
+                'transfer',
+                fixedAmount,
+                headline,
+                details,
+                this.code,
+                source,
+                account_target.accountNumber,
+            )
+    
+            return transaction;
+    }
+
+    async createPaymentOrder( account : string, key : string, amount : number, due : Date ){
+        const { precision } = await this.getLimits();
+        const fixedAmount = amount * ( Math.pow(10, precision) );
+
+        const order = await PaymentOrder.Generate({ 
+            namespaceCode: this.code,
+            namespaceAccountOrigin: account,
+            namespaceAccountOriginKey: key,
+            amount: fixedAmount,
+            due,
+            precision
+        })
+
+        order.amount = amount;
+
+        return order;
+    }
+
+    async getPaymentOrder( digits : string ){
+        const { precision } = await this.getLimits();
+
+        const order = await PaymentOrder.getOrder( this.code, digits )
+
+        return order;
+    }
+
     async deposit( account : string, amount : number, 
         type : 'deposit' | 'refund' | 'bonus' | 'cashback' = 'deposit',
         headline : string = '', 
@@ -239,7 +323,7 @@ export class Namespace{
         }
     }
 
-    async getTransactions( account : Account, start : Date, end : Date ){
+    async getTransactions( account : Account, start? : Date, end? : Date, transactionStatus : TransactionStatus | null = null){
         const { precision } = await this.getLimits();
         const transactions : Array<any> = await db.selectFrom('Transaction').selectAll().where(({and,eb}) => {
             const q = [
@@ -247,11 +331,14 @@ export class Namespace{
                 eb('Transaction.namespaceAccount','=',account.accountNumber)
             ];
 
+            if( transactionStatus ){
+                q.push( eb('Transaction.status', '=', transactionStatus) )
+            }
+
             if( start ){
                 if( !end ){
                     end = new Date( start.setDate( start.getDate() + 30 ).toLocaleString() );
                 }
-
                 q.push( eb('Transaction.confirmedAt','>', start ) )
                 q.push( eb('Transaction.confirmedAt','<', end ) )
             }
@@ -268,28 +355,30 @@ export class Namespace{
 
     async getRootTransactions( start? : Date, end? : Date ){
         const { precision } = await this.getLimits();
-        const transactions : Array<any> = await db.selectFrom('Transaction').selectAll().where(({and,eb,}) => {
+        const transactions : Array<any> = await db.selectFrom('Transaction').selectAll().where(({and,eb,not,parens}) => {
             const q = [
-                eb('Transaction.namespaceCode','=',this.code),
+                eb('namespaceCode','=',this.code),
+                eb('namespaceAccount','is',null)
             ];
 
             if( start ){
                 if( !end ){
                     end = new Date( start.setDate( start.getDate() + 30 ).toLocaleString() );
                 }
-
-                q.push( eb('Transaction.createdAt','>', start ) )
-                q.push( eb('Transaction.createdAt','<', end ) )
+                q.push( eb('createdAt','>', start ) )
+                q.push( eb('createdAt','<', end ) )
             }
 
             return and(q)
-        }).orderBy('Transaction.createdAt', 'desc').execute();
+        }).orderBy('createdAt', 'desc').execute();
 
         for( const t of transactions ){
             t.amount = (t.amount / ( Math.pow(10, precision) )).toFixed( precision ).toString();
         }
 
-        return transactions.map( t => ( t.namespaceAccount == null ) ? Transaction.DbToObj( t ) : undefined ).filter( t => !!t );
+        return transactions
+
+        // return transactions.map( t => ( t.namespaceAccount == null ) ? Transaction.DbToObj( t ) : undefined ).filter( t => !!t );
     }
 
     async getAccounts(){

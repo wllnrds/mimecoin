@@ -30,7 +30,11 @@ export async function GET(request: NextRequest){
     if( _days ){
         end_timestamp = start_timestamp + 1000 * 60 * 60 * 24 * parseInt( _days );
     }else{
-        end_timestamp = start_timestamp + 1000 * 60 * 60 * 24 * 30;
+        if( _start ){
+            end_timestamp = start_timestamp + 1000 * 60 * 60 * 24 * 30;
+        }else{
+            end_timestamp = new Date().getTime();
+        }
     }
 
     try {

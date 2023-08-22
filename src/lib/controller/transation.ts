@@ -81,11 +81,11 @@ export class Transaction{
 
         const record = await db.insertInto('Transaction').values({
             type,
-            amount: namespaceAccountOrigin ? Math.abs( amount ) * -1 : Math.abs( amount ),
+            amount: amount,
             headline,
             details,
             namespaceCode,
-            namespaceAccount: namespaceAccountOrigin,
+            namespaceAccount: null,
             namespaceAccountOrigin,
             namespaceAccountTarget,
             createdAt: new Date(),
@@ -145,6 +145,7 @@ export class Transaction{
             }
 
             if( accountSource.balance < Math.abs( this.amount ) ){
+                await db.updateTable('Transaction').set({ status: 'cancelled' }).where('id','=',this.id).executeTakeFirstOrThrow();
                 throw new Error("Insufficient funds");
             }
 
@@ -203,21 +204,46 @@ export class Transaction{
                     balance: eb('balance','+', Math.abs(this.amount))
                 })).where('id','=',accountTarget.id)
                 .executeTakeFirstOrThrow();
+
+                const copies : Array<any> = [];
+
+                // Origin record
+                if( this.namespaceAccountOrigin != null ){
+                    copies.push({
+                        type: this.type,
+                        amount: Math.abs( this.amount ) * -1,
+                        headline: this.headline,
+                        details: this.details,
+                        namespaceCode: this.namespaceCode,
+                        namespaceAccount: this.namespaceAccountOrigin,
+                        namespaceAccountOrigin: this.namespaceAccountOrigin,
+                        namespaceAccountTarget: this.namespaceAccountTarget,
+                        createdAt: this.createdAt,
+                        confirmedAt,
+                        hash,
+                        status: "confirmed"
+                    });
+                }
+
+                // Target record
+                if( this.namespaceAccountTarget != null ){
+                    copies.push({
+                        type: this.type,
+                        amount: Math.abs(this.amount),
+                        headline: this.headline,
+                        details: this.details,
+                        namespaceCode: this.namespaceCode,
+                        namespaceAccount: this.namespaceAccountTarget,
+                        namespaceAccountOrigin: this.namespaceAccountOrigin,
+                        namespaceAccountTarget: this.namespaceAccountTarget,
+                        createdAt: this.createdAt,
+                        confirmedAt,
+                        hash,
+                        status: "confirmed"
+                    });
+                }
                 
-                await trx.insertInto('Transaction').values({
-                    type: this.type,
-                    amount: Math.abs(this.amount),
-                    headline: this.headline,
-                    details: this.details,
-                    namespaceCode: this.namespaceCode,
-                    namespaceAccount: accountTarget.accountNumber,
-                    namespaceAccountOrigin: this.namespaceAccountOrigin,
-                    namespaceAccountTarget: this.namespaceAccountTarget,
-                    createdAt: this.createdAt,
-                    confirmedAt,
-                    hash,
-                    status: "confirmed"
-                }).executeTakeFirstOrThrow();
+                await trx.insertInto('Transaction').values(copies).executeTakeFirstOrThrow();
             }
         }).catch( async (err)  => {
             if( cancelIfFail ){

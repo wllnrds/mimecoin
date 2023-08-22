@@ -19,6 +19,17 @@ export function TransactionsWidget({ transactions = [] } : { transactions : Arra
         'pending': 'warning',
         'confirmed': 'success'
     }
+    
+    const types_icons = {
+        "bonus": "redeem",
+        "cashback": "redeem",
+        "deposit": "money",
+        "mint": "money",
+        "payment": "payments",
+        "refund": "undo",
+        "transfer": "currency_exchange",
+        "withdraw" : "attach_money"
+    }
 
     return transactions.map( tra => {
         if( tra == undefined ){
@@ -26,7 +37,9 @@ export function TransactionsWidget({ transactions = [] } : { transactions : Arra
         }else{
             return <div className={ "p-2 rounded-2xl hover:bg-" + statusTheme[ tra.status ].toString() + "/10 text-tiny" } key={`transaction-${ tra.id }`}>
                 <div className="flex space-x-4 items-center">
-                    <div className={`rounded-full bg-${ statusTheme[ tra.status ] } text-white h-8 w-8 flex items-center justify-center`}>{ tra.confirmedAt?.getDay() || "??" }</div>
+                    <div className={`rounded-full bg-${ statusTheme[ tra.status ] } text-white h-8 w-8 flex items-center justify-center`}>
+                        <span className="material-icon text-2xl">{ types_icons[tra.type] }</span>
+                    </div>
                     <div className="flex-1 py-1 space-y-1">
                         <div className="flex gap-2">
                             <div className={`uppercase text-${ statusTheme[ tra.status ] }-600 font-bold`}>{ types[tra.type] }</div>
