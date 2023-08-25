@@ -108,8 +108,6 @@ export class Account{
             last = parseInt(result.accountNumber);
         }).catch(()=>{ });
 
-        console.log( last )
-
         last += 1;
 
         if( last > 99999){

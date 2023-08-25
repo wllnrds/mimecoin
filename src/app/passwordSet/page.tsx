@@ -85,7 +85,7 @@ const decrypt = ( content : string ) => {
     const decryptedText = Buffer.concat([decrypted, decipher.final()]);
     return decryptedText.toString();
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 

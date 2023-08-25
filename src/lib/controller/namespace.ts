@@ -163,7 +163,7 @@ export class Namespace{
     async getAccount( number : string ){
         const accountNumber = validateDigit( number );
 
-        if( !accountNumber ){
+        if( !accountNumber || accountNumber.length < 5 ){
             throw new Error("Invalid account number");
         }
     
@@ -181,6 +181,41 @@ export class Namespace{
         await account.loadCustomer();
 
         return account;
+    }
+
+    async getAccountCustomer( number : string ){
+        let accountNumber : any = '';
+
+        if( number.length == 6 ){
+            accountNumber = validateDigit( number );
+        }else{
+            accountNumber = number;
+        }
+
+        if( !accountNumber || accountNumber.length < 5 ){
+            throw new Error("Invalid account number");
+        }
+    
+        const account_db = await db.selectFrom('NamespaceAccount').selectAll().where(({eb,and})=>and([
+            eb('accountNumber','=',accountNumber),
+            eb('namespaceCode','=',this.code)
+        ])).executeTakeFirst()
+
+        
+        if( !account_db ){
+            throw new Error("Account not founded");
+        }
+
+        const account = Account.DbToObj( account_db );
+        await account.loadCustomer();
+
+        return {
+            code: account?.namespaceCode,
+            number: account?.accountNumber,
+            digit: account?.accountKey,
+            customer: account?.customer!.name,
+            document: account?.customer!.document
+        };
     }
 
     async transfer(
@@ -259,9 +294,8 @@ export class Namespace{
 
     async getPaymentOrder( digits : string ){
         const { precision } = await this.getLimits();
-
-        const order = await PaymentOrder.getOrder( this.code, digits )
-
+        const order = await PaymentOrder.getOrder( this.code, digits );
+        order.amount = order.amount / ( Math.pow(10, precision) );
         return order;
     }
 
@@ -381,8 +415,6 @@ export class Namespace{
 
             return and(q)
         }).orderBy('Transaction.confirmedAt', 'desc').execute();
-
-        console.table( transactions );
 
         for( const t of transactions ){
             t.amount = (t.amount / ( Math.pow(10, precision) )).toFixed( precision ).toString();

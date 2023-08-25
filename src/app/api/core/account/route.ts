@@ -12,7 +12,7 @@ const encrypt = ( content : string, password : string ) => {
       encrypted = Buffer.concat([encrypted, cipher.final()])
       return iv.toString('hex') + ':' + encrypted.toString('hex');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 }
 
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest){
         const data = encrypt( JSON.stringify( obj ), process.env.NEXTAUTH_CRYPTO || 'USER_CRYTO_KEY' );
 
         return NextResponse.json({
-            data: { account, passwordUrl: `${ process.env.NEXTAUTH_URL }/passwordSet?userToken=${ data }` },
+            data: { account, passwordUrl: `${ process.env.VERCEL_URL }/passwordSet?userToken=${ data }` },
             status: 200,
             message: "Account created",
             timestamp: new Date().getTime()

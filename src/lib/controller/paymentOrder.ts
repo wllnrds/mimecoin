@@ -51,7 +51,12 @@ export class PaymentOrder{
     }
 
     static async getOrder( namespaceCode : string, digits : string ){
+        const order = await db.selectFrom('PaymentOrder').selectAll().where(({ eb, and })=>and([
+            eb('PaymentOrder.namespaceCode', '=', namespaceCode),
+            eb('PaymentOrder.digits','=', digits)
+        ])).executeTakeFirst();
 
+        return PaymentOrder.DbToObj(order);
     }
 
     static async Generate( params :{
@@ -63,7 +68,6 @@ export class PaymentOrder{
         precision: number,
     }){
         const digits = PaymentOrder._digitGenerator( params );
-
         const entry = await db.insertInto('PaymentOrder').values({
             namespaceCode: params.namespaceCode,
             namespaceAccountOrigin: params.namespaceAccountOrigin,
@@ -79,7 +83,6 @@ export class PaymentOrder{
     getDigits(){
         const REGEX_DIGIT = new RegExp("([a-z]{3})(0)([0-9]{5})([0-9]{1})([0-9]{5})([0-9]{6})([0-9]{1})([0-9]{5})([0-9]{6})([0-9]{1})([0-9]{4})([0-9]{1,})");
         const REPLACE_DIGIT = "$1 $2 $3 $4 $5.$6 $7 $8.$9 $10 $11 $12"
-
         return this.digits.replace( REGEX_DIGIT, REPLACE_DIGIT );
     }
 
@@ -109,8 +112,6 @@ export class PaymentOrder{
 
         let fromBase = fromBaseDate( params.due ).padStart( 4, "0" )
         let value = params.amount.toString().padStart(10,"0")
-
-        console.log( [start, middle, fromBase, value].join('') )
         
         return [start, middle, fromBase, value].join('');
     }
