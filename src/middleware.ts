@@ -29,6 +29,11 @@ export async function middleware(request: NextRequest) {
   if( test.resource == true && !request.headers.has('X-Resource-Token') ){
     return NotAllowed("Not logged.", 401);
   }
+
+  if (request.nextUrl.pathname.startsWith('/api')) {
+    const res = NextResponse.next()
+    res.headers.append('Access-Control-Allow-Origin', '*')
+  }
 }
 
 function NotAllowed ( message:string , status : number ){
