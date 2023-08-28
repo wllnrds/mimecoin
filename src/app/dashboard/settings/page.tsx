@@ -6,6 +6,7 @@ import { LimitsSqueleton, LimitsWidget } from "./limit.component";
 import { TokenWidget } from "./token.component";
 import { NamespaceWidget } from "./namespace.component";
 import { Metadata } from "next";
+import { GenerateToken } from "./generatetoken.component";
 
 export const metadata: Metadata = {
     title: 'Settings',
@@ -60,9 +61,33 @@ export default async function Page() {
             </div>
         </div>
         <div className="content-card">
-            <h2 className="text-2xl">Suas chaves</h2>
+            <div className="flex flex-row">
+                <h2 className="flex-1 text-2xl">Suas chaves</h2>
+                <GenerateToken namespaces={ namespaces } />
+            </div>
             <div>
                 { tokens.map(item => <TokenWidget key={`accesstoken-${item.id}`} item={item} />) }
+            </div>
+            <div className="flex flex-col gap-4 p-2">
+                <p className="font-bold">Como usar:</p>
+                <p>Adicione no header das requisições um JWT com o token de API do namespace e o JWT do usuário logado assinados com o segredo da chave utilizada. Você pode incluir informações de prazo de validade do token gerado para aumentar a segurança, mas a informação X-Integration-Token é obrigatória em todas as requisições.</p>
+                <pre className="p-6 bg-primary-50 rounded-3xl font-mono text-sm">
+                    {`header = {
+    "alg": "HS256",
+    "typ": "JWT"
+}
+
+payload = {
+    "X-Integration-Token":"Sua chave de API",
+    "X-Resource-Token":"JWT do usuário autenticado" 
+}
+
+HMACSHA256(
+    base64UrlEncode( header ) + '.' +
+    base64UrlEncode( payload ),
+    (secret da chave anunciada no payload)
+)`}
+                </pre>
             </div>
         </div>
     </div>;

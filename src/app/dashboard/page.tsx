@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: 'Dashboard',
 }
 
-export default async function Home() {
+export default async function Home({ searchParams } : {  searchParams : { [key: string]: string | string[] | undefined } }) {
   const session = await getServerSession(authOptions);
 
   if( !session ){
@@ -28,17 +28,19 @@ export default async function Home() {
     redirect('./');
   }
 
+  const namespaceIndex = searchParams.namespaceIndex ? parseInt( searchParams.namespaceIndex as string ) : 0 ;
+
   return (
     <div className="flex-1 w-full flex p-6 flex-col lg:flex-row gap-6 items-stretch">
       <div className="flex gap-6 flex-col">
         <Suspense fallback={ <LimitsSqueleton /> }>
-          <Limits namespaceIndex={ 0 } />
+          <Limits namespaceIndex={ namespaceIndex } />
         </Suspense>
         <div className="flex-1 flex gap-6 flex-col">
           <h2 className="font-bold">Contas</h2>
           <div className="content-list">
             <Suspense fallback={ <AccountsSqueleton /> }>
-              <Accounts namespaceIndex={ 0 } />
+              <Accounts namespaceIndex={ namespaceIndex } />
             </Suspense>
           </div>
         </div>
@@ -47,7 +49,7 @@ export default async function Home() {
         <h2 className="font-bold">Transações</h2>
         <div className="content-list">
           <Suspense fallback={ <AccountsSqueleton /> }>
-            <Transactions namespaceIndex={ 0 } />
+            <Transactions namespaceIndex={ namespaceIndex } />
           </Suspense>
         </div>
       </div>      

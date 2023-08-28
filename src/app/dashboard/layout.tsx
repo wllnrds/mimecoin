@@ -1,7 +1,8 @@
 import { DashboardButton, LoginButton, LogoutButton, RegisterButton, SettingsButton } from "@/components/auth/buttons.components";
-import { Namespaces } from "./namespaces.component";
+import { Namespaces } from "./namespaces";
 
 export default async function Home({ children }: { children: React.ReactNode }) {
+
   return (
     <div className="flex-1 flex flex-col lg:grid 2xl:grid-cols-8 md:grid-cols-4 bg-foreground overflow-hidden">
       <aside className="border-r-1 border-foreground-600 p-6 flex flex-col gap-6 bg-foreground-800 max-h-screen sticky">

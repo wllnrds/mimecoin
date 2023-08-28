@@ -1,37 +1,30 @@
-import { User } from "@/lib/controller/user";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+'use client';
 
-export const Namespaces = async () => {
-    const session = await getServerSession(authOptions);
+import { useSearchParams } from "next/navigation";
 
-    if( !session ){
-      return;
-    }
+export async function NamespacesWidget({ namespaces = [] , limit } : { namespaces : Array<any>, limit : any  }){
+    const searchParams = useSearchParams();
+    const namespaceIndex = searchParams.has('namespaceIndex') ? parseInt( searchParams.get('namespaceIndex') || '0' ) : 0 ;
 
-    const user_session : any = session.user;
-    const user = await User.get( user_session.id );
-    if( !user ){
-        return;
-    }
-    const namespaces = await user.getNamespaces();
-    const limit = await user.getLimit();
+    const square_base = "border box-content border-primary text-primary rounded-xl aspect-square overflow-hidden justify-center items-center flex";
+    const square_active = "border box-content bg-secondary text-secondary-foreground rounded-xl aspect-square overflow-hidden justify-center items-center flex";
 
-    const square_base = "border box-content border-primary rounded-xl aspect-square overflow-hidden justify-center items-center flex";
-    const square_inner = "text-xs aspect-square text-primary overflow-hidden justify-center items-center flex w-8 line-clamp-1";
+    const square_inner = "text-xs aspect-square overflow-hidden justify-center items-center flex w-8 line-clamp-1";
 
     return (<div className="flex flex-col gap-3">
-        <aside className="flex gap-3 justify-start align-middle items-center bg-white rounded-2xl p-2 pl-5">
-            <span className="flex-1 text-xs">Seu Mime</span>
+        <aside className="flex gap-3 justify-start align-middle items-center bg-white rounded-2xl p-4 flex-wrap">
+            <span className="flex-1 text-xs">Seus Mimes</span>
+            <div className="flex flex-wrap gap-2">
             { 
                 ( namespaces.length == 0 ) ? 
                     <div className={ `${ square_base } border-dashed` }>
                         <span className={ square_inner }></span>
-                    </div> : namespaces.map( namespace => 
-                    <a href="/" key={`namespaces-link-${ namespace.id }`} className={ `${ square_base } hover:bg-primary-50` } title={ namespace.name }>
+                    </div> : namespaces.map( ( namespace, index ) => 
+                    <a href="/" key={`namespaces-link-${ namespace.id }`} className={ `${ index === namespaceIndex ? square_active : square_base } hover:bg-primary-50` } title={ namespace.name }>
                         { namespace.pic ? <img src={ namespace.pic } /> : <span className={ square_inner }>{ namespace.code }</span>}
                     </a> )
             }
+            </div>
         </aside>        
         
         {
