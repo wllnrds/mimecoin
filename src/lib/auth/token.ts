@@ -1,37 +1,39 @@
-import jwt from 'jsonwebtoken';
 import {  type NextRequest } from "next/server";
 import { Namespace } from "@/lib/controller/namespace";
 
 export async function TokenAuth(request: NextRequest) {
-    let token = request.headers.get('X-Integration-Token');
-    let secret = request.headers.get('X-Integration-Secret');
+    let authorization = request.headers.get('authorization');
+    
+    if( !authorization ){
+        throw new Error("Missing authorization")
+    }
 
-    let result = await Namespace.CheckToken(token || '', secret || '');
+    const auth = authorization.split(' ');
+    let token;
+    switch (auth[0]) {
+        case 'Bearer':
+            if(!auth[1]){
+                throw new Error("Missing token")
+            }
+            token = auth[1];
+            break;
+        default:
+            throw new Error("Missing bearing token")
+    }
 
-    return {
-        namespace: result
-    };
+    return await Namespace.CheckToken(token);
 }
 
 export async function UserAuth(request: NextRequest) {
-    let { namespace } = await TokenAuth( request );
+    let auth = await TokenAuth( request );
 
-    let token = request.headers.get('X-Resource-Token')
-
-    if( !token ){
-        throw new Error("User token not founded")
+    if( auth.error ){
+        throw new Error( auth.error )
     }
 
-    const result : any = jwt.verify( token, process.env.NEXTAUTH_SECRET || 'COLOCA_UM_SECRET' );
-
-    if(!result){
-        throw new Error("User token invalid")
+    if( !auth.account ){
+        throw new Error("User token not working")
     }
 
-    const account = await namespace.getAccount( result.number + result.digit );
-
-    return {
-        namespace,
-        account
-    };
+    return auth;
 }

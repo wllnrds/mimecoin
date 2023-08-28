@@ -67,6 +67,7 @@ export async function POST(request: NextRequest){
 
     try{
         const account_auth = await AuthAccount.Login( auth.namespace.code,account + digit, password );
+
         return NextResponse.json({
             data: { token : account_auth },
             status: 200,

@@ -8,7 +8,7 @@
 - **2. Core**
     - [x] 2.1. `GET /api/core/account` Pega as informações de uma conta
     - [x] 2.2. `GET /api/core/request/deposit` Faz um depósito em uma conta
-    - [ ] 2.3. `GET /api/core/order` Pega uma ordem de pagamento
+    - [x] 2.3. `GET /api/core/order` Pega uma ordem de pagamento
 
 - **3. Account**
     - [x] 3.1. `POST /api/core/account` Cria uma conta

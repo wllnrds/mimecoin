@@ -16,7 +16,7 @@ connection = new Kysely<DB>({
 });
 
 // if( process.env.POSTGRES_HOST?.includes('localhost')){
-//     console.log("Usando Kysely direto")
+//     console.info("Usando Kysely direto")
 //     connection = new Kysely<DB>({
 //         dialect: new PostgresDialect({
 //             pool: new Pool({
@@ -25,7 +25,7 @@ connection = new Kysely<DB>({
 //         })
 //     });
 // }else{
-//     console.log("Usando vercel")
+//     console.info("Usando vercel")
 //     connection = createKysely<DB>();
 // }
 

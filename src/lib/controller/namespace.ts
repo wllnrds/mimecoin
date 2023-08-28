@@ -1,6 +1,6 @@
 import { suid } from 'rand-token';
 import bcrypt from 'bcrypt';
-
+import jwt from 'jsonwebtoken';
 
 import { Status, TransactionStatus } from "@/lib/database/db";
 import { db } from "@/lib/database";
@@ -102,14 +102,12 @@ export class Namespace{
             key: `mimecoin_${ suid(8) }`,
             secret: suid(16)
         };
-
-        const secret = bcrypt.hashSync( token.secret, bcrypt.genSaltSync( 10 ) )
         
         await db.insertInto('AccessToken').values({
             idUser: idUser,
             idNamespace: this.id,
             key: token.key,
-            secret: secret,
+            secret: token.secret,
             expiresAt: expiresAt?.toISOString()
         }).executeTakeFirstOrThrow()
 
@@ -140,24 +138,44 @@ export class Namespace{
         )
     }
 
-    static async CheckToken( key: string, secret: string ){
-        const token = await db.selectFrom('AccessToken').selectAll().where('AccessToken.key', '=', key ).executeTakeFirst();
+    static async CheckToken( jwtToken: string ){
+        const decoded : any = jwt.decode( jwtToken );
 
-        if( !token ){
+        const apiKey = decoded["X-Integration-Token"];
+
+        const accessToken = await db.selectFrom('AccessToken').selectAll().where('AccessToken.key', '=', apiKey ).executeTakeFirst();
+
+        if( !accessToken ){
             throw new Error('Token invalid.')
         }
 
-        const result = bcrypt.compareSync( secret, token.secret || '' )
+        const result = jwt.verify( jwtToken, accessToken.secret );
 
         if( !result ){
             throw new Error('Secret invalid.')
         }
 
-        if( token.expiresAt != null && new Date( token.expiresAt ) < new Date() ){
-            throw new Error(`Token expired on ${ new Date( token.expiresAt ).toLocaleString() }`)
+        if( accessToken.expiresAt != null && new Date( accessToken.expiresAt ) < new Date() ){
+            throw new Error(`Token expired on ${ new Date( accessToken.expiresAt ).toLocaleString() }`)
         }
 
-        return await Namespace.get( token.idNamespace ) ;
+        const namespace = await Namespace.get( accessToken.idNamespace );
+
+        const resource = decoded["X-Resource-Token"];
+        
+        let data : any = { namespace }
+        
+        if( resource ){
+            try {
+                const userJwt : any = jwt.verify( resource, namespace.id );
+                const account = await namespace.getAccount( userJwt.number + userJwt.digit );
+                data["account"] = account;
+            } catch (error:any) {
+                data["error"] = error.message;
+            }
+        }
+
+        return data ;
     }
 
     async getAccount( number : string ){

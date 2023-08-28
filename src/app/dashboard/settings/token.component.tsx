@@ -11,7 +11,7 @@ export function TokenWidget({ item } : { item : any }) {
                 <div className="flex flex-1 flex-col items-start gap-2">
                     <div className='text-xs'>Chave assoaciada ao mime <span className="font-bold">{ item.name }</span></div>
                     <Snippet variant="solid" color="secondary" symbol="">{ item.key }</Snippet>
-                    
+                    <Snippet variant="solid" color="secondary" symbol="">{ item.secret }</Snippet>                    
                 </div>
                 <div className="flex gap-6 items-center sm:justify-center sm:items-end">
                     <div className="text-tiny py-1">{ !item.expiresAt ? 'A chave não vence.' : <>Vence em <span className="text-secondary">{ moment( item.expiresAt ).format('D [de] MMMM [de] YYYY [às] H:mm:ss') }</span></> }</div>

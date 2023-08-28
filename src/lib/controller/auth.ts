@@ -58,7 +58,6 @@ export class AuthAccount{
                 eb('accountNumber','=',account_number),
                 eb('namespaceCode','=',namespace_code)
             ])).executeTakeFirst()
-
         if( !data ){
             throw new Error('Account not founded.');
         }
@@ -75,6 +74,8 @@ export class AuthAccount{
             throw new Error('Password is invalid');
         }
 
+        const namespace = await db.selectFrom('Namespace').select('id').where('code','=',namespace_code).executeTakeFirstOrThrow();
+
         const token = {
             code: data.namespaceCode,
             number: data.accountNumber,
@@ -88,7 +89,7 @@ export class AuthAccount{
             }
         }
 
-        return jwt.sign( token , process.env.NEXTAUTH_SECRET || 'COLOCA_UM_SECRET', {
+        return jwt.sign( token , namespace.id, {
             expiresIn: '1h'
         });
     }
