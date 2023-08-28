@@ -18,6 +18,15 @@ export async function Namespaces(){
     const namespaces = await user.getNamespaces();
     const limit = await user.getLimit();
 
-    return <NamespacesWidget namespaces={ namespaces } limit={ limit } />
+    return <NamespacesWidget namespaces={ namespaces.flatMap( ns => ({
+      id: ns.id,
+      code: ns.code,
+      pic: ns.pic,
+      name: ns.name ,
+      status: ns.status,
+      createdAt: ns.createdAt,
+      updatedAt: ns.updatedAt,
+      createdBy: ns.createdBy,
+  }) ) } limit={ limit } />
   };
   

@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 
-export async function NamespacesWidget({ namespaces = [] , limit } : { namespaces : Array<any>, limit : any  }){
+export function NamespacesWidget({ namespaces = [] , limit } : { namespaces : Array<any>, limit : any  }){
     const searchParams = useSearchParams();
     const namespaceIndex = searchParams.has('namespaceIndex') ? parseInt( searchParams.get('namespaceIndex') || '0' ) : 0 ;
 

@@ -20,7 +20,7 @@ export async function Transactions({ namespaceIndex = 0 }){
     }
     const namespaces = await user.getNamespaces();
     const namespace = namespaces[namespaceIndex];
-    const transactions = await namespace.getRootTransactions() as Array<Transaction>;
+    const transactions = await namespace.getRootTransactions() as any;
 
     return <TransactionsWidget transactions={ transactions } />
 }

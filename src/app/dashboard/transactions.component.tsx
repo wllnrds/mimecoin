@@ -2,7 +2,7 @@ import { Transaction } from "@/lib/controller/transation";
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
-export function TransactionsWidget({ transactions = [] } : { transactions : Array<Transaction> }){
+export function TransactionsWidget({ transactions = [] } : { transactions : Array<any> }){
     const types = {
         "bonus": "Bônus",
         "cashback": "Cashback",
