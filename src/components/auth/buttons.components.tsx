@@ -46,8 +46,16 @@ export const LogoutButton = () => {
   );
 };
 
+export const AccountButton = () => {
+  return <MenuLink auth="authenticated" href="/dashboard/accounts">Contas</MenuLink>;
+};
+
 export const DashboardButton = () => {
   return <MenuLink auth="authenticated" href="/dashboard">Dashboard</MenuLink>;
+};
+
+export const SettingsButton = () => {
+  return <MenuLink auth="authenticated" href="/dashboard/settings">Configurações</MenuLink>;
 };
 
 export function MenuLink({ href, auth, children } : { href : string | any, auth : 'authenticated' | 'unauthenticated' | 'all', children : React.ReactNode }){
@@ -64,8 +72,3 @@ export function MenuLink({ href, auth, children } : { href : string | any, auth 
 
   return <Link href={ href } className={ `py-3 px-6 text-left rounded-2xl transition-background text-xs hover:bg-foreground-700 ${ active ? ' bg-foreground-700 cursor-default' : '' }` } prefetch={ false }>{ children }</Link>
 }
-
-
-export const SettingsButton = () => {
-  return <MenuLink auth="authenticated" href="/dashboard/settings">Configurações</MenuLink>;
-};

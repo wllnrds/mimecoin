@@ -1,4 +1,4 @@
-import { DashboardButton, LoginButton, LogoutButton, RegisterButton, SettingsButton } from "@/components/auth/buttons.components";
+import { AccountButton, DashboardButton, LoginButton, LogoutButton, RegisterButton, SettingsButton } from "@/components/auth/buttons.components";
 import { Namespaces } from "./namespaces";
 
 export default async function Home({ children }: { children: React.ReactNode }) {
@@ -8,6 +8,7 @@ export default async function Home({ children }: { children: React.ReactNode }) 
       <aside className="border-r-1 border-foreground-600 p-6 flex flex-col gap-6 bg-foreground-800 max-h-screen sticky">
         <menu className="flex flex-col gap-3">
           <DashboardButton />
+          <AccountButton />
           <SettingsButton />
           <div className="border-b-1"></div>
           <LoginButton />

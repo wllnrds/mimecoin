@@ -1,6 +1,6 @@
 import { suid } from 'rand-token';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 import { Status, TransactionStatus } from "@/lib/database/db";
 import { db } from "@/lib/database";
@@ -8,8 +8,6 @@ import { Account } from './account';
 import { Transaction } from './transation';
 import { validateDigit } from '../core';
 import { PaymentOrder } from './paymentOrder';
-import { jsonObjectFrom } from 'kysely/helpers/postgres';
-
 export class Namespace{
     id: string
     code: string
@@ -190,6 +188,22 @@ export class Namespace{
             eb('namespaceCode','=',this.code)
         ])).executeTakeFirst()
 
+        
+        if( !account_db ){
+            throw new Error("Account not founded");
+        }
+
+        const account = Account.DbToObj( account_db );
+        await account.loadCustomer();
+
+        return account;
+    }
+
+    async getAccountById( id : string ){
+        const account_db = await db.selectFrom('NamespaceAccount').selectAll().where(({eb,and})=>and([
+            eb('id','=',id),
+            eb('NamespaceAccount.namespaceCode','=',this.code)
+        ])).executeTakeFirst()
         
         if( !account_db ){
             throw new Error("Account not founded");
@@ -470,7 +484,24 @@ export class Namespace{
     }
 
     async getAccounts(){
-        const accounts = await db.selectFrom('NamespaceAccount').innerJoin('Customer', 'Customer.id','NamespaceAccount.idCustomer').where('namespaceCode','=',this.code).selectAll().execute();
+        const accounts = await db.selectFrom('NamespaceAccount')
+        .where('namespaceCode','=',this.code)
+        .select((eb) => [
+            'NamespaceAccount.id',
+            'NamespaceAccount.namespaceCode',
+            'NamespaceAccount.accountNumber',
+            'NamespaceAccount.accountKey',
+            'NamespaceAccount.balance',
+            'NamespaceAccount.balanceExtra',
+            'NamespaceAccount.createdAt',
+            'NamespaceAccount.status',
+            jsonObjectFrom( 
+                eb.selectFrom('Customer')
+                .selectAll()
+                .whereRef('Customer.id','=','NamespaceAccount.idCustomer')
+            ).as('customer')
+        ]).execute();
+
         return accounts;
     }
 }

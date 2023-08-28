@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { User } from "@/lib/controller/user";
 
 import { Transactions } from "./transactions";
-import { Accounts, AccountsSqueleton } from "./accounts.component";
+import { AccountsSqueleton } from "./accounts/accounts.component";
 import { LimitsSqueleton } from "./limits.component";
 import { Limits } from "./limits";
 import { Metadata } from "next";
@@ -36,14 +36,6 @@ export default async function Home({ searchParams } : {  searchParams : { [key: 
         <Suspense fallback={ <LimitsSqueleton /> }>
           <Limits namespaceIndex={ namespaceIndex } />
         </Suspense>
-        <div className="flex-1 flex gap-6 flex-col">
-          <h2 className="font-bold">Contas</h2>
-          <div className="content-list">
-            <Suspense fallback={ <AccountsSqueleton /> }>
-              <Accounts namespaceIndex={ namespaceIndex } />
-            </Suspense>
-          </div>
-        </div>
       </div>
       <div className="flex flex-col flex-1 gap-6">
         <h2 className="font-bold">Transações</h2>

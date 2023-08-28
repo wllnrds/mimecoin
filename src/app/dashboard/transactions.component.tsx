@@ -2,7 +2,7 @@ import { Transaction } from "@/lib/controller/transation";
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
-export function TransactionsWidget({ transactions = [] } : { transactions : Array<any> }){
+export function TransactionsWidget({ transactions = [] } : { transactions : Array<Transaction> }){
     const types = {
         "bonus": "Bônus",
         "cashback": "Cashback",
@@ -31,7 +31,8 @@ export function TransactionsWidget({ transactions = [] } : { transactions : Arra
         "withdraw" : "attach_money"
     }
 
-    return transactions.map( tra => {
+    return transactions.map( ( tra : Transaction ) => {
+
         if( tra == undefined ){
             return;
         }else{
