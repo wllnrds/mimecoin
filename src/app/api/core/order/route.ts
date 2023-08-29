@@ -51,7 +51,7 @@ export async function GET(request: NextRequest){
         data: {
             order: {
                 id: order.id,
-                digits: order.id,
+                digits: order.digits,
                 due: order.due,
                 amount: order.amount,
                 status: order.status,

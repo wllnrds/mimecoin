@@ -7,7 +7,7 @@ export class PaymentOrder{
     id: string
     digits: string
     namespaceCode: string
-    namespaceAccountOrigin?: string | null
+    namespaceAccountOrigin?: string
     due?: Date | null
     amount: number
     status: TransactionStatus
@@ -54,6 +54,15 @@ export class PaymentOrder{
         const order = await db.selectFrom('PaymentOrder').selectAll().where(({ eb, and })=>and([
             eb('PaymentOrder.namespaceCode', '=', namespaceCode),
             eb('PaymentOrder.digits','=', digits)
+        ])).executeTakeFirst();
+
+        return PaymentOrder.DbToObj(order);
+    }
+
+    static async getOrderById( namespaceCode : string, id : string ){
+        const order = await db.selectFrom('PaymentOrder').selectAll().where(({ eb, and })=>and([
+            eb('PaymentOrder.namespaceCode', '=', namespaceCode),
+            eb('PaymentOrder.id','=', id)
         ])).executeTakeFirst();
 
         return PaymentOrder.DbToObj(order);
@@ -114,6 +123,14 @@ export class PaymentOrder{
         let value = params.amount.toString().padStart(10,"0")
         
         return [start, middle, fromBase, value].join('');
+    }
+
+    async confirm(){
+        await db.updateTable('PaymentOrder')
+            .set({
+                payedAt: new Date(),
+                status: 'confirmed'
+            }).where( 'id' , '=' , this.id ).executeTakeFirstOrThrow();
     }
 }
 

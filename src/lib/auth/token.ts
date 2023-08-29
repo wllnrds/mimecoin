@@ -27,8 +27,8 @@ export async function TokenAuth(request: NextRequest) {
 export async function UserAuth(request: NextRequest) {
     let auth = await TokenAuth( request );
 
-    if( auth.error ){
-        throw new Error( auth.error )
+    if( auth.account.error ){
+        throw new Error( auth.account.error )
     }
 
     if( !auth.account ){

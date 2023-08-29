@@ -167,9 +167,16 @@ export class Namespace{
             try {
                 const userJwt : any = jwt.verify( resource, namespace.id );
                 const account = await namespace.getAccount( userJwt.number + userJwt.digit );
-                data["account"] = account;
+
+                data["account"] = {
+                    ... account,
+                    accountPassword: undefined,
+                    ... await namespace.getBalance( account )
+                };
             } catch (error:any) {
-                data["error"] = error.message;
+                data["account"] = {
+                    error: error.message
+                };
             }
         }
 
@@ -256,6 +263,10 @@ export class Namespace{
         amount : number,
         headline : string = '', 
         details : string = ''){
+            if( source == target ){
+                throw new Error("The payment cannot be done by the target account")
+            }
+
             const { precision } = await this.getLimits();
             const fixedAmount = amount * ( Math.pow(10, precision) );
     
@@ -306,6 +317,77 @@ export class Namespace{
             return transaction;
     }
 
+    async payment( 
+        source : string,
+        orderId : string,
+        headline : string,
+        details : string ){
+
+        const order = await this.getPaymentOrderById( orderId );
+
+        if( !order ){
+            throw new Error("Missing payment order")
+        }
+
+        if( order.namespaceAccountOrigin == source ){
+            throw new Error("The payment cannot be done by the target account")
+        }
+
+        if( order.status == 'cancelled' ){
+            throw new Error(`Billing was cancelled`)
+        }else if( order.status == 'confirmed' ){
+            throw new Error(`Billing already paid`)
+        }
+
+        if( order.due && order.due.getTime() < new Date().getTime() ){
+            throw new Error("Expired bill")
+        }
+
+        const account_source = await db
+            .selectFrom('NamespaceAccount')
+            .selectAll()
+            .where(({and, eb})=>and([
+                eb('namespaceCode','=',this.code),
+                eb('accountNumber','=', source)
+            ])).executeTakeFirst();
+
+        if( !account_source ){
+            throw new Error("Invalid account source");
+        }
+
+        if( order.amount > account_source.balance ){
+            throw new Error("Source account has insuficient funds.");
+        }
+
+        if( !order.namespaceAccountOrigin ){
+            throw new Error("Invalid target account number");
+        }
+
+        const account_target = await db
+            .selectFrom('NamespaceAccount')
+            .selectAll()
+            .where(({and, eb})=>and([
+                eb('namespaceCode','=',this.code),
+                eb('accountNumber','=', order.namespaceAccountOrigin as string)
+            ])).executeTakeFirst();
+
+        if( !account_target ){
+            throw new Error("Invalid account target");
+        }
+        
+        const transaction = await Transaction.preBuilt( 
+            'payment',
+            order.amount,
+            headline,
+            details,
+            this.code,
+            source,
+            account_target.accountNumber,
+        )
+
+        return transaction;
+    }
+
     async createPaymentOrder( account : string, key : string, amount : number, due : Date ){
         const { precision } = await this.getLimits();
         const fixedAmount = amount * ( Math.pow(10, precision) );
@@ -328,6 +410,11 @@ export class Namespace{
         const { precision } = await this.getLimits();
         const order = await PaymentOrder.getOrder( this.code, digits );
         order.amount = order.amount / ( Math.pow(10, precision) );
+        return order;
+    }
+
+    async getPaymentOrderById( id : string ){
+        const order = await PaymentOrder.getOrderById( this.code, id );
         return order;
     }
 
@@ -503,5 +590,13 @@ export class Namespace{
         ]).execute();
 
         return accounts;
+    }
+
+    async confirmOrderPayment( order : PaymentOrder , transaction : Transaction ){
+        if(transaction.isSigned()){
+            order.confirm();
+        }else{
+            throw new Error("Fail to confirm payment, transaction is not signed.")
+        }
     }
 }

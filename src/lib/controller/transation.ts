@@ -117,7 +117,9 @@ export class Transaction{
         }
     }
 
-    async Sign({ originPassword, cancelIfFail = false } : { originPassword? : string, cancelIfFail: boolean } ){
+    async Sign(
+        { originPassword, cancelIfFail = false, inTransaction = null } : 
+        { originPassword? : string, cancelIfFail: boolean, inTransaction? : Function | null } ){
         if( this.status != 'pending' ){        
             if( this.status == 'cancelled'){
                 throw new Error("Transaction was cancelled")
@@ -191,13 +193,29 @@ export class Transaction{
         const hash = bcrypt.hashSync( JSON.stringify(to_hash) + originPassword || '', 10 );
         
         await db.transaction().execute( async (trx) => {
+            const copies : Array<any> = [];
+
             if( accountSource ){
                 await trx.updateTable('NamespaceAccount').set((eb)=>({
                     balance: eb('balance','-',Math.abs(this.amount))
                 })).where('id','=',accountSource.id)
                 .executeTakeFirstOrThrow();
+                
+                copies.push({
+                    type: this.type,
+                    amount: Math.abs( this.amount ) * -1,
+                    headline: this.headline,
+                    details: this.details,
+                    namespaceCode: this.namespaceCode,
+                    namespaceAccount: this.namespaceAccountOrigin,
+                    namespaceAccountOrigin: this.namespaceAccountOrigin,
+                    namespaceAccountTarget: this.namespaceAccountTarget,
+                    createdAt: this.createdAt,
+                    confirmedAt,
+                    hash,
+                    status: "confirmed"
+                });
             }
-            await trx.updateTable('Transaction').set({ confirmedAt, hash, status: 'confirmed' }).where('id','=',this.id).executeTakeFirstOrThrow();
             
             if( accountTarget ){
                 await trx.updateTable('NamespaceAccount').set((eb)=>({
@@ -205,51 +223,30 @@ export class Transaction{
                 })).where('id','=',accountTarget.id)
                 .executeTakeFirstOrThrow();
 
-                const copies : Array<any> = [];
-
-                // Origin record
-                if( this.namespaceAccountOrigin != null ){
-                    copies.push({
-                        type: this.type,
-                        amount: Math.abs( this.amount ) * -1,
-                        headline: this.headline,
-                        details: this.details,
-                        namespaceCode: this.namespaceCode,
-                        namespaceAccount: this.namespaceAccountOrigin,
-                        namespaceAccountOrigin: this.namespaceAccountOrigin,
-                        namespaceAccountTarget: this.namespaceAccountTarget,
-                        createdAt: this.createdAt,
-                        confirmedAt,
-                        hash,
-                        status: "confirmed"
-                    });
-                }
-
-                // Target record
-                if( this.namespaceAccountTarget != null ){
-                    copies.push({
-                        type: this.type,
-                        amount: Math.abs(this.amount),
-                        headline: this.headline,
-                        details: this.details,
-                        namespaceCode: this.namespaceCode,
-                        namespaceAccount: this.namespaceAccountTarget,
-                        namespaceAccountOrigin: this.namespaceAccountOrigin,
-                        namespaceAccountTarget: this.namespaceAccountTarget,
-                        createdAt: this.createdAt,
-                        confirmedAt,
-                        hash,
-                        status: "confirmed"
-                    });
-                }
-                
-                await trx.insertInto('Transaction').values(copies).executeTakeFirstOrThrow();
+                copies.push({
+                    type: this.type,
+                    amount: Math.abs(this.amount),
+                    headline: this.headline,
+                    details: this.details,
+                    namespaceCode: this.namespaceCode,
+                    namespaceAccount: this.namespaceAccountTarget,
+                    namespaceAccountOrigin: this.namespaceAccountOrigin,
+                    namespaceAccountTarget: this.namespaceAccountTarget,
+                    createdAt: this.createdAt,
+                    confirmedAt,
+                    hash,
+                    status: "confirmed"
+                });
             }
+            
+            await trx.updateTable('Transaction').set({ confirmedAt, hash, status: 'confirmed' }).where('id','=',this.id).executeTakeFirstOrThrow();         
+            await trx.insertInto('Transaction').values(copies).executeTakeFirstOrThrow();
+
+            if( inTransaction ) await inTransaction();
         }).catch( async (err)  => {
             if( cancelIfFail ){
                 await db.updateTable('Transaction').set({ status: 'cancelled' }).where('id','=',this.id).executeTakeFirstOrThrow();
-            }
-            
+            }            
             console.error( err );
             throw new Error("Fail to make transaction");
         });

@@ -19,6 +19,6 @@
     - [x] 3.6. `POST /api/account/request/transfer` Realiza uma transferência
     - [x] 3.7. `PATCH /api/account/request/transfer` Confirma uma transferência (via API)
     - [x] 3.8. `POST /api/account/request/order` Solicita uma ordem de pagamento
-    - [ ] 3.9. `POST /api/account/request/payment` Realiza um pagamento
+    - [x] 3.9. `POST /api/account/request/payment` Realiza um pagamento
     - [x] 3.10. `GET /api/account/request` Pega transações pendentes
     - [x] 3.12. `GET /api/account/wallet/google` Pega o cartão google Wallet
