@@ -11,7 +11,7 @@ export default function HeaderMenu() {
   const [ active , setStatus ] = useState( false );
 
   return <div className={ `flex flex-col gap-3 relative ${ active ? 'bg-primary' : '' }` }>
-    <div className="flex flex-col gap-3 pt-10 px-10">
+    <div className="flex flex-col gap-3 pt-10 px-4 sm:px-10">
       <aside className="flex flex-col sm:flex-row gap-3 items-center px-[20px]">
         <h1>
           <Image src={ active ? '/assets/logo-white.svg' : '/assets/logo.svg' } 
@@ -25,7 +25,7 @@ export default function HeaderMenu() {
             }} />
         </h1>
         <div className="flex-1"></div>
-        <div className="flex flex-row gap-3">
+        <div className="flex flex-row gap-1 md:gap-3 flex-wrap">
           <button className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` } onClick={() => signIn()}>Login</button>
           <ButtonLink auth="all" href="/dashboard" style={ active ? 'bg-foreground-900 hover:bg-foreground-700' : 'bg-primary hover:bg-primary-500' }>criar seu mime</ButtonLink>
           <button onClick={ () => setStatus( !active ) } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground bg-primary hover:bg-primary-500` }>
