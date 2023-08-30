@@ -171,7 +171,6 @@ export class Namespace{
                 data["account"] = {
                     ... account,
                     accountPassword: undefined,
-                    ... await namespace.getBalance( account )
                 };
             } catch (error:any) {
                 data["account"] = {
