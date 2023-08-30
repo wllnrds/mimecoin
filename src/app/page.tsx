@@ -8,7 +8,7 @@ export default async function Home() {
       <HeaderMenu />
       <div className="px-4 md:px-10 flex flex-col gap-10">
         <header className="relative flex gap-3 flex-col">
-          <div className="flex gap-3 flex-col relative rounded-[40px] bg-cover bg-center" style={{ backgroundImage: 'url(/assets/home/cover.png)', minHeight: 'max(calc(90vh - 10rem), 380px)' }} ></div>
+          <div className="flex gap-3 flex-col relative rounded-[40px] bg-cover bg-center" style={{ backgroundImage: 'url(/assets/home/cover.png)', minHeight: 'max(calc(85vh - 10rem), 380px)' }} ></div>
           <span className="text-right text-xs">*Mimecoin não transaciona dinheiro real</span>
           <div className="absolute top-0 left-0 p-10 md:p-20 max-w-xl text-white flex flex-col gap-4 items-start">
             <div className="text-5xl sm:text-6xl leading-[1.1] drop-shadow-md">O primeiro banco virtual digital*</div>
