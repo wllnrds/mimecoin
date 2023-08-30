@@ -91,8 +91,8 @@ export async function PATCH(request: NextRequest){
         },{ status : 400 })
     }
 
-    if(!auth.account.accountNumber){
-        throw new Error("Missing source account number");
+    if(!auth.account.acc
+        "Missing source account number");
     }
 
     try{
