@@ -6,7 +6,7 @@ export default async function Home() {
   return (<div className="bg-primary">
     <div className="bg-white rounded-t-[40px] mt-4 flex flex-col gap-10">
       <HeaderMenu />
-      <div className="px-10 flex flex-col gap-10">
+      <div className="px-3 md:px-10 flex flex-col gap-10">
         <header className="relative flex gap-3 flex-col">
           <div className="flex gap-3 flex-col relative rounded-[40px] bg-cover bg-center" style={{ backgroundImage: 'url(/assets/home/cover.png)', minHeight: 'max(calc(100vh - 15rem), 480px)' }} ></div>
           <span className="text-right text-xs">*Mimecoin não transaciona dinheiro real</span>

@@ -34,7 +34,7 @@ export default function HeaderMenu() {
         </div>
       </aside>
     </div>
-    { active && <div className="absolute top-[100%] w-full flex flex-row flex-nowrap bg-primary p-10 z-50 gap-6 md:justify-center overflow">
+    { active && <div className="absolute top-[100%] w-full flex flex-row flex-nowrap bg-primary p-10 z-50 gap-6 md:justify-center overflow-x-auto">
       <Feat title="banco completo" details="transferência entre contas, depósito, transferência e transações" />
       <Feat title="conta digital" details="cada usuário do seu banco tem sua própria conta digital" />
       <Feat title="gerencie os recursos" details="você decide o que seu usuário pode fazer" />
