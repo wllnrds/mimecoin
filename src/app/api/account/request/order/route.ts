@@ -83,16 +83,16 @@ export async function PATCH(request: NextRequest){
         if( password == null || password == '' ){
             throw new Error("Password required");
         }
+
+        if(!auth.account.acc){
+            throw new Error("Missing source account number");
+        }
     }catch( error : any ){
         return NextResponse.json({
             status: 400,
             message : error.message,
             timestamp: new Date().getTime()
         },{ status : 400 })
-    }
-
-    if(!auth.account.acc
-        "Missing source account number");
     }
 
     try{
