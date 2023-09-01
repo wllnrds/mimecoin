@@ -22,7 +22,6 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
       <body className='dark'>
         <Provider>
             <div className='h-full flex flex-col'>
-              <div></div>
               { children }
             </div>
         </Provider>

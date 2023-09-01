@@ -85,7 +85,7 @@ export async function POST(request: NextRequest){
         const data = encrypt( JSON.stringify( obj ), process.env.NEXTAUTH_CRYPTO || 'USER_CRYTO_KEY' );
 
         return NextResponse.json({
-            data: { account, passwordUrl: `${ process.env.VERCEL_URL }/passwordSet?userToken=${ data }` },
+            data: { account, passwordUrl: `https://mimecoin.vercel.app/passwordSet?userToken=${ data }` },
             status: 200,
             message: "Account created",
             timestamp: new Date().getTime()

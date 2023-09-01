@@ -28,13 +28,17 @@ export default async function Page( props : any ) {
     redirect('./passwordSet/ok')
   }
 
-  return <div>
+  return <div className='bg-primary h-screen flex-1 flex flex-col items-center justify-center'>
     <Toast message={ error } />
-    <form>
-      <input type="hidden" readOnly name="userToken" defaultValue={ props.searchParams.userToken }  />
-      <input type="password" name="password" defaultValue={ props.searchParams.password } required min={4}/>
-      <button type="submit">Enviar</button>
-    </form>
+    <div className='max-w-sm bg-white p-10 rounded-3xl'>      
+      <form className='flex flex-col gap-4'>
+        <div className='text-xl uppercase font-bold'>Nova senha</div>
+        <p className='text-xs leading-tight p-4 bg-slate-200 rounded-2xl'>Você está cadastrando uma senha para sua conta. A senha é necessária tanto para acessar as sua conta como pra confirmar transações.</p>
+        <input type="hidden" readOnly name="userToken" defaultValue={ props.searchParams.userToken }  />
+        <input type="password" name="password" defaultValue={ props.searchParams.password } required min={4} className='w-full rounded-2xl bg-white border text-center h-12 focus:outline-none focus:border-primary' placeholder='Senha' />
+        <button type="submit"className='bg-primary h-12 rounded-2xl hover:bg-primary-600'>Enviar</button>
+      </form>
+    </div>
   </div>
 }
 
