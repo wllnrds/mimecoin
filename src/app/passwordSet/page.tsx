@@ -13,7 +13,7 @@ export default async function Page( props : any ) {
   let _redirect : boolean = false;
 
   try {
-    if(isSubmit(props)){
+    if( isSubmit(props) ){
       const result = await setPassword(props.searchParams)
       if(result){
         _redirect = true;
@@ -34,6 +34,7 @@ export default async function Page( props : any ) {
       <form className='flex flex-col gap-4'>
         <div className='text-xl uppercase font-bold'>Nova senha</div>
         <p className='text-xs leading-tight p-4 bg-slate-200 rounded-2xl'>Você está cadastrando uma senha para sua conta. A senha é necessária tanto para acessar as sua conta como pra confirmar transações.</p>
+        <input type="hidden" readOnly name="wasSubmited" defaultValue="1"  />
         <input type="hidden" readOnly name="userToken" defaultValue={ props.searchParams.userToken }  />
         <input type="password" name="password" defaultValue={ props.searchParams.password } required min={4} className='w-full rounded-2xl bg-white border text-center h-12 focus:outline-none focus:border-primary' placeholder='Senha' />
         <button type="submit"className='bg-primary h-12 rounded-2xl hover:bg-primary-600'>Enviar</button>
@@ -43,13 +44,22 @@ export default async function Page( props : any ) {
 }
 
 function isSubmit( props: any) {
+  if(!Object.keys(props.searchParams).includes('wasSubmited')){
+    return false;
+  }
+
   if(!Object.keys(props.searchParams).includes('userToken')){
     throw new Error("Missing user token");
-  }else if(!Object.keys(props.searchParams).includes('password')){
+  }
+  if(!Object.keys(props.searchParams).includes('password')){
     return false;
-  }else if(props.searchParams.password?.length < 4){
+  }
+  
+  if(props.searchParams.password?.length < 4){
     throw new Error("Password must have 4 or more characteres.");
-  }else if(!!!props.searchParams.password){
+  }
+  
+  if(!!!props.searchParams.password){
     return false;
   }
 
