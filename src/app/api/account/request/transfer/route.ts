@@ -108,10 +108,13 @@ export async function PATCH(request: NextRequest){
             throw new Error("This transaction cannot be confirmed here");
         }
 
-        const result = await data.Sign({
-            originPassword: password,
-            cancelIfFail: false
-        });
+        await data.Sign({ originPassword: password, cancelIfFail: false })
+
+        const result = await Transaction.dataTansaction( auth.namespace.code, id );
+
+        const { precision } = await auth.namespace.getLimits();
+
+        result.amount = result.amount / ( Math.pow(10, precision) );
 
         return NextResponse.json({
             data : result,

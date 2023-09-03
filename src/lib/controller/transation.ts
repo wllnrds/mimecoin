@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import { db } from "../database"
 import { TransactionStatus, TransactionType } from "../database/db"
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 export class Transaction{
     id: string
@@ -95,12 +96,95 @@ export class Transaction{
         return Transaction.DbToObj(record);
     }
 
+    static async dataTansaction( code:string, id : string ){
+        
+        const transaction = await db.selectFrom('Transaction').select((eb) => [
+            "Transaction.id",
+            "Transaction.type",
+            "Transaction.amount",
+            "Transaction.headline",
+            "Transaction.details",
+            "Transaction.namespaceCode",
+            "Transaction.namespaceAccountOrigin",
+            "Transaction.namespaceAccountTarget",
+            "Transaction.status",
+            "Transaction.hash",
+            "Transaction.createdAt",
+            "Transaction.confirmedAt",
+            jsonObjectFrom(
+                eb.selectFrom('NamespaceAccount')
+                    .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
+                    .select([
+                        'Customer.name',
+                        'Customer.document',
+                        'NamespaceAccount.accountNumber',
+                        'NamespaceAccount.accountKey'
+                    ])
+                    .whereRef('Transaction.namespaceAccountOrigin','=','NamespaceAccount.accountNumber')
+            ).as("originAccount"),
+            jsonObjectFrom(
+                eb.selectFrom('NamespaceAccount')
+                    .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
+                    .select([
+                        'Customer.name',
+                        'Customer.document',
+                        'NamespaceAccount.accountNumber',
+                        'NamespaceAccount.accountKey'
+                    ])
+                    .whereRef('Transaction.namespaceAccountTarget','=','NamespaceAccount.accountNumber')
+            ).as("targetAccount")
+        ]).where(({and,eb}) => and([
+            eb('id','=',id),
+            eb('namespaceCode','=',code)
+        ])).executeTakeFirst();
+
+        if( !transaction ){
+            throw new Error("Transaction not founded");
+        }
+
+        return transaction;
+    }
+
     static async getById( code:string, id : string ){
-        const transaction = await db.selectFrom('Transaction').selectAll()
-            .where(({and,eb}) => and([
-                eb('id','=',id),
-                eb('namespaceCode','=',code)
-            ])).executeTakeFirst();
+        const transaction = await db.selectFrom('Transaction').select((eb) => [
+            "Transaction.id",
+            "Transaction.type",
+            "Transaction.amount",
+            "Transaction.headline",
+            "Transaction.details",
+            "Transaction.namespaceCode",
+            "Transaction.namespaceAccountOrigin",
+            "Transaction.namespaceAccountTarget",
+            "Transaction.status",
+            "Transaction.hash",
+            "Transaction.createdAt",
+            "Transaction.confirmedAt",
+            jsonObjectFrom(
+                eb.selectFrom('NamespaceAccount')
+                    .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
+                    .select([
+                        'Customer.name',
+                        'Customer.document',
+                        'NamespaceAccount.accountNumber',
+                        'NamespaceAccount.accountKey'
+                    ])
+                    .whereRef('Transaction.namespaceAccountOrigin','=','NamespaceAccount.accountNumber')
+            ).as("originAccount"),
+            jsonObjectFrom(
+                eb.selectFrom('NamespaceAccount')
+                    .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
+                    .select([
+                        'Customer.name',
+                        'Customer.document',
+                        'NamespaceAccount.accountNumber',
+                        'NamespaceAccount.accountKey'
+                    ])
+                    .whereRef('Transaction.namespaceAccountTarget','=','NamespaceAccount.accountNumber')
+            ).as("targetAccount")
+        ]).where(({and,eb}) => and([
+            eb('id','=',id),
+            eb('namespaceCode','=',code)
+        ])).executeTakeFirst();
 
         if( !transaction ){
             throw new Error("Transaction not founded");
