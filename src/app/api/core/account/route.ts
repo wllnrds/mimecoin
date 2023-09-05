@@ -123,8 +123,9 @@ export async function GET(request: NextRequest){
 
     const { searchParams } = new URL(request.url)
     const number = searchParams.get('account')
+    const id = searchParams.get('id')
 
-    if( number == null || number == '' || number.length != 6 ){
+    if( (number == null || number == '' || number.length != 6) && id == null ){
         return NextResponse.json({ 
             message: "Missing or invalid account number."
         }, {
@@ -133,8 +134,7 @@ export async function GET(request: NextRequest){
     }
 
     try {
-        const account = await auth.namespace.getAccount( number );
-        await account.loadCustomer();
+        const account = id ? await auth.namespace.getAccountById( id ) : await auth.namespace.getAccount( number );
 
         return NextResponse.json({
             code: account?.namespaceCode,

@@ -569,6 +569,63 @@ export class Namespace{
         // return transactions.map( t => ( t.namespaceAccount == null ) ? Transaction.DbToObj( t ) : undefined ).filter( t => !!t );
     }
 
+    async getTransactionById( id : string ){
+        const { precision } = await this.getLimits();
+
+        const transaction : any = await db.selectFrom('Transaction').select((eb) => [
+            "Transaction.id",
+            "Transaction.type",
+            "Transaction.amount",
+            "Transaction.headline",
+            "Transaction.details",
+            "Transaction.namespaceCode",
+            "Transaction.namespaceAccountOrigin",
+            "Transaction.namespaceAccountTarget",
+            "Transaction.status",
+            "Transaction.hash",
+            "Transaction.createdAt",
+            "Transaction.confirmedAt",
+            jsonObjectFrom(
+                eb.selectFrom('NamespaceAccount')
+                    .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
+                    .select([
+                        'NamespaceAccount.id',
+                        'Customer.name',
+                        'Customer.document',
+                        'NamespaceAccount.accountNumber',
+                        'NamespaceAccount.accountKey'
+                    ])
+                    .whereRef('Transaction.namespaceAccountOrigin','=','NamespaceAccount.accountNumber')
+            ).as("originAccount"),
+            jsonObjectFrom(
+                eb.selectFrom('NamespaceAccount')
+                    .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
+                    .select([
+                        'NamespaceAccount.id',
+                        'Customer.name',
+                        'Customer.document',
+                        'NamespaceAccount.accountNumber',
+                        'NamespaceAccount.accountKey'
+                    ])
+                    .whereRef('Transaction.namespaceAccountTarget','=','NamespaceAccount.accountNumber')
+            ).as("targetAccount")
+        ]).where(({and,eb}) => and([
+            eb('Transaction.namespaceCode','=',this.code),
+            eb('Transaction.id','=',id)
+        ])).executeTakeFirst();
+
+        console.log( transaction );
+
+        if( !transaction ){
+            return null;
+        }
+
+        return {
+            ...transaction,
+            amountFixed: transaction?.amount / Math.pow(10, precision)
+        };
+    }
+
     async getAccounts(){
         const accounts = await db.selectFrom('NamespaceAccount')
         .where('namespaceCode','=',this.code)
