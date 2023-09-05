@@ -16,7 +16,6 @@ export async function GET(request: NextRequest){
 
     delete auth.namespace.id;
     delete auth.account.accountPassword;
-    delete auth.account.id;
     delete auth.account.idCustomer;
     delete auth.account.customer.id;
     delete auth.account.balance;
