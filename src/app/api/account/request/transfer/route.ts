@@ -1,5 +1,6 @@
 import { UserAuth } from "@/lib/auth/token";
 import { Transaction } from "@/lib/controller/transation";
+import { Actions, Logging } from "@/lib/core/logging";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(request: NextRequest){
@@ -43,7 +44,16 @@ export async function POST(request: NextRequest){
     }
 
     try{
-        const data = await auth.namespace.transfer( auth.account.accountNumber, target, amount, headline, details );
+        const data = await auth.namespace.transfer( auth.account.accountNumber, target, amount, headline, details );    
+
+        await Logging({ 
+            namespaceCode: auth.namespace.code,
+            action: Actions.transactionCreated,
+            payload: { 
+                id : data.id,
+            }
+        })
+
         return NextResponse.json({
             data,
             status: 200,
@@ -111,6 +121,14 @@ export async function PATCH(request: NextRequest){
         await data.Sign({ originPassword: password, cancelIfFail: false })
 
         const result = await Transaction.dataTansaction( auth.namespace.code, id );
+
+        await Logging({ 
+            namespaceCode: auth.namespace.code,
+            action: Actions.transactionSigned,
+            payload: { 
+                id : result.id,
+            }
+        })
 
         const { precision } = await auth.namespace.getLimits();
 

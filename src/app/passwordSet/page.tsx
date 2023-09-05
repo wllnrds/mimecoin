@@ -3,6 +3,7 @@ import { Account } from "@/lib/controller/account";
 import { AuthAccount } from '@/lib/controller/auth';
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import { Actions, Logging } from '@/lib/core/logging';
 
 export const metadata: Metadata = {
     title: 'Password set',
@@ -82,6 +83,14 @@ async function setPassword({ userToken, password } : { userToken : string, passw
   }
   
   await AuthAccount.SetPassword(acc.id, acc.idCustomer, acc.namespaceCode, acc.accountNumber+acc.accountKey, password );
+
+  await Logging({ 
+    namespaceCode: acc.namespaceCode,
+    action: Actions.passwordSetted,
+    payload: { 
+        id : acc.id,
+    }
+  })
 
   return true;
 }

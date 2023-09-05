@@ -1,4 +1,5 @@
 import { TokenAuth } from "@/lib/auth/token";
+import { Actions, Logging } from "@/lib/core/logging";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(request: NextRequest){
@@ -39,6 +40,15 @@ export async function POST(request: NextRequest){
 
     try{
         const data = await auth.namespace.deposit( account, amount, 'deposit', headline, description );
+
+        await Logging({
+            namespaceCode: auth.namespace.code,
+            action: Actions.transactionSigned,
+            payload: { 
+                id : data.id
+            }
+        })
+
         return NextResponse.json({
             data,
             status: 200,

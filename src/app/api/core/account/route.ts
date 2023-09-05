@@ -1,6 +1,7 @@
 import { TokenAuth } from "@/lib/auth/token";
 import { NextResponse, NextRequest } from "next/server";
 import crypto from 'crypto';
+import { Actions, Logging } from "@/lib/core/logging";
 
 const encrypt = ( content : string, password : string ) => {
     try {
@@ -81,6 +82,14 @@ export async function POST(request: NextRequest){
             "account": account.accountNumber,
             "digit": account.accountKey
         }
+
+        await Logging({ 
+            namespaceCode: auth.namespace.code,
+            action: Actions.accountCreated,
+            payload: { 
+                id : account.id,
+            }
+        })
 
         const data = encrypt( JSON.stringify( obj ), process.env.NEXTAUTH_CRYPTO || 'USER_CRYTO_KEY' );
 

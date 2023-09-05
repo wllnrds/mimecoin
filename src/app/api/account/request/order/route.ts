@@ -1,5 +1,6 @@
 import { UserAuth } from "@/lib/auth/token";
 import { Transaction } from "@/lib/controller/transation";
+import { Actions, Logging } from "@/lib/core/logging";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(request: NextRequest){
@@ -40,81 +41,20 @@ export async function POST(request: NextRequest){
         amount,
         _dueDate
     )
+    
+    await Logging({ 
+        namespaceCode: auth.namespace.code,
+        action: Actions.paymentCreated,
+        payload: { 
+            id : _order.id,
+        }
+    })
 
     try{
         return NextResponse.json({
             data: _order,
             status: 200,
             message: "Payment order created",
-            timestamp: new Date().getTime()
-        });
-    }catch( error : any ){
-        return NextResponse.json({
-            status: 400,
-            message : error.message,
-            timestamp: new Date().getTime()
-        },{ status : 400 })
-    }
-}
-
-export async function PATCH(request: NextRequest){
-    let auth = null;
-
-    try {
-        auth = await UserAuth( request );
-    } catch ( error : any ) {
-        return NextResponse.json({
-            status: 401,
-            message : error.message,
-            timestamp: new Date().getTime()
-        },{ status : 401 })
-    }
-
-    const { id, password } : {
-        id : string,
-        password: string
-    } = await request.json();
-
-    try{
-        if( id == null || id == '' ){
-            throw new Error("Must must have an transaction ID to confirm.");
-        }
-
-        if( password == null || password == '' ){
-            throw new Error("Password required");
-        }
-
-        if(!auth.account.acc){
-            throw new Error("Missing source account number");
-        }
-    }catch( error : any ){
-        return NextResponse.json({
-            status: 400,
-            message : error.message,
-            timestamp: new Date().getTime()
-        },{ status : 400 })
-    }
-
-    try{
-        const data = await Transaction.getById( auth.namespace.code, id );
-
-        if( data.namespaceAccountOrigin !=  auth.account.accountNumber ){
-            throw new Error("Transaction error.");
-        }
-
-        if( data.type !== 'transfer' ){
-            throw new Error("This transaction cannot be confirmed here");
-        }
-
-        const result = await data.Sign({
-            originPassword: password,
-            cancelIfFail: false
-        });
-
-        return NextResponse.json({
-            data : result,
-            status: 200,
-            message: "Transfer confirmed",
             timestamp: new Date().getTime()
         });
     }catch( error : any ){

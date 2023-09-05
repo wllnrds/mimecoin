@@ -1,5 +1,6 @@
 import { UserAuth } from "@/lib/auth/token";
 import { PaymentOrder } from "@/lib/controller/paymentOrder";
+import { Actions, Logging } from "@/lib/core/logging";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(request: NextRequest){
@@ -62,15 +63,38 @@ export async function POST(request: NextRequest){
     if( !details ){
         details = `Refer to ${ order.digits }`;
     }
+    const transaction = await auth.namespace.payment( auth.account.accountNumber, id, headline, details );
 
     try{
-        const transaction = await auth.namespace.payment( auth.account.accountNumber, id, headline, details );
-        
         const result = await transaction.Sign({
             originPassword: password,
             cancelIfFail: true,
             inTransaction: () => order.confirm()
+        }).catch( async () => {
+            await Logging({ 
+                namespaceCode: transaction.namespaceCode,
+                action: Actions.transactionCancelled,
+                payload: { 
+                    id : transaction.id,
+                }
+            })
         });
+
+        // Logging
+        await Logging({ 
+            namespaceCode: auth.namespace.code,
+            action: Actions.paymentConfirmed,
+            payload: { 
+                id : order.id,
+            }
+        })        
+        await Logging({ 
+            namespaceCode: auth.namespace.code,
+            action: Actions.transactionSigned,
+            payload: { 
+                id : id,
+            }
+        })
 
         return NextResponse.json({
             data: result,

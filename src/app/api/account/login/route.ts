@@ -1,5 +1,6 @@
 import { TokenAuth } from "@/lib/auth/token";
 import { AuthAccount } from "@/lib/controller/auth";
+import { Actions, Logging } from "@/lib/core/logging";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest){
@@ -66,10 +67,18 @@ export async function POST(request: NextRequest){
     } = await request.json();
 
     try{
-        const account_auth = await AuthAccount.Login( auth.namespace.code,account + digit, password );
+        const account_auth = await AuthAccount.Login( auth.namespace.code, account + digit, password );
+
+        await Logging({ 
+            namespaceCode: auth.namespace.code,
+            action: Actions.login,
+            payload: { 
+                id : account_auth.user.id,
+            }
+        })
 
         return NextResponse.json({
-            data: { token : account_auth },
+            data: { token : account_auth.token },
             status: 200,
             message: "Success on login.",
             timestamp: new Date().getTime()

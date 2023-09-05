@@ -77,6 +77,7 @@ export class AuthAccount{
         const namespace = await db.selectFrom('Namespace').select('id').where('code','=',namespace_code).executeTakeFirstOrThrow();
 
         const token = {
+            id: data.id,
             code: data.namespaceCode,
             number: data.accountNumber,
             digit: data.accountKey,
@@ -89,9 +90,10 @@ export class AuthAccount{
             }
         }
 
-        return jwt.sign( token , namespace.id, {
-            expiresIn: '1h'
-        });
+        return {
+            token: jwt.sign( token , namespace.id, { expiresIn: '1h' }),
+            user: token
+        };
     }
 
     static async SetPassword( id:string, idCustomer:string, namespaceCode : string, number:string, password : string ){
