@@ -73,7 +73,7 @@ export function MenuLink({ href, auth, children } : { href : string | any, auth 
   return <Link href={ href } className={ `py-3 px-6 text-left rounded-2xl transition-background text-xs hover:bg-foreground-700 ${ active ? ' bg-foreground-700 cursor-default' : '' }` } prefetch={ false }>{ children }</Link>
 }
 
-export function ButtonLink( { href, auth, children, style = 'hover:bg-foreground-700' } : { href? : string | any, auth : 'authenticated' | 'unauthenticated' | 'all', children : React.ReactNode, style? : string } ){
+export function ButtonLink( { href, auth, children, style = 'hover:bg-foreground-700', target } : { href? : string | any, auth : 'authenticated' | 'unauthenticated' | 'all', children : React.ReactNode, style? : string, target?: string } ){
   const { status } = useSession();
 
   if( auth !== 'all'){
@@ -82,5 +82,5 @@ export function ButtonLink( { href, auth, children, style = 'hover:bg-foreground
     }
   }
 
-  return <Link href={ href } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ style }` } prefetch={ false }>{ children }</Link>
+  return <Link href={ href } target={ target } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ style }` } prefetch={ false }>{ children }</Link>
 }

@@ -42,6 +42,7 @@
     "encoding": "^0.1.13",
     "request": "^2.88.2",
     "support-color": "^7.1.0",
-    "supports-color": "^8.1.1"
+    "supports-color": "^8.1.1",
+    "tailwindcss-3d": "^1.0.0"
   }
 }

@@ -44,7 +44,7 @@ export class Namespace{
                 expiresAt: null,
                 idNamespace: newEntry.id,
                 precision: precision,
-                maxOffer: 100000 * Math.pow(10, precision)
+                maxOffer: 10000 * Math.pow(10, precision)
             }).returningAll().executeTakeFirstOrThrow();
 
             await trx.insertInto('UserNamespace').values({

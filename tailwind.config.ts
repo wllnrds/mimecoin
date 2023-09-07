@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
 import { nextui, colors } from '@nextui-org/react'
+import tailwind3d from 'tailwindcss-3d'
 
 const config: Config = {
   content: [
@@ -82,6 +83,7 @@ const config: Config = {
         },
       },
     }),
+    tailwind3d({ legacy: true })
   ],
 }
 
