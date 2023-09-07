@@ -1,4 +1,4 @@
-import { ButtonLink } from "@/components/auth/buttons.components";
+import { ButtonLink } from "@/components/button.component";
 
 import HeaderMenu from "./features.component";
 import MonetaryWidget from "./monetary.component";

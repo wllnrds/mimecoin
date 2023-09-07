@@ -31,6 +31,7 @@ body {
 
 body > *{
   height: 100%;
+  font-size: 12px;
 }
 
 a {
@@ -45,10 +46,9 @@ a {
 }
 
 .material-icon {
-  font-family: 'Material Symbols Rounded';
-  font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 40;
+  font-family: 'Material Symbols Sharp';
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
 }
-
 
 // /* ===== Scrollbar CSS ===== */
 // /* Firefox */
@@ -74,10 +74,10 @@ a {
 
 @layer components {
   .content-card {
-    @apply flex flex-col gap-6 bg-white rounded-3xl p-6 shadow;
+    @apply flex flex-col gap-2 bg-foreground-900 rounded-3xl p-6;
   }
 
   .content-list {
-    @apply flex-1 rounded-2xl lg:overflow-x-auto p-2 shadow bg-white ;
+    @apply flex-1 rounded-2xl lg:overflow-x-auto p-2 bg-foreground-900 ;
   }
 }

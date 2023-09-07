@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardBody, CardFooter, Chip, CircularProgress } from "@nextui-org/react";
+import { useSearchParams } from "next/navigation";
 
 export function LimitsWidget({ precision = 0, total = 100, used = 0 }){
     const limit : number = used / Math.pow( 10, precision );
@@ -26,10 +27,16 @@ export function LimitsWidget({ precision = 0, total = 100, used = 0 }){
         }}
         variant="bordered"
       >
-        Tokens emitidos
+        { ( used / Math.pow(10, precision) ).toLocaleString('pt-BR',{ notation: 'compact', maximumFractionDigits: 1 }) } tokens emitidos
       </Chip>
     </CardFooter>
   </Card>
+}
+
+export function Limit({ namespaces } : { namespaces : Array< { code : string, pic : string, name : string, limit: { precision: number, max: number, used: number, current: number } } > }){
+  const searchParams = useSearchParams();
+  const namespaceIndex = searchParams.has('namespaceIndex') ? parseInt( searchParams.get('namespaceIndex') || '0' ) : 0 ;
+  return <LimitsWidget precision={ namespaces[namespaceIndex].limit.precision } total={ namespaces[namespaceIndex].limit.max } used={ namespaces[namespaceIndex].limit.used } />
 }
 
 export function LimitsSqueleton(){

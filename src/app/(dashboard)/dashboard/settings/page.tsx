@@ -37,41 +37,27 @@ export default async function Page() {
 
     return <div className="w-full flex-1 p-6 flex flex-col gap-6 max-w-screen justify-start">
         <div className="flex gap-6 flex-col lg:flex-row">
-            <div className="content-card">
-                <h2 className="text-2xl">Sua conta</h2>
-                <div className="flex flex-col gap-2">
-                    <div className="flex gap-6">
-                        <div className="font-bold">Nome</div>
-                        <div className="col-span-4">{user.name}</div>
-                    </div>
-                    <div className="flex gap-6">
-                        <div className="font-bold">E-mail</div>
-                        <div className="col-span-4">{user.email}</div>
-                    </div>
-                </div>
-            </div>
-            <Suspense fallback={<LimitsSqueleton />}>
-                <Limits />
-            </Suspense>
+            <Suspense fallback={<LimitsSqueleton />}><Limits /></Suspense>
         </div>
         <div className="content-card">
-            <h2 className="text-2xl">Seus mimes</h2>
-            <div>
+            <h2 className="text-default text-lg">Seus mimes</h2>
+            <div className="grid grid-cols-2 gap-1">
                 { namespaces.map( item => <NamespaceWidget key={ `namespaces-${ item.id }` } item={ item } /> ) }
             </div>
         </div>
         <div className="content-card">
-            <div className="flex flex-row">
-                <h2 className="flex-1 text-2xl">Suas chaves</h2>
+            <div className="flex flex-row items-center">
+                <h2 className="text-default text-lg flex-1">Suas chaves</h2>
                 <GenerateToken namespaces={ namespaces.flatMap( ns => ({ id: ns.id, code: ns.code, pic: ns.pic, name: ns.name , status: ns.status, createdAt: ns.createdAt, updatedAt: ns.updatedAt, createdBy: ns.createdBy, }) )  } />
             </div>
-            <div>
+            <div className="flex flex-col gap-2">
                 { tokens.map(item => <TokenWidget key={`accesstoken-${item.id}`} item={item} />) }
             </div>
-            <div className="flex flex-col gap-4 p-2">
+            <hr className="my-4" />
+            <div className="flex flex-col gap-3">
                 <p className="font-bold">Como usar:</p>
                 <p>Adicione no header das requisições um JWT com o token de API do namespace e o JWT do usuário logado assinados com o segredo da chave utilizada. Você pode incluir informações de prazo de validade do token gerado para aumentar a segurança, mas a informação X-Integration-Token é obrigatória em todas as requisições.</p>
-                <pre className="p-6 bg-primary-50 rounded-3xl font-mono text-sm">
+                <pre className="p-6 bg-foreground-200 text-white rounded-[1rem] font-mono text-xs">
                     {`header = {
     "alg": "HS256",
     "typ": "JWT"

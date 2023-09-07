@@ -17,19 +17,27 @@ export async function AccountsWidget({ accounts } : { accounts : any }) {
         [searchParams]
     )
 
-    return <div className="flex flex-col gap-4 flex-1">
-        <h1>Contas</h1>
-        <div className="flex flex-col gap-2">
+    return <div className="flex flex-col gap-4 flex-1 overflow-y-auto">
+        <h2 className="font-bold">Contas</h2>
+        <div className="content-list">
             {
                 accounts.map( (account : any) => {
                     const status = account.status != 'blocked' && account.status != 'deactive'
-                    return <Link key={`account-${account.id}`} href={ pathname + '?' + createQueryString('id', account.id) }>
-                        <div className={`p-4 bg-white text-tiny rounded-2xl hover:bg-primary-50`}>
-                            <div className="flex space-x-4 items-center">
-                                <div className={`rounded-full text-white h-8 w-8 flex items-center justify-center ${status ? ' bg-success' : ' bg-danger'}`}>{ account.customer.name.split(" ").map( (i : string) => i[0] ).join("").substring(0, 2)}</div>
-                                <div className="flex-1 py-1">
-                                    <div className="font-bold">{account.customer?.name}</div>
-                                    <div>{account.accountNumber}-{account.accountKey}</div>
+
+                    let theme = status ? account.status == 'new' ? 'bg-lime-200' : 'bg-secondary-300' : 'bg-rose-400';
+
+                    const href = pathname + '?' + createQueryString('id', account.id);
+                    return <Link key={`account-${account.id}`} href={ href } className={ `p-2 rounded-2xl text-tiny flex ${ pathname + '?' +  searchParams === href ? 'bg-secondary-50' : '' } hover:bg-secondary-50` }>
+                        <div className="flex space-x-4 items-center">
+                            <div className={`rounded-full ${ theme } text-white h-8 w-8 flex items-center justify-center`}>
+                                <span className="text-xs">{ account.customer.name.split(" ").map( (i : string) => i[0] ).join("").substring(0, 2)}</span>
+                            </div>
+                            <div className="flex-1 py-1 space-y-1">
+                                <div className="flex gap-2">
+                                    <div className={`uppercase text-secondary-600 font-bold`}>{account.customer?.name}</div>
+                                </div>
+                                <div className="flex">
+                                    <div className="text-default/50">{account.accountNumber}-{account.accountKey}</div>
                                 </div>
                             </div>
                         </div>
@@ -53,10 +61,10 @@ export function AccountsSqueleton() {
         </div>
     }
 
-    return <div className="flex-1 w-full flex p-6 flex-col gap-6 overflow-auto">
+    return <div className="flex-1 w-full flex flex-col">
             <div className="flex flex-col gap-4 flex-1">
-                <h1>Contas</h1>
-                <div className="flex flex-col gap-2">
+                <h2 className="font-bold">Contas</h2>
+                <div className="content-list gap-2">
                     <Item />
                     <Item />
                     <Item />

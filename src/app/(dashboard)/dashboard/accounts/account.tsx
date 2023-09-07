@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
-export async function AccountWidget({ data, precision } : { data : any | null, precision : number | 0 }) {
+export function AccountWidget({ data, precision } : { data : any | null, precision : number | 0 }) {
     if( !data ){
         return;
     }
@@ -23,10 +23,10 @@ export async function AccountWidget({ data, precision } : { data : any | null, p
         [searchParams]
     )
 
-    return <div className="max-w-xl w-full relative">
-        <div className="bg-white relative p-6 overflow-clip rounded-3xl">
-            <Link href={ pathname + '?' + clearQueryString() } className="absolute rounded-xl flex items-center justify-center h-11 w-11 text-primary border-primary border top-6 right-6" >
-                <span className="material-icon">close</span>
+    return <div className="relative max-w-xl w-full">
+        <div className="w-full bg-foreground-800 p-6 rounded-3xl">
+            <Link href={ pathname + '?' + clearQueryString() } className="absolute rounded-xl flex items-center justify-center h-11 w-11 text-primary bg-primary top-6 right-6" >
+                <span className="material-icon text-lg text-foreground-50">close</span>
             </Link>
             <div className="flex flex-col gap-6">
                 <div className="h-11 flex flex-col justify-end">
@@ -63,11 +63,11 @@ export async function AccountWidget({ data, precision } : { data : any | null, p
                 </table>
 
                 <div className="flex flex-row gap-6">
-                    <div className="flex flex-col gap-2 border flex-1 items-center rounded-3xl p-6">
+                    <div className="flex flex-col gap-2 border flex-1 rounded-3xl p-6">
                         <span className="text-3xl">₼ { data.balance / ( Math.pow(10, precision) ) }</span>
                         <span>Saldo</span>
                     </div>
-                    <div className="flex flex-col gap-2 border flex-1 items-center rounded-3xl p-6">
+                    <div className="flex flex-col gap-2 border flex-1 rounded-3xl p-6">
                         <span className="text-3xl">₼ { data.balanceExtra / ( Math.pow(10, precision) ) }</span>
                         <span>Saldo bônus</span>
                     </div>

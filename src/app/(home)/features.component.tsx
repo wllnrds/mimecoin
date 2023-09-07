@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 
-import { ButtonLink } from "@/components/auth/buttons.components";
+import { ButtonLink } from "@/components/button.component";
 
 export default function HeaderMenu() {
   const [ active , setStatus ] = useState( false );
@@ -26,7 +26,7 @@ export default function HeaderMenu() {
         </h1>
         <div className="flex-1"></div>
         <div className="flex flex-row gap-1 md:gap-3 flex-wrap">
-          <button className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` } onClick={() => signIn()}>Login</button>
+          <button className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` } onClick={() => signIn('email', { callbackUrl : '/dashboard' })}>Login</button>
           <ButtonLink auth="all" href="/dashboard" style={ active ? 'bg-foreground-900 hover:bg-foreground-700' : 'bg-primary hover:bg-primary-500' }>criar seu mime</ButtonLink>
           <button onClick={ () => setStatus( !active ) } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground bg-primary hover:bg-primary-500` }>
             <span className="material-icon">{ active ? 'close' : 'star' }</span>
