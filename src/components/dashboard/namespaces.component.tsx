@@ -1,7 +1,5 @@
 'use client';
 
-import { Namespace } from "@/lib/controller/namespace";
-import { User } from "@/lib/controller/user";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -29,14 +27,15 @@ export function Namespaces({
 
     const router = useRouter()
     const pathname = usePathname()
-    const searchParams = useSearchParams()
+    const searchParams = useSearchParams()!
 
-    const createQueryString = useCallback(
+    const createQueryString = useCallback( 
         (name: string, value: string) => {
-          const params = new URLSearchParams(searchParams)
-          params.set(name, value)
-     
-          return params.toString()
+
+            const params = new URLSearchParams(searchParams as any)
+            params.set(name, value)
+        
+            return params.toString()
         },
         [searchParams]
     )
@@ -65,7 +64,7 @@ export function Namespaces({
                                 { showList ? 'Ocultar sistemas' : 'Mostrar sistemas' }
                             </span>
                             <div className={ `flex flex-row transition-opacity ${ !showList ? 'opacity-100' : 'opacity-0' }` }>
-                                { namespaces.slice(0,2).map( ns => <div className="w-4"><div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200 shadow-small"><span className="text-xs">{ ns.code }</span></div></div>) }
+                                { namespaces.slice(0,2).map( ns => <div className="w-4" key={ `ns-circle-${ ns.code }` }><div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200 shadow-small"><span className="text-xs">{ ns.code }</span></div></div>) }
                                 { namespaces.length > 2 ? <div className="w-4"><div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200 shadow-small"><span className="text-xs">+{ namespaces.length - 2 }</span></div></div> : <></> }
                             </div>
                             <div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full ">
@@ -74,19 +73,19 @@ export function Namespaces({
                         </button>
                         <div className={`flex flex-col gap-[2px] overflow-clip ${ showList ? 'h-auto' : 'h-0' }`}>
                             { namespaces.map( ( ns, index ) =>
-                                <Link href={ pathname + '?' + createQueryString('namespaceIndex', index.toString() ) }>
-                                <div className="w-full flex flex-row items-center gap-3 bg-primary-50 px-5 py-3 rounded-md hover:bg-primary-200">
-                                    <div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200">
-                                        <span className="text-xs">{ ns.code }</span>
+                                <Link key={ `ns-link-${ ns.code }` } href={ pathname + '?' + createQueryString('namespaceIndex', index.toString() ) }>
+                                    <div className="w-full flex flex-row items-center gap-3 bg-primary-50 px-5 py-3 rounded-md hover:bg-primary-200">
+                                        <div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200">
+                                            <span className="text-xs">{ ns.code }</span>
+                                        </div>
+                                        <div className="text-sm flex flex-col">
+                                            <span className="font-semibold">{ ns.name }</span>
+                                            <span className="font-light text-xs">{ (( ns.limit.used/ns.limit.max ) * 100).toFixed(0) }% de { ( ns.limit.max / Math.pow(10, ns.limit.precision) ).toLocaleString('pt-BR',{
+                                                notation: 'compact',
+                                                maximumFractionDigits: 1
+                                            }) } usado</span>
+                                        </div>
                                     </div>
-                                    <div className="text-sm flex flex-col">
-                                        <span className="font-semibold">{ ns.name }</span>
-                                        <span className="font-light text-xs">{ (( ns.limit.used/ns.limit.max ) * 100).toFixed(0) }% de { ( ns.limit.max / Math.pow(10, ns.limit.precision) ).toLocaleString('pt-BR',{
-                                            notation: 'compact',
-                                            maximumFractionDigits: 1
-                                        }) } usado</span>
-                                    </div>
-                                </div>
                                 </Link>
                             ) }
                             { 

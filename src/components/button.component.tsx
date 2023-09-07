@@ -1,9 +1,11 @@
 "use client";
 
+import { use, useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
-import Link from "next/link";
-import { usePathname } from 'next/navigation'
 
 const button_menu = "py-3 px-6 text-left rounded-2xl transition-background text-xs";
 
@@ -62,6 +64,18 @@ export function MenuLink({ href, auth, children } : { href : string | any, auth 
   const pathname = usePathname()
   const { status } = useSession();
 
+  const searchParams = useSearchParams()!
+
+  const createQueryString = useCallback( (name?: string, value?: string) => {
+      const params = new URLSearchParams(searchParams as any)
+        if( name && value ){
+          params.set(name, value)
+        }
+        return params.toString()
+      },
+      [searchParams]
+  )
+
   if( auth !== 'all'){
     if( status != auth ){
       return;
@@ -70,11 +84,22 @@ export function MenuLink({ href, auth, children } : { href : string | any, auth 
 
   const active : boolean = pathname.toLowerCase() == href.toLowerCase();
 
-  return <Link href={ href } className={ `py-3 px-6 text-left rounded-2xl transition-background text-xs hover:bg-foreground-700 ${ active ? ' bg-foreground-700 cursor-default' : '' }` } prefetch={ true }>{ children }</Link>
+  return <Link href={ href + "?" + createQueryString() } className={ `py-3 px-6 text-left rounded-2xl transition-background text-xs hover:bg-foreground-700 ${ active ? ' bg-foreground-700 cursor-default' : '' }` } prefetch={ true }>{ children }</Link>
 }
 
 export function ButtonLink( { href, auth, children, style = 'hover:bg-foreground-700', target } : { href? : string | any, auth : 'authenticated' | 'unauthenticated' | 'all', children : React.ReactNode, style? : string, target?: string } ){
   const { status } = useSession();
+  const searchParams = useSearchParams()!
+
+  const createQueryString = useCallback( (name?: string, value?: string) => {
+      const params = new URLSearchParams(searchParams as any)
+        if( name && value ){
+          params.set(name, value)
+        }
+        return params.toString()
+      },
+      [searchParams]
+  )
 
   if( auth !== 'all'){
     if( status != auth ){
@@ -82,5 +107,5 @@ export function ButtonLink( { href, auth, children, style = 'hover:bg-foreground
     }
   }
 
-  return <Link href={ href } target={ target } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ style }` } prefetch={ false }>{ children }</Link>
+  return <Link href={ href + "?" + createQueryString() } target={ target } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ style }` } prefetch={ false }>{ children }</Link>
 }
