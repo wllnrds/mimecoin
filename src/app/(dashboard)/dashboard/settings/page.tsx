@@ -41,7 +41,7 @@ export default async function Page() {
         </div>
         <div className="content-card">
             <h2 className="text-default text-lg">Seus mimes</h2>
-            <div className="grid grid-cols-2 gap-1">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-1">
                 { namespaces.map( item => <NamespaceWidget key={ `namespaces-${ item.id }` } item={ item } /> ) }
             </div>
         </div>

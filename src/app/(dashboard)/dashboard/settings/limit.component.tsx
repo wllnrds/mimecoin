@@ -6,7 +6,7 @@ export function LimitsWidget({ total = 100, used = 0 }) {
     return <Card className="flex-1 border-none rounded-3xl  bg-foreground-900 shadow-none">
         <CardBody className="justify-center">
             <h2 className="text-default text-lg">Seu limite de Criação de Mimes</h2>
-            <div className="flex flex-row gap-6 items-center">
+            <div className="flex flex-col lg:flex-row gap-1 lg:gap-6 lg:items-center">
                 <div>
                     <Chip classNames={{ base: "border-1 text-default/30", content: "text-default/90 text-xs font-semibold", }} variant="bordered" >
                         Você criou {used} mime. Seu limite é {total}.

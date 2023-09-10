@@ -12,7 +12,7 @@ export function TokenWidget({ item } : { item : any }) {
                 <div className='text-xs font-bold'>{ item.name }</div>
                 <div className="text-[0.6rem] text-foreground-500">{ !item.expiresAt ? 'A chave não vence.' : <>Vence em <span className="text-secondary">{ moment( item.expiresAt ).format('D [de] MMMM [de] YYYY [às] H:mm:ss') }</span></> }</div> 
             </div>
-            <div className="flex flex-1 flex-row items-center gap-2">
+            <div className="flex flex-1 flex-row items-center gap-2 flex-wrap">
                 <Snippet size="sm" variant="flat" color="secondary" symbol="Chave" >{ item.key }</Snippet>
                 <Snippet size="sm" variant="flat" color="secondary" symbol="Segredo">{ item.secret }</Snippet>        
             </div>

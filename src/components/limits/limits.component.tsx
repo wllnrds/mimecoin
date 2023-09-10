@@ -6,14 +6,14 @@ import { useSearchParams } from "next/navigation";
 export function LimitsWidget({ precision = 0, total = 100, used = 0 }){
     const limit : number = used / Math.pow( 10, precision );
 
-    return <Card className="w-[240px] h-[240px] border-none bg-primary shadow">
+    return <Card className="w-[200px] h-[200px] border-none bg-primary shadow">
     <CardBody className="justify-center items-center pb-0">
       <CircularProgress
         classNames={{
-          svg: "w-36 h-36 drop-shadow-md",
+          svg: "w-32 h-32 drop-shadow-md",
           indicator: "stroke-white",
           track: "stroke-white/20",
-          value: "text-3xl font-semibold text-white",
+          value: "text-2xl font-semibold text-white",
         }}
         value={ (100 * used) / total }
         showValueLabel={true}

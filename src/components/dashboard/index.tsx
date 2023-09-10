@@ -44,9 +44,9 @@ export async function Dashboard({ children }: { children: React.ReactNode }) {
         <div className="flex-1 flex flex-col foreground-900 relative min-w-[600px]">
             <div className='sticky top-0 z-50 bg-foreground-900'>
                 <header className="py-2 px-3 flex flex-row items-center gap-3">
-                    <div className="hover:bg-foreground-700 aspect-square flex items-center justify-center h-12 w-12 rounded-full cursor-pointer">
+                    {/* <div className="hover:bg-foreground-700 aspect-square flex items-center justify-center h-12 w-12 rounded-full cursor-pointer">
                         <span className="material-icon text-2xl">menu</span>
-                    </div>
+                    </div> */}
 
                     <Link href={'/dashboard'}><h1 className="h-12 flex items-center"><Image src="/assets/logo.svg" width="150" height="30" alt={"Mimecoin"} /></h1></Link>
 
