@@ -4,6 +4,7 @@ import Link from "next/link";
 import { User } from "@/lib/controller/user";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 import { 
   AccountButton, 
@@ -18,13 +19,13 @@ export async function Dashboard({ children }: { children: React.ReactNode }) {
     const session = await getServerSession(authOptions);
 
     if( !session ){
-      return;
+        return redirect('/');
     }
 
     const user_session : any = session.user;
     const user = await User.get( user_session.id );
     if( !user ){
-        return;
+        return redirect('/');
     }
 
     const _ns = await user.getNamespaces();

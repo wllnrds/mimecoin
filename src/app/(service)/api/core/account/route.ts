@@ -30,10 +30,9 @@ export async function POST(request: NextRequest){
         },{ status : 401 })
     }
 
-    const { name , email, document, birthday } : {
+    const { name , email, birthday } : {
         name : string ,
-        email : string, 
-        document : string, 
+        email : string,
         birthday : string
     } = await request.json();
 
@@ -42,7 +41,6 @@ export async function POST(request: NextRequest){
         if(
             name == null || name == '' ||
             email == null || email == '' ||
-            document == null || document == '' ||
             birthday == null || birthday == ''
         ){
             throw new Error("All fields should be setted.");
@@ -54,10 +52,6 @@ export async function POST(request: NextRequest){
     
         if( !email.match( /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) ){
             throw new Error("E-mail not seems valid.");
-        }
-    
-        if( document.length !== 11 ){
-            throw new Error("Actualy document should be a CPF" );
         }
     
         try{
@@ -74,7 +68,7 @@ export async function POST(request: NextRequest){
     }
 
     try{
-        const account = await auth.namespace.createAccount( name , email, document, birthday );
+        const account = await auth.namespace.createAccount( name , email, birthday );
 
         const obj = {
             "id": account.id,
@@ -140,8 +134,7 @@ export async function GET(request: NextRequest){
             code: account?.namespaceCode,
             number: account?.accountNumber,
             digit: account?.accountKey,
-            customer: account?.customer!.name,
-            document: account?.customer!.document
+            customer: account?.customer!.name
         },{
             status: 200
         });

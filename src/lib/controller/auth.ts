@@ -84,7 +84,6 @@ export class AuthAccount{
             customer: {
                 name: customer?.name,
                 email: customer?.email,
-                document: customer?.document,
                 status: customer?.status,
                 birtday: customer?.birthday
             }

@@ -45,7 +45,6 @@ export interface Customer {
   name: string;
   birthday: Timestamp;
   email: string;
-  document: string;
   status: Generated<Status>;
   createdAt: Generated<Timestamp>;
   updatedAt: Generated<Timestamp>;

@@ -116,7 +116,6 @@ export class Transaction{
                     .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
                     .select([
                         'Customer.name',
-                        'Customer.document',
                         'NamespaceAccount.accountNumber',
                         'NamespaceAccount.accountKey'
                     ])
@@ -127,7 +126,6 @@ export class Transaction{
                     .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
                     .select([
                         'Customer.name',
-                        'Customer.document',
                         'NamespaceAccount.accountNumber',
                         'NamespaceAccount.accountKey'
                     ])
@@ -164,7 +162,6 @@ export class Transaction{
                     .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
                     .select([
                         'Customer.name',
-                        'Customer.document',
                         'NamespaceAccount.accountNumber',
                         'NamespaceAccount.accountKey'
                     ])
@@ -175,7 +172,6 @@ export class Transaction{
                     .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
                     .select([
                         'Customer.name',
-                        'Customer.document',
                         'NamespaceAccount.accountNumber',
                         'NamespaceAccount.accountKey'
                     ])

@@ -116,7 +116,7 @@ export class PaymentOrder{
                 fromBaseDate( new Date() ).padStart( 5, "0" ),  // Preenchimento
                 params.namespaceAccountOrigin + params.namespaceAccountOriginKey // Conta beneficiada
             ].join(''),
-            code.generate(10).toString().padStart( 10, "0" )                                  // ID do documento
+            code.generate(10).toString().padStart( 10, "0" )    // ID do documento
         ]);
 
         let fromBase = fromBaseDate( params.due ).padStart( 4, "0" )

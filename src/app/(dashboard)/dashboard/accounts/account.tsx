@@ -48,10 +48,6 @@ export function AccountWidget({ data, precision } : { data : any | null, precisi
                             <td className="py-1 px-2">{ data.customer.name }</td>
                         </tr>
                         <tr>
-                            <th className="py-1 px-2 font-bold text-left">Documento</th>
-                            <td className="py-1 px-2">{ data.customer.document }</td>
-                        </tr>
-                        <tr>
                             <th className="py-1 px-2 font-bold text-left">E-mail</th>
                             <td className="py-1 px-2">{ data.customer.email }</td>
                         </tr>

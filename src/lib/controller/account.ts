@@ -45,7 +45,7 @@ export class Account{
         }
     }
 
-    static async create( idNamespace: string, name: string, document: string, birthday: Date, email: string ){
+    static async create( idNamespace: string, name: string, birthday: Date, email: string ){
         const namespace = await db.selectFrom('Namespace').select(['status','code']).where('id','=',idNamespace).executeTakeFirst();
 
         if(!namespace){
@@ -57,18 +57,16 @@ export class Account{
         }
 
         const preview = await db.selectFrom('Customer').select('id').where( ({eb, or})=>or([
-            eb('document','=',document),
             eb('email','=',email)
         ])).execute();
 
         if( preview.length > 0 ){
-            throw new Error(`Document or email has been used by another customer.`)
+            throw new Error(`E-mail has been used by another customer.`)
         }
 
         const entry = await db.transaction().execute( async (trx) => {
             const customer = await trx.insertInto('Customer').values({
                 name,
-                document,
                 birthday,
                 email,
                 status: 'new'
@@ -150,17 +148,15 @@ export class Customer{
     name: string
     birthday: Date
     email: string
-    document: string
     status: Status
     createdAt: Date
     updatedAt: Date
 
-    constructor( id: string, name: string, birthday: Date, email: string, document: string, status: Status, createdAt: Date, updatedAt: Date ){
+    constructor( id: string, name: string, birthday: Date, email: string, status: Status, createdAt: Date, updatedAt: Date ){
         this.id = id;
         this.name = name;
         this.birthday = birthday;
         this.email = email;
-        this.document = document;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -172,7 +168,6 @@ export class Customer{
             data.name,
             data.birthday,
             data.email,
-            data.document,
             data.status,
             data.createdAt,
             data.updatedAt,

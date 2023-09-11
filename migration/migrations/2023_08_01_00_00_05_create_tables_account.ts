@@ -4,19 +4,16 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable('Customer')
         .addColumn('id', 'uuid', (col) => col.primaryKey().defaultTo(sql`gen_random_uuid()`))
-        .addColumn('name', 'varchar', (col) => col.unique().notNull())
+        .addColumn('name', 'varchar', (col) => col.notNull())
         .addColumn('birthday', 'date', (col) => col.notNull())
         .addColumn('email', 'varchar', (col) => col.unique().notNull())
-        .addColumn('document', 'varchar', (col) => col.unique().notNull())
         .addColumn('status', sql`status`, (col) => col.defaultTo('new').notNull())
         .addColumn('createdAt', 'timestamptz', (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .addColumn('updatedAt', 'timestamptz', (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull())
         .execute()
 
-    await db.schema.createIndex('customer_document').on('Customer').column('document').execute()
     await db.schema.createIndex('customer_email').on('Customer').column('email').execute()
     await db.schema.createIndex('customer_status').on('Customer').column('status').execute()
-
 
     await db.schema
         .createTable('NamespaceAccount')

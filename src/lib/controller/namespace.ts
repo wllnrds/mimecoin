@@ -112,11 +112,10 @@ export class Namespace{
         return token;
     }
 
-    async createAccount( name: string, email: string, document:string, birthday:string){
+    async createAccount( name: string, email: string, birthday:string){
         const entry = await Account.create(
             this.id,
             name,
-            document,
             new Date( birthday ),
             email
         );
@@ -252,7 +251,6 @@ export class Namespace{
             number: account?.accountNumber,
             digit: account?.accountKey,
             customer: account?.customer!.name,
-            document: account?.customer!.document
         };
     }
 
@@ -496,7 +494,6 @@ export class Namespace{
                     .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
                     .select([
                         'Customer.name',
-                        'Customer.document',
                         'NamespaceAccount.accountNumber',
                         'NamespaceAccount.accountKey'
                     ])
@@ -507,7 +504,6 @@ export class Namespace{
                     .innerJoin('Customer','Customer.id','NamespaceAccount.idCustomer')
                     .select([
                         'Customer.name',
-                        'Customer.document',
                         'NamespaceAccount.accountNumber',
                         'NamespaceAccount.accountKey'
                     ])
@@ -591,7 +587,6 @@ export class Namespace{
                     .select([
                         'NamespaceAccount.id',
                         'Customer.name',
-                        'Customer.document',
                         'NamespaceAccount.accountNumber',
                         'NamespaceAccount.accountKey'
                     ])
@@ -603,7 +598,6 @@ export class Namespace{
                     .select([
                         'NamespaceAccount.id',
                         'Customer.name',
-                        'Customer.document',
                         'NamespaceAccount.accountNumber',
                         'NamespaceAccount.accountKey'
                     ])

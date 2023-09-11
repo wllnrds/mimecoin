@@ -17,13 +17,13 @@ export default async function Home({ searchParams } : {  searchParams : { [key: 
   const session = await getServerSession(authOptions);
 
   if( !session ){
-    redirect('./');
+    return redirect('/');
   }
 
   const user_session : any = session.user;
   const user = await User.get( user_session.id );
   if( !user ){
-    redirect('./');
+    return redirect('/');
   }
 
   const namespaceIndex = searchParams.namespaceIndex ? parseInt( searchParams.namespaceIndex as string ) : 0 ;
