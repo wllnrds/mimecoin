@@ -1,6 +1,6 @@
 import { authOptions } from "@/lib/auth";
-import { User } from "@/lib/controller/user";
 import { getServerSession } from "next-auth";
+import { User } from "@/lib/controller/user";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import CreateMime from "./create";

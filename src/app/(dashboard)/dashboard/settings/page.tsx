@@ -48,7 +48,7 @@ export default async function Page() {
         <div className="content-card">
             <div className="flex flex-row items-center">
                 <h2 className="text-default text-lg flex-1">Suas chaves</h2>
-                <GenerateToken namespaces={ namespaces.flatMap( ns => ({ id: ns.id, code: ns.code, pic: ns.pic, name: ns.name , status: ns.status, createdAt: ns.createdAt, updatedAt: ns.updatedAt, createdBy: ns.createdBy, }) )  } />
+                { namespaces.length > 0 && <GenerateToken namespaces={ namespaces.flatMap( ns => ({ id: ns.id, code: ns.code, pic: ns.pic, name: ns.name , status: ns.status, createdAt: ns.createdAt, updatedAt: ns.updatedAt, createdBy: ns.createdBy, }) )  } />}
             </div>
             <div className="flex flex-col gap-2">
                 { tokens.map(item => <TokenWidget key={`accesstoken-${item.id}`} item={item} />) }

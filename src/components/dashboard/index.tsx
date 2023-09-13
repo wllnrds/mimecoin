@@ -60,7 +60,7 @@ export async function Dashboard({ children }: { children: React.ReactNode }) {
                 <aside className=" p-6 flex flex-col gap-6 max-h-[calc(100dvh-4rem)] sticky top-[4rem] left-0">
                     <menu className="flex flex-col gap-1">
                         <DashboardButton />
-                        <AccountButton />
+                        { _ns.length > 0 && <AccountButton /> }
                         <SettingsButton />
                     </menu>
                     <div className="flex-1"></div>

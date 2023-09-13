@@ -2,7 +2,7 @@ import { authOptions } from "@/lib/auth";
 import { User } from "@/lib/controller/user";
 import { getServerSession } from "next-auth";
 import { TransactionsWidget } from "./transactions.component";
-import { Transaction } from "@/lib/controller/transation";
+import { Namespace } from "@/lib/controller/namespace";
 
 export const revalidate = 0;
 
@@ -18,7 +18,12 @@ export async function Transactions({ namespaceIndex = 0 }){
     if (!user) {
         return;
     }
-    const namespaces = await user.getNamespaces();
+    const namespaces : Array<Namespace> = await user.getNamespaces();
+
+    if( namespaces.length == 0 ){
+        return <div>Crie seu primeiro Mime</div>
+    }
+
     const namespace = namespaces[namespaceIndex];
     const transactions = await namespace.getRootTransactions() as any;
 

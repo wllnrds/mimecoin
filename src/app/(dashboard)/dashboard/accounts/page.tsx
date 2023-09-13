@@ -27,8 +27,16 @@ export default async function Home({ searchParams } : {  searchParams : { [key: 
   }
 
   let namespaces = await user.getNamespaces();
+
+  if( namespaces.length === 0 ){
+    return  <div className="flex-1 w-full flex p-6 flex-col lg:flex-row gap-6 items-stretch">
+      <div className="flex flex-col flex-1 gap-6">Crie seu primeiro mime</div>      
+    </div>
+  }
+  
   const namespaceIndex = searchParams.namespaceIndex ? parseInt( searchParams.namespaceIndex as string ) : 0 ;
   const idRef = searchParams['id'] as string;
+
   let accountSelected = null;
   const { precision } = await namespaces[namespaceIndex].getLimits();
 

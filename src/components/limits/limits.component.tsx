@@ -34,6 +34,10 @@ export function LimitsWidget({ precision = 0, total = 100, used = 0 }){
 }
 
 export function Limit({ namespaces } : { namespaces : Array< { code : string, pic : string, name : string, limit: { precision: number, max: number, used: number, current: number } } > }){
+  if( namespaces.length == 0 ){
+    return
+  }
+
   const searchParams = useSearchParams();
   const namespaceIndex = searchParams.has('namespaceIndex') ? parseInt( searchParams.get('namespaceIndex') || '0' ) : 0 ;
   return <LimitsWidget precision={ namespaces[namespaceIndex].limit.precision } total={ namespaces[namespaceIndex].limit.max } used={ namespaces[namespaceIndex].limit.used } />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, FormEvent, useState } from "react";
 
 export default function CreateMime(){
     const [mime,setMime] = useState<{
@@ -8,6 +8,9 @@ export default function CreateMime(){
         name: String,
         code: String
     }>({ precision: null, name: "", code: "" });
+
+    const [ loading, setLoading ] = useState< boolean >(false);
+    const [ error, setError ] = useState< string | null >( null );
 
     const [codeValid,setCodeValid] = useState<Boolean | null>( null );
     const [readyToSend,setReady] = useState( false );
@@ -23,6 +26,20 @@ export default function CreateMime(){
             setCodeValid( true )
         }
     },[mime])
+
+    async function register( event: FormEvent<HTMLFormElement> ){
+        event.preventDefault();
+        setLoading( true )
+
+        setError( '' );
+
+        const result : any = "";
+
+        if( !result || result?.error ){
+            setError("Login e/ou senha inválidos.")
+        }
+        setLoading( false )
+    }
 
     const icon_waiting = <div className="h-8 w-8 flex flex-row items-center justify-center"><span className="animate-pulse rounded-full bg-warning w-2 h-2"></span></div>;
     const icon_ready = <div className="h-8 w-8 flex flex-row items-center justify-center text-success"><span className="material-icon bold">done</span></div>
@@ -96,7 +113,8 @@ export default function CreateMime(){
             </ul>
         </div>
         <div className="bg-primary flex flex-row justify-end rounded-[2rem] m-2">
-            <button className="h-[4rem] rounded-[2rem] flex items-center justify-center gap-2 py-2 pl-6  pr-3 hover:bg-primary-500 uppercase">Criar Mime <span className="material-icon text-xl">arrow_forward</span></button>
+            { loading && <div className="flex h-[4rem] w-[4rem] items-center justify-center bg-primary-500 rounded-[2rem]"><span className="material-icon text-2xl animate-spin">progress_activity</span></div> }
+            { !loading && <button className="h-[4rem] rounded-[2rem] flex items-center justify-center gap-2 py-2 pl-6  pr-3 hover:bg-primary-500 uppercase">Criar Mime <span className="material-icon text-xl">arrow_forward</span></button>}
         </div>
     </section>
 }
