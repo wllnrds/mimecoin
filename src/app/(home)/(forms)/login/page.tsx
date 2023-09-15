@@ -11,7 +11,7 @@ export default function Page(){
     const [ identity, setIdentity ] = useState< { email: string, password: string } >({ email: "", password: "" }) 
 
     if( session ){
-        return redirect('/dashboard')
+        redirect('/dashboard')
     }
 
     async function handleChange( event : ChangeEvent<HTMLInputElement> ){
@@ -26,7 +26,8 @@ export default function Page(){
         setError( '' )
 
         try {
-            const result = await signIn('credentials', { ...identity, redirect: false, callbackUrl: '/dashboard' });
+            const result = await signIn('credentials', { ...identity, redirect: false });
+            console.log( result )
         } catch (error : any ) {
             console.error( error );
             setError( "Login e/ou senha inválidos." )
