@@ -23,14 +23,17 @@ export default function Page(){
     async function login( event: FormEvent<HTMLFormElement> ){
         event.preventDefault();
         setLoading( true )
+        setError( '' )
 
-        setError( '' );
-
-        const result = await signIn('credentials', { ...identity, redirect: false, callbackUrl: '/dashboard' });
-
-        if( !result || result?.error ){
-            setError("Login e/ou senha inválidos.")
+        try {
+            const result = await signIn('credentials', { ...identity, redirect: false, callbackUrl: '/dashboard' });
+            if( !result || result?.error ){
+                throw new Error("Login e/ou senha inválidos.");
+            }
+        } catch (error : any ) {
+            setError( error.message )
         }
+
         setLoading( false )
     }
 
