@@ -27,11 +27,9 @@ export default function Page(){
 
         try {
             const result = await signIn('credentials', { ...identity, redirect: false, callbackUrl: '/dashboard' });
-            if( !result || result?.error ){
-                throw new Error("Login e/ou senha inválidos.");
-            }
         } catch (error : any ) {
-            setError( error.message )
+            console.error( error );
+            setError( "Login e/ou senha inválidos." )
         }
 
         setLoading( false )
