@@ -61,6 +61,16 @@ export class Namespace{
         return Namespace.DbToObj(entry);
     }
 
+    static async getByCode( code:string ){
+        const entry = await db.selectFrom('Namespace').selectAll().where('code','=',code).executeTakeFirst();
+
+        if(!entry){
+            throw new Error("Entry not founded.");
+        }
+
+        return Namespace.DbToObj(entry);
+    }
+
     static async get( id:string ){
         const entry = await db.selectFrom('Namespace').selectAll().where('id','=',id).executeTakeFirst();
 

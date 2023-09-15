@@ -1,14 +1,17 @@
 "use client";
 
-import { ChangeEvent, useEffect, FormEvent, useState } from "react";
+import { useEffect, useState } from "react";
+import { CheckCode, CreateNamespace } from "./action";
+import { redirect } from "next/navigation";
 
 export default function CreateMime(){
     const [mime,setMime] = useState<{
         precision: 0 | 2 | null,
-        name: String,
-        code: String
+        name: string,
+        code: string
     }>({ precision: null, name: "", code: "" });
 
+    const [ loadingCode, setLoadingCode ] = useState< boolean >(false);
     const [ loading, setLoading ] = useState< boolean >(false);
     const [ error, setError ] = useState< string | null >( null );
 
@@ -23,21 +26,46 @@ export default function CreateMime(){
 
     useEffect(()=>{
         if( mime.code.length === 3 ){
-            setCodeValid( true )
+            handleCheckCode()
         }
-    },[mime])
+        checkReady();
+    },[ mime, codeValid ])
 
-    async function register( event: FormEvent<HTMLFormElement> ){
-        event.preventDefault();
+    function checkReady(){
+        if( mime.precision != null && mime.name?.length > 3 && codeValid ){
+            setReady(true);
+        }else{
+            setReady(false);
+        }
+    }
+
+    async function handleCheckCode(){
+        setLoadingCode( true );
+        const has = await CheckCode( mime.code );
+        setCodeValid( !has );
+        if( has ){
+            setError("Código do mime já está em uso.")
+        }else{
+            setError( null )
+        }
+        setLoadingCode( false );
+    }
+
+    async function handleSubmit( formdata : FormData ){
         setLoading( true )
 
         setError( '' );
 
-        const result : any = "";
+        console.log(formdata)
+
+        const result : any = await CreateNamespace( formdata )
 
         if( !result || result?.error ){
             setError("Login e/ou senha inválidos.")
+        }else{
+            redirect('/dashboard');
         }
+
         setLoading( false )
     }
 
@@ -45,7 +73,7 @@ export default function CreateMime(){
     const icon_ready = <div className="h-8 w-8 flex flex-row items-center justify-center text-success"><span className="material-icon bold">done</span></div>
     const icon_error = <div className="h-8 w-8 flex flex-row items-center justify-center text-danger"><span className="material-icon bold animate-ping">error</span></div>
 
-    return <section className="flex-1 flex flex-col bg-white rounded-[2rem] overflow-clip">
+    return <form action={ handleSubmit } onSubmit={ () => setLoading( true ) } className="flex-1 flex flex-col bg-white rounded-[2rem] overflow-clip">
         <div className="flex flex-col p-8 gap-4">
             <div className="flex flex-col gap-6 items-center">
                 <h2 className="text-[2rem] font-black uppercase">Novo Mime</h2>
@@ -90,13 +118,19 @@ export default function CreateMime(){
                 <div className="flex-1 flex flex-col gap-2">
                     <div className="font-semibold">Código do Mime</div>
                     <div className="flex flex-col gap-2">
-                        <input onChange={ handleChange } autoComplete="off" name="code" className="bg-white w-full border py-2 px-3 rounded-[12px] outline-none focus:outline-2 focus:outline-secondary uppercase" maxLength={3} minLength={3} />
+                        <div className="flex flex-row relative">
+                            <input onChange={ handleChange } autoComplete="off" name="code" className="bg-white w-full border py-2 px-3 rounded-[12px] outline-none focus:outline-2 focus:outline-secondary uppercase" maxLength={3} minLength={3} />
+                            { loadingCode && <div className="absolute right-1 top-[50%] translate-y-[-50%] flex h-[2rem] w-[2rem] items-center justify-center bg-primary-500 rounded-[2rem]"><span className="material-icon text-2xl animate-spin">progress_activity</span></div> }
+                            { codeValid && <div className="absolute right-1 top-[50%] translate-y-[-50%] flex h-[2rem] w-[2rem] items-center justify-center rounded-[2rem] bg-success"><span className="material-icon text-2xl">done</span></div> }
+                            { codeValid == false && <div className="absolute right-1 top-[50%] translate-y-[-50%] flex h-[2rem] w-[2rem] items-center justify-center rounded-[2rem] bg-danger"><span className="material-icon text-2xl">error</span></div> }
+                        </div>
                         <span className="text-[0.6rem] font-light">O código não pode ser alterado futuramente e deve ser único.</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div className="flex-1 p-8 text-lg">
+        <div className="flex-1 p-8 text-lg flex flex-col gap-4">
+            { error && <div className="bg-danger p-3 text-white">{ error }</div> }
             <ul className="p-0">
                 <li className="flex flex-row gap-2">
                     { mime.precision != null ? icon_ready : icon_waiting } Escolher tipo do mime
@@ -107,14 +141,14 @@ export default function CreateMime(){
                 <li className="flex flex-row gap-2">
                     { codeValid == null ? icon_waiting : codeValid ? icon_ready : icon_error } Escolher um código único
                 </li>
-                <li className={ `flex flex-row gap-2 ${ readyToSend ? 'opacity-100' : 'opacity-0' }` }>
-                    <div className="h-8 w-8 flex flex-row items-center justify-center"><span className="material-icon">done_all</span></div> Tudo pronto!   
+                <li className={ `flex flex-row transition-opacity gap-2 ${ readyToSend ? 'opacity-100' : 'opacity-0' }` }>
+                    <div className="h-8 w-8 flex flex-row items-center rounded-[2rem] justify-center bg-success"><span className="material-icon">done</span></div> Tudo pronto!   
                 </li>
             </ul>
         </div>
-        <div className="bg-primary flex flex-row justify-end rounded-[2rem] m-2">
+        <div className="bg-primary flex flex-row justify-end rounded-[2rem] m-2 h-[4rem]">
             { loading && <div className="flex h-[4rem] w-[4rem] items-center justify-center bg-primary-500 rounded-[2rem]"><span className="material-icon text-2xl animate-spin">progress_activity</span></div> }
-            { !loading && <button className="h-[4rem] rounded-[2rem] flex items-center justify-center gap-2 py-2 pl-6  pr-3 hover:bg-primary-500 uppercase">Criar Mime <span className="material-icon text-xl">arrow_forward</span></button>}
+            { readyToSend && !loading  &&  <button className="h-[4rem] rounded-[2rem] flex items-center justify-center gap-2 py-2 pl-6  pr-3 hover:bg-primary-500 uppercase">Criar Mime <span className="material-icon text-xl">arrow_forward</span></button>}
         </div>
-    </section>
+    </form>
 }
