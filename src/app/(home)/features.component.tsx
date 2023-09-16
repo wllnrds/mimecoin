@@ -30,7 +30,7 @@ export default function HeaderMenu() {
           {
             session ? <Link href="/dashboard" className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` }>dashboard</Link> : <Link href="/login" className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` }>Login</Link>
           }
-          <ButtonLink auth="all" href="/new/mime" style={ active ? 'bg-foreground-900 hover:bg-foreground-700' : 'bg-primary hover:bg-primary-500' }>criar seu mime</ButtonLink>
+          <ButtonLink auth="all" href="/new/mime" event={{ name: "create_mime", body: { origin : 'feature_header' } }} style={ active ? 'bg-foreground-900 hover:bg-foreground-700' : 'bg-primary hover:bg-primary-500' }>criar seu mime</ButtonLink>
           <button onClick={ () => setStatus( !active ) } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground bg-primary hover:bg-primary-500` }>
             <span className="material-icon">{ active ? 'close' : 'star' }</span>
           </button>

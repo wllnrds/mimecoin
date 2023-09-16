@@ -47,6 +47,10 @@ export function Namespaces({
     const isEmpty = namespaces.length === 0;
     const namespaceIndex = searchParams.has('namespaceIndex') ? parseInt( searchParams.get('namespaceIndex') || '0' ) : 0 ;
 
+    function tagEvent(){
+        gtag('event', "create_mime", { origin : 'user_header' } )
+    }
+
     return (
         <div >
             <button onClick={ menu } className="aspect-square flex items-center justify-center h-10 w-10 rounded-full border-2 cursor-pointer">
@@ -95,7 +99,7 @@ export function Namespaces({
                                 </Link>
                             ) }
                             { 
-                                limit && limit?.current > 0 ? <Link href="/new/mime" className="w-full flex flex-row items-center gap-3 bg-primary-50 px-5 py-3 rounded-md hover:bg-primary-200">
+                                limit && limit?.current > 0 ? <Link href="/new/mime" onClick={ tagEvent } className="w-full flex flex-row items-center gap-3 bg-primary-50 px-5 py-3 rounded-md hover:bg-primary-200">
                                     <div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-primary-100 text-primary">
                                         <span className="material-icon text-lg">add</span>
                                     </div>

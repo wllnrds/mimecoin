@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
@@ -87,7 +87,7 @@ export function MenuLink({ href, auth, children } : { href : string | any, auth 
   return <Link href={ href + "?" + createQueryString() } className={ `py-3 px-6 text-left rounded-2xl transition-background text-xs hover:bg-foreground-700 ${ active ? ' bg-foreground-700 cursor-default' : '' }` } prefetch={ true }>{ children }</Link>
 }
 
-export function ButtonLink( { href, auth, children, style = 'hover:bg-foreground-700', target } : { href? : string | any, auth : 'authenticated' | 'unauthenticated' | 'all', children : React.ReactNode, style? : string, target?: string } ){
+export function ButtonLink( { href, auth, children, style = 'hover:bg-foreground-700', target, event } : { href? : string | any, auth : 'authenticated' | 'unauthenticated' | 'all', children : React.ReactNode, style? : string, target?: string, event?: any | null } ){
   const { status } = useSession();
   const searchParams = useSearchParams()!
 
@@ -107,5 +107,11 @@ export function ButtonLink( { href, auth, children, style = 'hover:bg-foreground
     }
   }
 
-  return <Link href={ href + "?" + createQueryString() } target={ target } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ style }` } prefetch={ false }>{ children }</Link>
+  function callback(){
+    if( event && event.name && event.body ){
+      gtag('event', event.name, event.body )
+    }
+  }
+
+  return <Link onClick={ () => callback() } href={ href + "?" + createQueryString() } target={ target } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ style }` } prefetch={ false }>{ children }</Link>
 }

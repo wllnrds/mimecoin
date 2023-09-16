@@ -44,7 +44,9 @@ export async function CreateNamespace( formdata : FormData ){
         const result = await Namespace.create( newMime.code, '', newMime.name, newMime.precision, user.id );
         return {
             id: result.id,
-            code: result.code
+            code: result.code,
+            name: result.name,
+            precision: newMime.precision
         };
     }catch( err : any ){
         return { error: err.message };

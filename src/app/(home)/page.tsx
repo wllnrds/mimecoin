@@ -20,7 +20,7 @@ export default async function Home() {
 						<div className="absolute top-0 left-0 p-10 md:p-20 max-w-xl text-white flex flex-col gap-4 items-start">
 							<div className="text-5xl sm:text-6xl leading-[1.1] drop-shadow-md">O primeiro banco virtual digital*</div>
 							<p className="sm:max-w-md text-xl drop-shadow-md">Ideal para pontos de fidelidade, pontos de recompensa e outras aplicações de tokenização.</p>
-							<ButtonLink auth="all" href="/new/mime" style="bg-primary hover:bg-primary-600">criar seu mime</ButtonLink>
+							<ButtonLink auth="all" event={{ name: "create_mime", body: { origin : 'big_header' } }} href="/new/mime" style="bg-primary hover:bg-primary-600">criar seu mime</ButtonLink>
 						</div>
 					</header>
 
@@ -28,7 +28,7 @@ export default async function Home() {
 						<div className="flex-1 p-10 md:p-20 max-w-xl flex flex-col gap-4 items-start justify-center">
 							<div className="text-5xl sm:text-6xl leading-[1.1]"><span className="drop-shadow-md">Seu próprio</span> <span className="text-primary">domínio econômico</span></div>
 							<p className="sm:max-w-md text-xl">Cada Mime tem sua cunhagem separa e você é o único que tem controle da emissão de novos tokens.</p>
-							<ButtonLink auth="all" href="/new/mime" style="bg-primary hover:bg-primary-600">criar seu mime</ButtonLink>
+							<ButtonLink auth="all" href="/new/mime" event={{ name: "create_mime", body: { origin : 'mime_types' } }} style="bg-primary hover:bg-primary-600">criar seu mime</ButtonLink>
 						</div>
 						<div className="flex-1 p-10 md:p-20 max-w-xl flex flex-col gap-4 items-center justify-center">
 							<MonetaryWidget />
@@ -39,7 +39,7 @@ export default async function Home() {
 						<div className="flex-1 p-10 md:p-20 flex flex-col gap-4 items-start justify-center">
 							<div className="text-5xl sm:text-6xl leading-[1.1] drop-shadow-md"><span className="drop-shadow-md">bank-</span><span className="text-primary text-white">like</span></div>
 							<p className="sm:max-w-md text-xl">Todas as transações são seguras e construídas com um sistema antifraude que foi construída como um banco real.</p>
-							<ButtonLink auth="all" href="/new/mime" style="bg-white hover:bg-slate-200">criar seu mime</ButtonLink>
+							<ButtonLink auth="all" href="/new/mime" event={{ name: "create_mime", body: { origin : 'features' } }} style="bg-white hover:bg-slate-200">criar seu mime</ButtonLink>
 						</div>
 						<div className="flex-1 p-10 md:p-20 flex flex-col gap-4 justify-center">
 							<div className="bg-white rounded-2xl py-3 px-4 flex flex-row gap-3 items-center transition-all hover:shadow-small hover:-translate-y-1 ">
@@ -88,7 +88,7 @@ export default async function Home() {
 									</ul>
 									<div className="md:h-10"></div>
 								</div>
-								<ButtonLink auth="all" href="/new/mime" style="bg-primary items-center justify-center hover:bg-primary-500">criar seu mime</ButtonLink>
+								<ButtonLink auth="all" href="/new/mime" event={{ name: "create_mime", body: { origin : 'pricing' } }} style="bg-primary items-center justify-center hover:bg-primary-500">criar seu mime</ButtonLink>
 								<p className="text-[0.6rem] text-slate-500">* Equivalentes no sistema de pontos a 10000 pontos e no monetário ₼10000.00.</p>
 							</div>
 							<div className="min-w-[240px] max-w-[280px] border-1 bg-white rounded-[40px] w-full overflow-clip flex flex-col">

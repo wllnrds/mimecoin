@@ -53,6 +53,8 @@ export async function Dashboard({ children }: { children: React.ReactNode }) {
 
                     <div className="flex-1 h-12">&nbsp;</div>
 
+                    <Link target="_blank" href="https://app.swaggerhub.com/apis/Wlln/Mimecoin/1.0.0.alpha">Documentação</Link>
+
                     <Namespaces user={ {  name: user.name, email: user.email } } limit={ limit } namespaces={ namespaces }></Namespaces>
                 </header>
             </div>

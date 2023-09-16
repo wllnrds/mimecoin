@@ -56,13 +56,18 @@ export default function CreateMime(){
 
         setError( '' );
 
-        console.log(formdata)
-
-        const result : any = await CreateNamespace( formdata )
+        const result : {
+            id?: string,
+            code?: string,
+            name?: string,
+            precision?: number,
+            error?: any
+        } = await CreateNamespace( formdata );
 
         if( !result || result?.error ){
-            setError("Login e/ou senha inválidos.")
+            setError("Algo deu errado na criação do seu mime.")
         }else{
+            gtag('event', "mime_created", result )
             redirect('/dashboard');
         }
 

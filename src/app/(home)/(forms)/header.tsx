@@ -9,6 +9,7 @@ export default function Header() {
 
     return <div className="max-w-7xl w-full m-auto flex flex-col p-4">
         <div className="flex flex-col sm:flex-row gap-3 items-center px-[20px]">
+            <Link href="/">
             <h1>
                 <Image src={ '/assets/logo-white.svg' } 
                     sizes="100vw"
@@ -20,6 +21,7 @@ export default function Header() {
                     height: '100%'
                     }} />
             </h1>
+            </Link>
             <div className="flex-1"></div>
             <div>
             {
