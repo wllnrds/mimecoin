@@ -1,11 +1,11 @@
 "use client";
 
-import { use, useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { useSession } from "next-auth/react";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 const button_menu = "py-3 px-6 text-left rounded-2xl transition-background text-xs";
 
@@ -15,8 +15,8 @@ export const LoginButton = () => {
   if( status !== 'unauthenticated' ){
     return;
   }
-
-  return <button className={ button_menu + " hover:bg-foreground-600" } onClick={() => signIn()}>Login</button>;
+  
+  return <Link href="/login" className={ button_menu + " bg-primary text-primary-foreground hover:bg-primary-300" } prefetch={ false }>Login</Link>
 };
 
 

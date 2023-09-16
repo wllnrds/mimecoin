@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 import { ButtonLink } from "@/components/button.component";
 
@@ -28,7 +28,7 @@ export default function HeaderMenu() {
         <div className="flex-1"></div>
         <div className="flex flex-row gap-1 md:gap-3 flex-wrap">
           {
-            session ? <Link href="/dashboard" className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` }>dashboard</Link> : <button className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` } onClick={() => signIn('email', { callbackUrl : '/dashboard' })}>Login</button>
+            session ? <Link href="/dashboard" className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` }>dashboard</Link> : <Link href="/login" className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground ${ active ? 'bg-primary hover:bg-primary-500' : 'hover:bg-foreground-700' }` }>Login</Link>
           }
           <ButtonLink auth="all" href="/new/mime" style={ active ? 'bg-foreground-900 hover:bg-foreground-700' : 'bg-primary hover:bg-primary-500' }>criar seu mime</ButtonLink>
           <button onClick={ () => setStatus( !active ) } className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground bg-primary hover:bg-primary-500` }>

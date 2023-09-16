@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function Header() {
     const { data: session } = useSession()
@@ -25,7 +25,7 @@ export default function Header() {
             {
                 session ? 
                 <Link href="/dashboard" className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground bg-white hover:bg-primary-50` }>dashboard</Link> : 
-                <button className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground bg-white hover:bg-primary-50' }` } onClick={() => signIn('email', { callbackUrl : '/dashboard' })}>Login</button>
+                <Link href="/login" className={ `py-3 px-5 flex text-left rounded-full transition-background text-xs text-primary-foreground bg-white hover:bg-primary-50' }` }>Login</Link>
             }
             </div>
         </div>

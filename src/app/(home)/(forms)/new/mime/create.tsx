@@ -119,7 +119,7 @@ export default function CreateMime(){
                     <div className="font-semibold">Código do Mime</div>
                     <div className="flex flex-col gap-2">
                         <div className="flex flex-row relative">
-                            <input onChange={ handleChange } autoComplete="off" name="code" className="bg-white w-full border py-2 px-3 rounded-[12px] outline-none focus:outline-2 focus:outline-secondary uppercase" maxLength={3} minLength={3} />
+                            <input onChange={ handleChange } autoComplete="off" name="code" className="bg-white w-full border py-2 px-3 rounded-[12px] outline-none focus:outline-2 focus:outline-secondary lowercase" maxLength={3} minLength={3} />
                             { loadingCode && <div className="absolute right-1 top-[50%] translate-y-[-50%] flex h-[2rem] w-[2rem] items-center justify-center bg-primary-500 rounded-[2rem]"><span className="material-icon text-2xl animate-spin">progress_activity</span></div> }
                             { codeValid && <div className="absolute right-1 top-[50%] translate-y-[-50%] flex h-[2rem] w-[2rem] items-center justify-center rounded-[2rem] bg-success"><span className="material-icon text-2xl">done</span></div> }
                             { codeValid == false && <div className="absolute right-1 top-[50%] translate-y-[-50%] flex h-[2rem] w-[2rem] items-center justify-center rounded-[2rem] bg-danger"><span className="material-icon text-2xl">error</span></div> }

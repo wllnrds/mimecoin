@@ -48,12 +48,15 @@ export function Namespaces({
     const namespaceIndex = searchParams.has('namespaceIndex') ? parseInt( searchParams.get('namespaceIndex') || '0' ) : 0 ;
 
     return (
-        <div>
+        <div >
             <button onClick={ menu } className="aspect-square flex items-center justify-center h-10 w-10 rounded-full border-2 cursor-pointer">
-                <span className="text-sm">{ isEmpty ? <span className="material-icon">add</span> : namespaces[ namespaceIndex ].code }</span>
-            </button>
+                <span className="text-xs uppercase">{ isEmpty ? <span className="material-icon">add</span> : namespaces[ namespaceIndex ].code }</span>
+            </button> 
             <div className={`absolute flex w-96 max-w-screen max-h-[calc(100vh-3.5rem)] right-0 top-[3.5rem] box-border pt-1 px-4 pb-4 ${ showMenu ? 'visible' : 'hidden' }`}>
-                <div className="overflow-clip bg-primary-100 p-3 rounded-[1.25rem] border-1 border-primary-200 w-full shadow-xl flex flex-col gap-4">
+                <div className="overflow-clip bg-primary-100 p-3 rounded-[1.25rem] border-1 border-primary-200 w-full shadow-xl flex flex-col gap-4 relative">
+                    <button onClick={ () => setShowMenu( false ) } className="bg-primary aspect-square flex items-center justify-center h-10 w-10 rounded-full border-nen cursor-pointer absolute right-3 top-3">
+                        <span className="text-xs uppercase"><span className="material-icon">close</span></span>
+                    </button>
                     <div className="flex items-center flex-col p-3">
                         <span className="text-xs font-semibold">{ user.email }</span>
                         <div className="mt-6 mb-2 h-16 w-16 flex items-center justify-center bg-white rounded-full"></div>
@@ -66,8 +69,8 @@ export function Namespaces({
                                     { showList ? 'Ocultar sistemas' : 'Mostrar sistemas' }
                                 </span>
                                 <div className={ `flex flex-row transition-opacity ${ !showList ? 'opacity-100' : 'opacity-0' }` }>
-                                    { namespaces.slice(0,2).map( ns => <div className="w-4" key={ `ns-circle-${ ns.code }` }><div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200 shadow-small"><span className="text-xs">{ ns.code }</span></div></div>) }
-                                    { namespaces.length > 2 ? <div className="w-4"><div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200 shadow-small"><span className="text-xs">+{ namespaces.length - 2 }</span></div></div> : <></> }
+                                    { namespaces.slice(0,2).map( ns => <div className="w-4" key={ `ns-circle-${ ns.code }` }><div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200 shadow-small"><span className="text-xs uppercase">{ ns.code }</span></div></div>) }
+                                    { namespaces.length > 2 ? <div className="w-4"><div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200 shadow-small"><span className="text-xs uppercase">+{ namespaces.length - 2 }</span></div></div> : <></> }
                                 </div>
                                 <div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full ">
                                     <span className={ `material-icon transition-transform text-lg ${ showList ? 'rotate-180' : '' }` }>expand_more</span>
@@ -79,7 +82,7 @@ export function Namespaces({
                                 <Link key={ `ns-link-${ ns.code }` } href={ pathname + '?' + createQueryString('namespaceIndex', index.toString() ) }>
                                     <div className="w-full flex flex-row items-center gap-3 bg-primary-50 px-5 py-3 rounded-md hover:bg-primary-200">
                                         <div className="aspect-square flex items-center justify-center h-8 w-8 rounded-full bg-teal-200">
-                                            <span className="text-xs">{ ns.code }</span>
+                                            <span className="text-xs uppercase">{ ns.code }</span>
                                         </div>
                                         <div className="text-sm flex flex-col">
                                             <span className="font-semibold">{ ns.name }</span>
