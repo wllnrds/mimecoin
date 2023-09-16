@@ -1,0 +1,868 @@
+openapi: 3.0.0
+
+info:
+  title: MimeCoin
+  description: |-
+    Mimecoin is a platform _TaaS_ (**Token as a Service**).
+  contact:
+    email: w.almeida.w@gmail.com
+  version: 1.0.0.alpha
+
+servers:
+  - url: "https://mimecoin.wlln.dev"
+    variables:
+      X-Integration-Token:
+        default: ""
+        description: "Namespace API token"
+      X-Integration-Secret:
+        default: ""
+        description: "Namespace API secret"
+      X-Resource-Token:
+        default: ""
+        description: "User JWT"
+
+tags:
+  - name: Test
+  - name: Basic
+  - name: Account
+  - name: Namespace
+
+paths:
+  /api/v1/core:
+    get:
+      tags:
+        - Test
+      summary: Api integration test
+      description: Verify if token integration is working
+      operationId: apiTest
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Namespace"
+                  message:
+                    type: string
+                    default: "Request para a API account"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+                    
+  /api/v1/core/account:
+    get:
+      tags:
+        - Basic
+      summary: Get account
+      description: Gett account info
+      operationId: apiGetAccount
+      parameters:
+        - name: "account"
+          in: "query"
+          schema:
+            example: "100013"
+            type: string
+            description: Account number with digit
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: Namespace code
+                    example: "wln"
+                  number:
+                    type: string
+                    example: "10000"
+                  digit:
+                    type: string
+                    example: "1"
+                  customer:
+                    type: string
+                    example: "João da Silva"
+                  document:
+                    type: string
+                    example: "000000000"
+    post:
+      tags:
+        - Basic
+      summary: Create account
+      description: Create an account on namespace
+      operationId: apiCoreCreateAccount
+      requestBody:
+        $ref: "#/components/requestBodies/newAccount"
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "400":
+          $ref: "#/components/responses/400"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      account:
+                        $ref: "#/components/schemas/Account"
+                      passwordUrl:
+                        type: string
+                        description: Link to create password on account
+                        example: "https://mimecoin.vercel.app/userToken={Token}"
+                  message:
+                    type: string
+                    default: "Account created"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+  /api/v1/core/order:
+    get:
+      tags:
+        - Basic
+      summary: Get payment order
+      description: Get payment order info
+      operationId: apiGetOrder
+      parameters:
+        - name: "code"
+          in: "query"
+          schema:
+            example: ""
+            type: string
+            description: Barcode
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PaymentOrder"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+                    
+  /passwordSet:
+    get:
+      tags:
+        - Basic
+      summary: Set Account Password
+      operationId: apiCreateAccountPassword
+      parameters:
+        - name: "userToken"
+          in: "query"
+          schema:
+            type: string
+            description: Token generate on account create
+        - name: "password"
+          in: "query"
+          schema:
+            type: string
+            description: New account password
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "200":
+          description: Successful operation
+  /api/v1/account/login:
+    post:
+      tags:
+        - Account
+      summary: Account login
+      operationId: apiAccountLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                account:
+                  type: string
+                  description: Account number
+                  example: "10001"
+                digit:
+                  type: string
+                  description: Account digit
+                  example: "3"
+                password:
+                  type: string
+                  description: Account password
+                  example: "1234"
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "400":
+          $ref: "#/components/responses/400"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        description: User JWT
+                  message:
+                    type: string
+                    default: "Success on login"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+
+  /api/v1/account/balance:
+    get:
+      tags:
+        - Account
+      summary: Get account balance
+      operationId: apiGetAccountBalance
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      balance:
+                        type: string
+                        description: Account balance
+                      balanceExtra:
+                        type: string
+                        description: Account balance extra is a bonus amout
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+  /api/v1/account/statement:
+    get:
+      tags:
+        - Account
+      summary: Get account statement
+      operationId: apiGetAccountStatement
+      parameters:
+        - name: "start"
+          in: "query"
+          schema:
+            type: string
+            description: timestamp start date
+        - name: "days"
+          in: "query"
+          schema:
+            type: string
+            description: days after start date
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Transaction"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+  /api/v1/account/info:
+    get:
+      tags:
+        - Account
+      summary: Get account info
+      operationId: apiGetAccountInfo
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      namespace:
+                        $ref: "#/components/schemas/Namespace"
+                      account:
+                        $ref: "#/components/schemas/Account"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+  /api/v1/account/request/order:
+    post:
+      tags:
+        - Account
+      summary: Create a payment order
+      operationId: apiCreatePaymentOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                due:
+                  type: string
+                  description: Date format
+                  example: "01/01/2023"
+                amount:
+                  type: number
+                  description: Value
+                  example: 100
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PaymentOrder"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+                    
+  /api/v1/account/request/transfer:
+    post:
+      tags:
+        - Account
+      summary: Request a account transfer
+      operationId: apiRequestTransfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target:
+                  type: string
+                headline:
+                  type: string
+                details:
+                  type: string
+                amount:
+                  type: number
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Transaction'
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+    patch:
+      tags:
+        - Account
+      summary: Confirm a account transfer
+      operationId: apiConfirmTransfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  description: Transfer transaction id
+                  type: string
+                password:
+                  description: Origin account password
+                  type: string
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Transaction'
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+  /api/v1/account/request/payment:
+    post:
+      tags:
+        - Account
+      summary: Do a order payment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  example: "86e86ab6-2f65-4458-a93d-9c4aa6975027"
+                  description: Order id
+                  type: string
+                password:
+                  description: Origin account password
+                  type: string
+                headline:
+                  description: Headline of transaction
+                  type: string
+                details:
+                  description: Details of transaction
+                  type: string
+
+      responses:
+        '200':
+          description: Comprovante de pagamento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  confirm:
+                    type: string
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    
+  /api/v1/account/request/pending:
+    post:
+      tags:
+        - Account
+      summary: List of pending requests
+      responses:
+        '200':
+          description: Comprovante de pagamento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PaymentOrder"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+                    
+  /api/v1/core/request/deposit:
+    post:
+      tags:
+        - Namespace
+      summary: Deposit
+      operationId: apiAccountDeposit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                account:
+                  type: string
+                  description: Account number with digit
+                  example: 100013
+                headline:
+                  type: string
+                  description: Deposit headline
+                  example: "Deposit"
+                description:
+                  type: string
+                  description: Deposit description
+                amount:
+                  type: number
+                  description: Deposit value
+      responses:
+        "401":
+          $ref: "#/components/responses/401"
+        "400":
+          $ref: "#/components/responses/400"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+                  message:
+                    type: string
+                    default: "Success on login"
+                  status:
+                    type: number
+                    default: 200
+                  timestamp:
+                    type: number
+                    example: 1692623744968
+
+components:
+  schemas:
+    Namespace:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID do namespace
+          example: "c9d4c1da-63ee-40ed-b557-32e4975f1630"
+        code:
+          type: string
+          example: "wln"
+        pic:
+          type: string
+          example: "https://wln.bank/pic.png"
+        name:
+          type: string
+          example: "Wln Bank"
+        status:
+          type: string
+          enum:
+            - "active"
+            - "blocked"
+            - "deactive"
+          example: "active"
+        createdAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+        updatedAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+        createdBy:
+          type: string
+          description: UUID do usuário que criou o namespace
+          example: "a8a39197-e759-47e0-8b5b-21c990cff4fd"
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID do customer
+          example: "c9d4c1da-63ee-40ed-b557-32e4975f1630"
+        name:
+          type: string
+          example: "João da Silva"
+        birthday:
+          type: string
+          example: "1991-07-04T03:00:00.000Z"
+        document:
+          type: string
+          example: "00000000000"
+        status:
+          type: string
+          enum:
+            - "active"
+            - "blocked"
+            - "deactive"
+            - "new"
+          example: "new"
+        createdAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+        updatedAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID da Account
+          example: "c9d4c1da-63ee-40ed-b557-32e4975f1630"
+        idCustomer:
+          type: string
+          description: UUID do Customer
+          example: "a7f87a6f-96e6-46cf-9608-49f65a836201"
+        namespaceCode:
+          type: string
+          example: "wln"
+        accountNumber:
+          type: string
+          maximum: 5
+          minimum: 5
+          example: "10000"
+        accountKey:
+          type: string
+          maximum: 1
+          minimum: 1
+          example: "1"
+        accountPassword:
+          type: string
+          default: null
+          example: ""
+        balance:
+          type: number
+          default: 0
+          example: 0
+        balanceExtra:
+          type: number
+          default: 0
+          example: 0
+        status:
+          type: string
+          enum:
+            - "active"
+            - "blocked"
+            - "deactive"
+            - "new"
+          example: "new"
+        createdAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+        updatedAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+        customer:
+          $ref: "#/components/schemas/Customer"
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID of Transaction
+          example: "c9d4c1da-63ee-40ed-b557-32e4975f1630"
+        type:
+          type: string
+          enum:
+            - "bonus"
+            - "cashback"
+            - "deposit"
+            - "mint"
+            - "payment"
+            - "refund"
+            - "transfer"
+            - "withdraw"
+        amount:
+          type: number
+          example: ""
+        headline:
+          type: string
+          example: ""
+        details:
+          type: string
+          example: ""
+        namespaceCode:
+          type: string
+          example: ""
+        namespaceAccount:
+          type: string
+          description: Account number of transaction
+          example: ""
+        namespaceAccountOrigin:
+          type: string
+          description: Account number origin on transaction
+          example: ""
+        namespaceAccountTarget:
+          type: string
+          description: Account number target on transaction
+          example: ""
+        createdAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+        status:
+          type: string
+          example: "pending"
+          enum:
+            - "cancelled"
+            - "confirmed"
+            - "pending"
+        hash:
+          type: string
+          example: ""
+        confirmedAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+    PaymentOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID of payment order
+          example: "c9d4c1da-63ee-40ed-b557-32e4975f1630"
+        digits:
+          type: string
+          description: Barcode of payment order
+          example: "wln000002700136100013921622154606001670000010000"
+        namespaceCode:
+          type: string
+          example: "wln"
+        namespaceAccountOrigin:
+          type: string
+          description: Account number origin on transaction
+          example: "10001"
+        due:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+        amount:
+          type: number
+          example: 100
+        status:
+          type: string
+          example: "pending"
+          enum:
+            - "cancelled"
+            - "confirmed"
+            - "pending"
+        createdAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+        payedAt:
+          type: string
+          example: "2023-08-15T12:27:19.744Z"
+  requestBodies:
+    newAccount:
+      description: Dados pra criar uma conta
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "João da Silva"
+              email:
+                type: string
+                example: "joaosilva@dominio.com"
+              document:
+                type: string
+                example: "00000000000"
+              birthday:
+                type: string
+                example: "07/04/1991"
+
+  responses:
+    404:
+      description: Notfound
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                default: "Not found."
+              status:
+                type: number
+                default: 404
+              timestamp:
+                type: number
+                example: 1692623744968
+    401:
+      description: Token/JWT invalid - Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                default: "Token invalid."
+              status:
+                type: number
+                default: 401
+              timestamp:
+                type: number
+                example: 1692623744968
+    400:
+      description: Somefield is invalid or empty
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Fields should be setted."
+              status:
+                type: number
+                default: 400
+              timestamp:
+                type: number
+                example: 1692623744968
+
+  securitySchemes:
+    jwtApiToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - jwtApiToken: []

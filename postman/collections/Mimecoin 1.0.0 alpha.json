@@ -1,0 +1,2312 @@
+{
+	"info": {
+		"_postman_id": "9b241985-9145-4de5-b3a0-f4d0d9f16233",
+		"name": "Mimecoin 1.0.0 alpha",
+		"description": "Mimecoin is a platform _TaaS_ (**Token as a Service**).\n\nContact Support:\n Email: w.almeida.w@gmail.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "4020985-9b241985-9145-4de5-b3a0-f4d0d9f16233"
+	},
+	"item": [
+		{
+			"name": "Creating an auth token",
+			"item": [
+				{
+					"name": "Api integration test",
+					"id": "f91dbb23-5b06-4d6e-bc2e-e5e2f7df98ef",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/core",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"core"
+							]
+						},
+						"description": "Verify if token integration is working"
+					},
+					"response": [
+						{
+							"id": "8703c380-8d14-4bd8-bebe-4c57c76e1b62",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core"
+									]
+								},
+								"description": "Verify if token integration is working"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\"code\": \"wln\",\n\t\t\"pic\": \"https://wln.bank/pic.png\",\n\t\t\"name\": \"Wln Bank\",\n\t\t\"status\": \"active\",\n\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"updatedAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"createdBy\": \"a8a39197-e759-47e0-8b5b-21c990cff4fd\"\n\t},\n\t\"message\": \"Request para a API account\",\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "e38ed0d9-f4fe-4cb2-ab41-dca5c15b0a95",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core"
+									]
+								},
+								"description": "Verify if token integration is working"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				}
+			],
+			"id": "728cdcb4-568a-459c-86c7-bc7acd9f256f",
+			"description": "``` javascript\nheader = {\n    \"alg\": \"HS256\",\n    \"typ\": \"JWT\"\n}\npayload = {\n    \"X-Integration-Token\":\"Sua chave de API\",\n    \"X-Resource-Token\":\"JWT do usuário autenticado\" \n}\nHMACSHA256(\n    base64UrlEncode( header ) + '.' +\n    base64UrlEncode( payload ),\n    (secret da chave anunciada no payload)\n)\n\n ```"
+		},
+		{
+			"name": "Basic",
+			"item": [
+				{
+					"name": "Get account",
+					"id": "36bee916-c8e5-4622-85ac-4841359d1d44",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/core/account?account=100013",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"core",
+								"account"
+							],
+							"query": [
+								{
+									"key": "account",
+									"value": "100013"
+								}
+							]
+						},
+						"description": "Gett account info"
+					},
+					"response": [
+						{
+							"id": "6de1b19b-c772-4a9f-9a4f-7ae364851046",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/account?account=100013",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"account"
+									],
+									"query": [
+										{
+											"key": "account",
+											"value": "100013"
+										}
+									]
+								},
+								"description": "Gett account info"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"code\": \"wln\",\n\t\"number\": \"10000\",\n\t\"digit\": \"1\",\n\t\"customer\": \"João da Silva\",\n\t\"document\": \"000000000\"\n}"
+						},
+						{
+							"id": "a7accec1-1c71-4688-a7ed-37f478f8a884",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/account?account=100013",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"account"
+									],
+									"query": [
+										{
+											"key": "account",
+											"value": "100013"
+										}
+									]
+								},
+								"description": "Gett account info"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "d2b3d67e-cae6-4cde-a2b2-902eebfbe147",
+							"name": "Notfound",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/account?account=100013",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"account"
+									],
+									"query": [
+										{
+											"key": "account",
+											"value": "100013"
+										}
+									]
+								},
+								"description": "Gett account info"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Not found.\",\n\t\"status\": 404,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Create account",
+					"id": "0801533d-c0d5-485e-b3de-dd30d4a06fea",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"João da Silva\",\n\t\"email\": \"joaosilva@dominio.com\",\n\t\"document\": \"00000000000\",\n\t\"birthday\": \"07/04/1991\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/core/account",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"core",
+								"account"
+							]
+						},
+						"description": "Create an account on namespace"
+					},
+					"response": [
+						{
+							"id": "2cbfc283-9da2-4e41-b863-dbf112df455a",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"João da Silva\",\n\t\"email\": \"joaosilva@dominio.com\",\n\t\"document\": \"00000000000\",\n\t\"birthday\": \"07/04/1991\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/account",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"account"
+									]
+								},
+								"description": "Create an account on namespace"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"account\": {\n\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\"idCustomer\": \"a7f87a6f-96e6-46cf-9608-49f65a836201\",\n\t\t\t\"namespaceCode\": \"wln\",\n\t\t\t\"accountNumber\": \"10000\",\n\t\t\t\"accountKey\": \"1\",\n\t\t\t\"accountPassword\": \"\",\n\t\t\t\"balance\": 0,\n\t\t\t\"balanceExtra\": 0,\n\t\t\t\"status\": \"new\",\n\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"updatedAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"customer\": {\n\t\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\t\"name\": \"João da Silva\",\n\t\t\t\t\"birthday\": \"1991-07-04T03:00:00.000Z\",\n\t\t\t\t\"document\": \"00000000000\",\n\t\t\t\t\"status\": \"new\",\n\t\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\t\"updatedAt\": \"2023-08-15T12:27:19.744Z\"\n\t\t\t}\n\t\t},\n\t\t\"passwordUrl\": \"https://mimecoin.vercel.app/userToken={Token}\"\n\t},\n\t\"message\": \"Account created\",\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "7a510c86-e624-479d-9ab1-cee21b02a99b",
+							"name": "Somefield is invalid or empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"João da Silva\",\n\t\"email\": \"joaosilva@dominio.com\",\n\t\"document\": \"00000000000\",\n\t\"birthday\": \"07/04/1991\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/account",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"account"
+									]
+								},
+								"description": "Create an account on namespace"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Fields should be setted.\",\n\t\"status\": 400,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "588f77f6-6c8f-4fbd-826d-acc9db144c8f",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"João da Silva\",\n\t\"email\": \"joaosilva@dominio.com\",\n\t\"document\": \"00000000000\",\n\t\"birthday\": \"07/04/1991\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/account",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"account"
+									]
+								},
+								"description": "Create an account on namespace"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Get payment order",
+					"id": "3d4eee4a-f60f-428d-9cd3-1b77ce151fa1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/core/order?code=",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"core",
+								"order"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": ""
+								}
+							]
+						},
+						"description": "Get payment order info"
+					},
+					"response": [
+						{
+							"id": "84a92b6f-104c-46c2-a903-1422db88d794",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/order?code=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"order"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": ""
+										}
+									]
+								},
+								"description": "Get payment order info"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\"digits\": \"wln000002700136100013921622154606001670000010000\",\n\t\t\"namespaceCode\": \"wln\",\n\t\t\"namespaceAccountOrigin\": \"10001\",\n\t\t\"due\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"amount\": 100,\n\t\t\"status\": \"pending\",\n\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"payedAt\": \"2023-08-15T12:27:19.744Z\"\n\t},\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "52006450-25e4-43bb-8969-3701802485d4",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/order?code=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"order"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": ""
+										}
+									]
+								},
+								"description": "Get payment order info"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "966c46e4-5ef2-49bb-bee8-c62467f3cddb",
+							"name": "Notfound",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/order?code=",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"order"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": ""
+										}
+									]
+								},
+								"description": "Get payment order info"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Not found.\",\n\t\"status\": 404,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Set Account Password",
+					"id": "20366d16-3b44-4ef4-8ac6-01fd61bcb321",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/passwordSet?userToken=ex dolore&password=Ut ut",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"passwordSet"
+							],
+							"query": [
+								{
+									"key": "userToken",
+									"value": "ex dolore"
+								},
+								{
+									"key": "password",
+									"value": "Ut ut"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "73a16220-03c2-4721-9c28-40744131c763",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/passwordSet?userToken=ex dolore&password=Ut ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"passwordSet"
+									],
+									"query": [
+										{
+											"key": "userToken",
+											"value": "ex dolore"
+										},
+										{
+											"key": "password",
+											"value": "Ut ut"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": null
+						},
+						{
+							"id": "16d5718a-6f49-44e3-b770-bb00bf4a945b",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/passwordSet?userToken=ex dolore&password=Ut ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"passwordSet"
+									],
+									"query": [
+										{
+											"key": "userToken",
+											"value": "ex dolore"
+										},
+										{
+											"key": "password",
+											"value": "Ut ut"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "3fabb940-7c96-48e5-8d61-abe4280681ab",
+							"name": "Notfound",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/passwordSet?userToken=ex dolore&password=Ut ut",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"passwordSet"
+									],
+									"query": [
+										{
+											"key": "userToken",
+											"value": "ex dolore"
+										},
+										{
+											"key": "password",
+											"value": "Ut ut"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Not found.\",\n\t\"status\": 404,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				}
+			],
+			"id": "ca50760d-607c-4732-b741-0add1013b73c"
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Account login",
+					"id": "85d126ed-ffe7-4b84-81ea-6acaa109e309",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"account\": \"10001\",\n\t\"digit\": \"3\",\n\t\"password\": \"1234\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "3acbd748-f627-4c4e-bd0e-0c71d6206860",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"account\": \"10001\",\n\t\"digit\": \"3\",\n\t\"password\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"token\": \"non Lorem\"\n\t},\n\t\"message\": \"Success on login\",\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "e827e287-4c1c-4b92-a615-76cb746c3398",
+							"name": "Somefield is invalid or empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"account\": \"10001\",\n\t\"digit\": \"3\",\n\t\"password\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Fields should be setted.\",\n\t\"status\": 400,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "b571d082-f877-4318-b986-79cc339c6a9d",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"account\": \"10001\",\n\t\"digit\": \"3\",\n\t\"password\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"login"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Get account balance",
+					"id": "785a865a-76c4-43b9-8d65-a368f0684b64",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/balance",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"balance"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "652f199a-74be-4777-8f82-5c196bec0d74",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/balance",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"balance"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"balance\": \"do cillum commodo\",\n\t\t\"balanceExtra\": \"aute pariatur\"\n\t},\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "2dba919c-232a-4472-8b75-51de6a83c2c3",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/balance",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"balance"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "cd9257cf-5ab2-4569-9200-320ce3c0b19f",
+							"name": "Notfound",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/balance",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"balance"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Not found.\",\n\t\"status\": 404,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Get account statement",
+					"id": "c6bb4ba8-8123-45e9-bb04-66c6c759a4c5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/statement?start=officia&days=nulla te",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"statement"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "officia"
+								},
+								{
+									"key": "days",
+									"value": "nulla te"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "07b4d406-f385-427b-aa20-75e2f25293f2",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/statement?start=officia&days=nulla te",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"statement"
+									],
+									"query": [
+										{
+											"key": "start",
+											"value": "officia"
+										},
+										{
+											"key": "days",
+											"value": "nulla te"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\"type\": \"mint\",\n\t\t\t\"amount\": 38494871.99600518,\n\t\t\t\"headline\": \"\",\n\t\t\t\"details\": \"\",\n\t\t\t\"namespaceCode\": \"\",\n\t\t\t\"namespaceAccount\": \"\",\n\t\t\t\"namespaceAccountOrigin\": \"\",\n\t\t\t\"namespaceAccountTarget\": \"\",\n\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"status\": \"pending\",\n\t\t\t\"hash\": \"\",\n\t\t\t\"confirmedAt\": \"2023-08-15T12:27:19.744Z\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\"type\": \"withdraw\",\n\t\t\t\"amount\": 54726734.109641135,\n\t\t\t\"headline\": \"\",\n\t\t\t\"details\": \"\",\n\t\t\t\"namespaceCode\": \"\",\n\t\t\t\"namespaceAccount\": \"\",\n\t\t\t\"namespaceAccountOrigin\": \"\",\n\t\t\t\"namespaceAccountTarget\": \"\",\n\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"status\": \"pending\",\n\t\t\t\"hash\": \"\",\n\t\t\t\"confirmedAt\": \"2023-08-15T12:27:19.744Z\"\n\t\t}\n\t],\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "9590555c-e398-4d1c-a7c5-005807cb698f",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/statement?start=officia&days=nulla te",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"statement"
+									],
+									"query": [
+										{
+											"key": "start",
+											"value": "officia"
+										},
+										{
+											"key": "days",
+											"value": "nulla te"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "44a3964f-08da-4a22-9636-16806373467d",
+							"name": "Notfound",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/statement?start=officia&days=nulla te",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"statement"
+									],
+									"query": [
+										{
+											"key": "start",
+											"value": "officia"
+										},
+										{
+											"key": "days",
+											"value": "nulla te"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Not found.\",\n\t\"status\": 404,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Get account info",
+					"id": "f200e5b5-4644-4662-ad1b-f2405d3c2b60",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/info",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"info"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "456e87bf-d4cb-4763-823a-6d29aa09c8cd",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/info",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"info"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"namespace\": {\n\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\"code\": \"wln\",\n\t\t\t\"pic\": \"https://wln.bank/pic.png\",\n\t\t\t\"name\": \"Wln Bank\",\n\t\t\t\"status\": \"active\",\n\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"updatedAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"createdBy\": \"a8a39197-e759-47e0-8b5b-21c990cff4fd\"\n\t\t},\n\t\t\"account\": {\n\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\"idCustomer\": \"a7f87a6f-96e6-46cf-9608-49f65a836201\",\n\t\t\t\"namespaceCode\": \"wln\",\n\t\t\t\"accountNumber\": \"10000\",\n\t\t\t\"accountKey\": \"1\",\n\t\t\t\"accountPassword\": \"\",\n\t\t\t\"balance\": 0,\n\t\t\t\"balanceExtra\": 0,\n\t\t\t\"status\": \"new\",\n\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"updatedAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"customer\": {\n\t\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\t\"name\": \"João da Silva\",\n\t\t\t\t\"birthday\": \"1991-07-04T03:00:00.000Z\",\n\t\t\t\t\"document\": \"00000000000\",\n\t\t\t\t\"status\": \"new\",\n\t\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\t\"updatedAt\": \"2023-08-15T12:27:19.744Z\"\n\t\t\t}\n\t\t}\n\t},\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "2ce057e7-1de2-4e43-a44b-fc2e4be9a519",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/info",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"info"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "58f159f6-19d3-4352-936a-9b4272327348",
+							"name": "Notfound",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/info",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"info"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Not found.\",\n\t\"status\": 404,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Create a payment order",
+					"id": "a3e72482-7d15-4ed2-8956-678556eb42fd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"due\": \"01/01/2023\",\n\t\"amount\": 100\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/request/order",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"request",
+								"order"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "14d4441e-858c-4ce3-aff5-ae8039f74abc",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"due\": \"01/01/2023\",\n\t\"amount\": 100\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/request/order",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"request",
+										"order"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\"digits\": \"wln000002700136100013921622154606001670000010000\",\n\t\t\"namespaceCode\": \"wln\",\n\t\t\"namespaceAccountOrigin\": \"10001\",\n\t\t\"due\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"amount\": 100,\n\t\t\"status\": \"pending\",\n\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"payedAt\": \"2023-08-15T12:27:19.744Z\"\n\t},\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "57748721-d09b-41da-b838-54313f048c58",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"due\": \"01/01/2023\",\n\t\"amount\": 100\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/request/order",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"request",
+										"order"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Request a account transfer",
+					"id": "80f1658b-beb9-4c26-9a17-fa00c4262d68",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"target\": \"cupidatat consequat\",\n\t\"headline\": \"consectetur\",\n\t\"details\": \"nisi ex in dolore\",\n\t\"amount\": -78150227.51634228\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/request/transfer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"request",
+								"transfer"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "6fc8cf29-4856-41ef-9bcb-fd023e464ea3",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"target\": \"cupidatat consequat\",\n\t\"headline\": \"consectetur\",\n\t\"details\": \"nisi ex in dolore\",\n\t\"amount\": -78150227.51634228\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/request/transfer",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"request",
+										"transfer"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\"type\": \"deposit\",\n\t\t\"amount\": -45890280.53907005,\n\t\t\"headline\": \"\",\n\t\t\"details\": \"\",\n\t\t\"namespaceCode\": \"\",\n\t\t\"namespaceAccount\": \"\",\n\t\t\"namespaceAccountOrigin\": \"\",\n\t\t\"namespaceAccountTarget\": \"\",\n\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"status\": \"pending\",\n\t\t\"hash\": \"\",\n\t\t\"confirmedAt\": \"2023-08-15T12:27:19.744Z\"\n\t},\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "bdae25db-413b-4b21-a0c0-231a28db06dc",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"target\": \"cupidatat consequat\",\n\t\"headline\": \"consectetur\",\n\t\"details\": \"nisi ex in dolore\",\n\t\"amount\": -78150227.51634228\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/request/transfer",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"request",
+										"transfer"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Confirm a account transfer",
+					"id": "be8a751f-d285-4d3b-bfb5-3c008def6686",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"ea non in\",\n\t\"password\": \"irure aliqua\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/request/transfer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"request",
+								"transfer"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "ee48412d-d27d-4f2f-b061-ad255614cacc",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": \"ea non in\",\n\t\"password\": \"irure aliqua\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/request/transfer",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"request",
+										"transfer"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\"type\": \"deposit\",\n\t\t\"amount\": -45890280.53907005,\n\t\t\"headline\": \"\",\n\t\t\"details\": \"\",\n\t\t\"namespaceCode\": \"\",\n\t\t\"namespaceAccount\": \"\",\n\t\t\"namespaceAccountOrigin\": \"\",\n\t\t\"namespaceAccountTarget\": \"\",\n\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"status\": \"pending\",\n\t\t\"hash\": \"\",\n\t\t\"confirmedAt\": \"2023-08-15T12:27:19.744Z\"\n\t},\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "c37807be-2e2b-4f58-b9d3-78c5c2e6234c",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": \"ea non in\",\n\t\"password\": \"irure aliqua\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/request/transfer",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"request",
+										"transfer"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				},
+				{
+					"name": "Do a order payment",
+					"id": "7fb7bd7c-80d2-4096-9c8b-286013ff7695",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"86e86ab6-2f65-4458-a93d-9c4aa6975027\",\n\t\"password\": \"eiusmod nisi\",\n\t\"headline\": \"cupidatat officia aliquip\",\n\t\"details\": \"ipsum amet ut esse\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/request/payment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"request",
+								"payment"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "7ace68c6-2337-494e-9c2a-9068462a46eb",
+							"name": "Comprovante de pagamento",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": \"86e86ab6-2f65-4458-a93d-9c4aa6975027\",\n\t\"password\": \"eiusmod nisi\",\n\t\"headline\": \"cupidatat officia aliquip\",\n\t\"details\": \"ipsum amet ut esse\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/request/payment",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"request",
+										"payment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"confirm\": \"ni\",\n\t\"transaction\": {\n\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\"type\": \"bonus\",\n\t\t\"amount\": 11473670.634668574,\n\t\t\"headline\": \"\",\n\t\t\"details\": \"\",\n\t\t\"namespaceCode\": \"\",\n\t\t\"namespaceAccount\": \"\",\n\t\t\"namespaceAccountOrigin\": \"\",\n\t\t\"namespaceAccountTarget\": \"\",\n\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"status\": \"pending\",\n\t\t\"hash\": \"\",\n\t\t\"confirmedAt\": \"2023-08-15T12:27:19.744Z\"\n\t}\n}"
+						}
+					]
+				},
+				{
+					"name": "List of pending requests",
+					"id": "4602ac08-8ca0-4b7c-8e74-73f639e05671",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/account/request/pending",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"request",
+								"pending"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "1a58533d-b7bc-44a0-a6cb-6f56c38d979a",
+							"name": "Comprovante de pagamento",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/account/request/pending",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"account",
+										"request",
+										"pending"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\"digits\": \"wln000002700136100013921622154606001670000010000\",\n\t\t\t\"namespaceCode\": \"wln\",\n\t\t\t\"namespaceAccountOrigin\": \"10001\",\n\t\t\t\"due\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"amount\": 100,\n\t\t\t\"status\": \"pending\",\n\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"payedAt\": \"2023-08-15T12:27:19.744Z\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\t\"digits\": \"wln000002700136100013921622154606001670000010000\",\n\t\t\t\"namespaceCode\": \"wln\",\n\t\t\t\"namespaceAccountOrigin\": \"10001\",\n\t\t\t\"due\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"amount\": 100,\n\t\t\t\"status\": \"pending\",\n\t\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\t\"payedAt\": \"2023-08-15T12:27:19.744Z\"\n\t\t}\n\t],\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				}
+			],
+			"id": "53e58f9b-398c-43c7-b8f9-3a82dc92fff7"
+		},
+		{
+			"name": "Namespace",
+			"item": [
+				{
+					"name": "Deposit",
+					"id": "d3053cda-46b8-457f-b76d-3726970d7e2c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"account\": \"nulla elit velit officia\",\n\t\"headline\": \"Deposit\",\n\t\"description\": \"tempor Ut officia irure\",\n\t\"amount\": -63295736.10185881\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/core/request/deposit",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"core",
+								"request",
+								"deposit"
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "eda1a9d7-15e0-4ecb-be83-7c5528bf35bc",
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"account\": \"nulla elit velit officia\",\n\t\"headline\": \"Deposit\",\n\t\"description\": \"tempor Ut officia irure\",\n\t\"amount\": -63295736.10185881\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/request/deposit",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"request",
+										"deposit"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"data\": {\n\t\t\"id\": \"c9d4c1da-63ee-40ed-b557-32e4975f1630\",\n\t\t\"type\": \"mint\",\n\t\t\"amount\": 29011536.687969387,\n\t\t\"headline\": \"\",\n\t\t\"details\": \"\",\n\t\t\"namespaceCode\": \"\",\n\t\t\"namespaceAccount\": \"\",\n\t\t\"namespaceAccountOrigin\": \"\",\n\t\t\"namespaceAccountTarget\": \"\",\n\t\t\"createdAt\": \"2023-08-15T12:27:19.744Z\",\n\t\t\"status\": \"pending\",\n\t\t\"hash\": \"\",\n\t\t\"confirmedAt\": \"2023-08-15T12:27:19.744Z\"\n\t},\n\t\"message\": \"Success on login\",\n\t\"status\": 200,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "a6e818e4-daae-4b42-a14c-b85415264a7d",
+							"name": "Somefield is invalid or empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"account\": \"nulla elit velit officia\",\n\t\"headline\": \"Deposit\",\n\t\"description\": \"tempor Ut officia irure\",\n\t\"amount\": -63295736.10185881\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/request/deposit",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"request",
+										"deposit"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Fields should be setted.\",\n\t\"status\": 400,\n\t\"timestamp\": 1692623744968\n}"
+						},
+						{
+							"id": "299ed298-0c8f-4f03-8b1e-556d54a5dc80",
+							"name": "Token/JWT invalid - Unauthorized",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"account\": \"nulla elit velit officia\",\n\t\"headline\": \"Deposit\",\n\t\"description\": \"tempor Ut officia irure\",\n\t\"amount\": -63295736.10185881\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/core/request/deposit",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"core",
+										"request",
+										"deposit"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n\t\"message\": \"Token invalid.\",\n\t\"status\": 401,\n\t\"timestamp\": 1692623744968\n}"
+						}
+					]
+				}
+			],
+			"id": "83a405fe-c49e-40a2-b506-86e9124db3fd"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearerToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"id": "6add8f96-5448-4734-ac23-6052e65f3e96",
+			"key": "X-Integration-Token",
+			"value": ""
+		},
+		{
+			"id": "007ddc6a-d6cc-4cea-aeab-ebd65cea0436",
+			"key": "X-Integration-Secret",
+			"value": ""
+		},
+		{
+			"id": "8a9a6ef2-b2ee-4183-90ff-dae7a424fc63",
+			"key": "X-Resource-Token",
+			"value": ""
+		},
+		{
+			"id": "5013b9e3-0448-40a8-91dd-ea7589f8ed0b",
+			"key": "baseUrl",
+			"value": "https://mimecoin.wlln.dev"
+		}
+	]
+}
