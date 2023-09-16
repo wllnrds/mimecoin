@@ -1,16 +1,10 @@
-'use client';
-
-import { signOut, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import type { Metadata } from 'next'
+import LogoutPage from "./logout";
+ 
+export const metadata: Metadata = {
+  title: "Logout"
+}
 
 export default function Page(){
-    const { data: session } = useSession()
-
-    if( !session ){
-        return redirect('/login')
-    }
-
-    signOut();
-
-    return <></>
+    return <LogoutPage></LogoutPage>
 }

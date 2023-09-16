@@ -2,6 +2,12 @@ import { ButtonLink } from "@/components/button.component";
 import HeaderMenu from "./features.component";
 import MonetaryWidget from "./monetary.component";
 
+import type { Metadata } from 'next'
+ 
+export const metadata: Metadata = {
+  title: "Página inicial"
+}
+
 export default async function Home() {
 	return (
 		<div className="bg-primary">

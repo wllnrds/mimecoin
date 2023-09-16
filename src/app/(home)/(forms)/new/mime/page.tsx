@@ -1,5 +1,10 @@
 import { Suspense } from "react";
 import LimitWare from "./limit";
+import type { Metadata } from 'next'
+ 
+export const metadata: Metadata = {
+  title: "Novo Mime"
+}
 
 export default function Page(){
     const loading_state = (<div className="flex flex-row items-center p-8 justify-center">

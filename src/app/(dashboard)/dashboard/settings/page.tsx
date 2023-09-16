@@ -9,7 +9,7 @@ import { Metadata } from "next";
 import { GenerateToken } from "./generatetoken.component";
 
 export const metadata: Metadata = {
-    title: 'Settings',
+    title: 'Configurações',
 }
 
 export default async function Page() {

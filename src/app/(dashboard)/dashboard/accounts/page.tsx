@@ -10,7 +10,7 @@ import { AccountsSqueleton } from "./accounts.component";
 import { AccountWidget } from "./account";
 
 export const metadata: Metadata = {
-  title: 'Dashboard',
+  title: 'Contas'
 }
 
 export default async function Home({ searchParams } : {  searchParams : { [key: string]: string | string[] | undefined } }) {

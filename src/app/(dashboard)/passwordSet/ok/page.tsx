@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: 'Account created',
+    title: 'Conta criada',
 }
 
 export default function Page(){

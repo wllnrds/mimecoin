@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import { Actions, Logging } from '@/lib/core/logging';
 
 export const metadata: Metadata = {
-    title: 'Password set',
+    title: 'Configuração de senha de conta',
 }
 
 export default async function Page( props : any ) {

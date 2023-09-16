@@ -1,4 +1,5 @@
-import Header from "./header";
+import Header from "./header"
+
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
 		<div className="bg-primary flex-1 flex flex-col">

@@ -1,13 +1,19 @@
 import '@/style/globals.scss'
 
-import type { Metadata } from 'next'
 import Script from 'next/script'
 import Provider from './providers'
 
-import 'moment/locale/pt-br';
+import 'moment/locale/pt-br'
  
+import type { Metadata } from 'next'
 export const metadata: Metadata = {
-  title: "Mimecoin"
+  title: {
+    template: "%s | Mimecoin",
+    absolute: "Mimecoin",
+  },
+  openGraph: {
+    images: ['/static/og.png'],
+  },
 }
 
 export default function RootLayout({ children, }: { children: React.ReactNode }) {
