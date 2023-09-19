@@ -3,6 +3,7 @@ import HeaderMenu from "./features.component";
 import MonetaryWidget from "./monetary.component";
 
 import type { Metadata } from 'next'
+import Footer from "./footer";
  
 export const metadata: Metadata = {
   title: "Página inicial"
@@ -101,6 +102,7 @@ export default async function Home() {
 					</section>
 				</div>
 			</div>
+			<Footer />
 		</div>
 	)
 }

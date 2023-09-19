@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FormEvent, useState } from "react";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 
 export default function LoginForm(){
@@ -56,6 +57,9 @@ export default function LoginForm(){
             <div className="bg-primary flex flex-row justify-end rounded-[2rem] m-2">
                 { loading && <div className="flex h-[4rem] w-[4rem] items-center justify-center bg-primary-500 rounded-[2rem]"><span className="material-icon text-2xl animate-spin">progress_activity</span></div>}
                 { !loading && <button className="h-[4rem] rounded-[2rem] flex items-center justify-center gap-2 py-2 pl-6  pr-3 hover:bg-primary-500 uppercase">Entrar <span className="material-icon text-xl">arrow_forward</span></button> }
+            </div>
+            <div className="px-8">
+                <p className="text-center"><Link href="/new/user" className="text-secondary">Criar conta</Link></p>
             </div>
         </form>
     </div>

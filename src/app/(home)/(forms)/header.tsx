@@ -8,7 +8,7 @@ export default function Header() {
     const { data: session } = useSession()
 
     return <div className="max-w-7xl w-full m-auto flex flex-col p-4">
-        <div className="flex flex-col sm:flex-row gap-3 items-center px-[20px]">
+        <div className="flex flex-col sm:flex-row gap-3 items-center">
             <Link href="/">
             <h1>
                 <Image src={ '/assets/logo-white.svg' } 

@@ -50,7 +50,7 @@ export default function NewUserForm(){
                 { !loading && <button className="h-[4rem] rounded-[2rem] flex items-center justify-center gap-2 py-2 pl-6  pr-3 hover:bg-primary-500 uppercase">Criar conta <span className="material-icon text-xl">arrow_forward</span></button> }
             </div>
             <div className="px-8">
-                <p className="text-center">Criando sua conta <strong>Mimecoin</strong> você concorda com os <Link href="#" className="text-secondary">Termos de Serviço</Link> e <Link href="#" className="text-secondary">Política de Privacidade</Link>.</p>
+                <p className="text-center">Criando sua conta <strong>Mimecoin</strong> você concorda com os <Link href="/terms" className="text-secondary">Termos de Serviço</Link> e <Link href="#" className="text-secondary">Política de Privacidade</Link>.</p>
             </div>
         </form>
     </div>
