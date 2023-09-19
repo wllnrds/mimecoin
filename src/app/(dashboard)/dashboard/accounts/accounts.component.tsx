@@ -17,7 +17,7 @@ export async function AccountsWidget({ accounts } : { accounts : any }) {
         [searchParams]
     )
 
-    return <div className="flex flex-col gap-4 flex-1 overflow-y-auto">
+    return <div className={`flex flex-col gap-4 flex-1 overflow-y-auto`}>
         <h2 className="font-bold">Contas</h2>
         <div className="content-list">
             {

@@ -54,26 +54,28 @@ a {
   }
 }
 
-/* ===== Scrollbar CSS ===== */
-/* Firefox */
-* {
-  scrollbar-width: auto;
-  scrollbar-color: #fbc105 transparent;
-}
+@media (hover: hover) {
+  /* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #fbc105 transparent;
+  }
 
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-  width: 16px;
-}
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 16px;
+  }
 
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-*::-webkit-scrollbar-thumb {
-  background-color: #fbc105;
-  border-radius: 0;
-  border: 3px solid transparent;
+  *::-webkit-scrollbar-thumb {
+    background-color: #fbc105;
+    border-radius: 0;
+    border: 3px solid transparent;
+  }
 }
 
 @layer components {

@@ -23,14 +23,14 @@ export function AccountWidget({ data, precision } : { data : any | null, precisi
         [searchParams]
     )
 
-    return <div className="relative max-w-xl w-full">
-        <div className="w-full bg-foreground-800 p-6 rounded-3xl">
-            <Link href={ pathname + '?' + clearQueryString() } className="absolute rounded-xl flex items-center justify-center h-11 w-11 text-primary bg-primary top-6 right-6" >
-                <span className="material-icon text-lg text-foreground-50">close</span>
-            </Link>
+    return <div className="absolute px-4 top-0 left-0 sm:relative max-w-xl w-full">
+        <div className="w-full bg-foreground-800 p-6 rounded-3xl shadow-2xl">
             <div className="flex flex-col gap-6">
-                <div className="h-11 flex flex-col justify-end">
-                    <span className="text-2xl font-bold">{ data.customer.name }</span>
+                <div className="min-h-11 flex flex-row gap-2 items-start">
+                    <span className="text-2xl flex-1 font-bold">{ data.customer.name }</span>
+                    <Link href={ pathname + '?' + clearQueryString() } className="rounded-xl flex items-center w-11 justify-center text-primary bg-primary" >
+                        <span className="material-icon text-lg text-foreground-50">close</span>
+                    </Link>
                 </div>
                 <table>
                     <tbody>
@@ -59,12 +59,12 @@ export function AccountWidget({ data, precision } : { data : any | null, precisi
                 </table>
 
                 <div className="flex flex-row gap-6">
-                    <div className="flex flex-col gap-2 border flex-1 rounded-3xl p-6">
-                        <span className="text-3xl">₼ { data.balance / ( Math.pow(10, precision) ) }</span>
+                    <div className="flex flex-col gap-2 border flex-1 rounded-3xl p-3 sm:p-6">
+                        <span className="text-xl sm:text-3xl">₼ { data.balance / ( Math.pow(10, precision) ) }</span>
                         <span>Saldo</span>
                     </div>
-                    <div className="flex flex-col gap-2 border flex-1 rounded-3xl p-6">
-                        <span className="text-3xl">₼ { data.balanceExtra / ( Math.pow(10, precision) ) }</span>
+                    <div className="flex flex-col gap-2 border flex-1 rounded-3xl p-3 sm:p-6">
+                        <span className="text-xl sm:text-3xl">₼ { data.balanceExtra / ( Math.pow(10, precision) ) }</span>
                         <span>Saldo bônus</span>
                     </div>
                 </div>

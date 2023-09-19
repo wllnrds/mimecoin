@@ -49,7 +49,9 @@ export default async function Home({ searchParams } : {  searchParams : { [key: 
   }
 
   return <div className="flex-1 w-full flex flex-row gap-6 overflow-auto p-6 relative max-h-[calc(100dvh-4rem)]">
-    <Suspense fallback={ <AccountsSqueleton /> }><Accounts namespaceIndex={ namespaceIndex } /></Suspense>
+    <Suspense fallback={ <AccountsSqueleton /> }>
+      <Accounts namespaceIndex={ namespaceIndex } />
+    </Suspense>
     <AccountWidget data={ accountSelected } precision={ precision } />
   </div>
 }

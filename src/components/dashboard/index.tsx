@@ -42,7 +42,7 @@ export async function Dashboard({ children }: { children: React.ReactNode }) {
     const limit = await user.getLimit();
 
     return (
-        <div className="flex-1 flex flex-col foreground-900 relative min-w-[600px]">
+        <div className="flex-1 flex flex-col foreground-900 relative">
             <div className='sticky top-0 z-50 bg-foreground-900'>
                 <header className="py-2 px-3 flex flex-row items-center gap-3">
                     {/* <div className="hover:bg-foreground-700 aspect-square flex items-center justify-center h-12 w-12 rounded-full cursor-pointer">
@@ -59,16 +59,18 @@ export async function Dashboard({ children }: { children: React.ReactNode }) {
                 </header>
             </div>
             <div className='z-0 flex flex-1 flex-row relative'>
-                <aside className=" p-6 flex flex-col gap-6 max-h-[calc(100dvh-4rem)] sticky top-[4rem] left-0">
+                <aside className=" p-6 flex flex-col gap-6 max-h-[calc(100dvh-4rem)] absolute sm:sticky top-[4rem] left-0">
                     <menu className="flex flex-col gap-1">
                         <DashboardButton />
                         { _ns.length > 0 && <AccountButton /> }
                         <SettingsButton />
                     </menu>
                     <div className="flex-1"></div>
-                    <Limit namespaces={ namespaces } />
+                    <div className="hidden md:block">
+                        <Limit namespaces={ namespaces } />
+                    </div>
                 </aside>
-                <main className="flex-1 flex md:col-span-3 2xl:col-span-7 relative">{ children }</main>
+                <main className="flex flex-1 md:col-span-3 2xl:col-span-7 relative">{ children }</main>
             </div>
         </div>
     );

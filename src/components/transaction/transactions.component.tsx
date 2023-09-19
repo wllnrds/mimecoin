@@ -48,11 +48,11 @@ export function TransactionsWidget({ transactions = [] } : { transactions : Arra
                         </div>
                         <div className="flex">
                             <div className="flex-1 flex gap-2">
-                                <span className={ `font-bold ${ tra.status == 'cancelled' ? 'line-through' : '' }` }>{ tra.headline }</span>
+                                <span className={ `font-bold break-words break-all ${ tra.status == 'cancelled' ? 'line-through' : '' }` }>{ tra.headline }</span>
                             </div>
                             <div className={ tra.amount < 0 ? "text-danger" : "text-success-50" }>₼ { tra.amount }</div>
                         </div>
-                        <div>{ tra.details }<span className="hover:bg-danger/10 hover:bg-success/10 hover:bg-warning/10 text-danger-600 text-success-600 text-warning-600"></span></div>
+                        <div className="break-words break-all">{ tra.details }<span className="hover:bg-danger/10 hover:bg-success/10 hover:bg-warning/10 text-danger-600 text-success-600 text-warning-600"></span></div>
                     </div>
                 </div>
             </div>
