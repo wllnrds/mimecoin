@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:migrate": "cd ./migration && npm run build && npm run migrate && cd .. && npm run db:schema",
-    "db:schema": "kysely-codegen --dialect postgres --url postgres://postgres:1234@localhost:5432/mimecoin --out-file ./src/lib/database/db.d.ts"
+    "db:schema": "kysely-codegen --dialect postgres --url postgres://user:password@host/databaseName --out-file ./src/lib/database/db.d.ts"
   },
   "dependencies": {
     "@auth/core": "^0.16.1",

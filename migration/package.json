@@ -4,7 +4,6 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "start": "if exist dist rmdir && npm run build",
       "build": "tsc",
       "migrate": "node dist/index.js"
     },
