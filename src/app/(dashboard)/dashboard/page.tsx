@@ -8,6 +8,7 @@ import { User } from "@/lib/controller/user";
 import { Transactions } from "@/components/transaction";
 import { AccountsSqueleton } from "./accounts/accounts.component";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -29,8 +30,10 @@ export default async function Home({ searchParams } : {  searchParams : { [key: 
   const namespaces = await user.getNamespaces();
 
   if( namespaces.length === 0 ){
-    return  <div className="flex-1 w-full flex p-6 flex-col lg:flex-row gap-6 items-stretch">
-      <div className="flex flex-col flex-1 gap-6">Crie seu primeiro mime</div>      
+    return  <div className="flex-1 w-full flex p-6 flex-col gap-6">
+      <div className="flex flex-col flex-1 gap-6">
+          <p><Link href="/new/mime" className="bg-primary px-6 py-3 rounded-2xl inline-block transition-background hover:bg-primary-500">Criar um mime</Link> Crie seu primeiro mime.</p>
+      </div>
     </div>
   }
 
