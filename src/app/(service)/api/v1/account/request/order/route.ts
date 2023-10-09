@@ -1,5 +1,4 @@
 import { UserAuth } from "@/lib/auth/token";
-import { Transaction } from "@/lib/controller/transation";
 import { Actions, Logging } from "@/lib/core/logging";
 import { NextResponse, NextRequest } from "next/server";
 
@@ -17,17 +16,16 @@ export async function POST(request: NextRequest){
     }
 
     const { due, amount } : {
-        due : string,
-        amount: number,
+        due? : string,
+        amount?: number,
     } = await request.json();
 
-    if( amount <= 0 ){
+    if( !amount || amount <= 0 ){
         throw new Error("Amount must be a positive value");
     }
+    const _dueDate = due ? new Date(due) : null ;
 
-    const _dueDate = new Date(due);
-
-    if( _dueDate.getTime() < new Date().getTime() ){
+    if( _dueDate && _dueDate.getTime() < new Date().getTime() ){
         throw new Error("Due must be after now");
     }
 

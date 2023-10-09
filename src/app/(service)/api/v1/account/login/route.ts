@@ -17,8 +17,8 @@ export async function GET(request: NextRequest){
     }
 
     const { searchParams } = new URL(request.url)
-    const account = searchParams.get('account')
-    const digit = searchParams.get('digit')
+    const account = searchParams.get('account') || null
+    const digit = searchParams.get('digit') || null
 
     if( !account || !digit){
         return NextResponse.json({
@@ -61,10 +61,19 @@ export async function POST(request: NextRequest){
     }
 
     const { account, digit, password } : {
-        account : string ,
-        digit : string, 
-        password : string
+        account? : string ,
+        digit? : string, 
+        password? : string
     } = await request.json();
+
+
+    if( !account || !digit || !password ){
+        return NextResponse.json({
+            status: 400,
+            message : "Missing data to login.",
+            timestamp: new Date().getTime()
+        },{ status : 400 })
+    }
 
     try{
         const account_auth = await AuthAccount.Login( auth.namespace.code, account + digit, password );

@@ -16,10 +16,10 @@ export async function POST(request: NextRequest){
     }
 
     const { account , headline, description, amount } : {
-        account : string ,
-        headline: string,
-        description : string, 
-        amount : number
+        account? : string ,
+        headline? : string,
+        description? : string, 
+        amount? : number
     } = await request.json();
 
     try{
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest){
             throw new Error("All fields should be setted.");
         }
 
-        if( amount <= 0 ){
+        if( !amount || amount <= 0 ){
             throw new Error("Amount must be higher than 0");
         }
     }catch( error : any ){

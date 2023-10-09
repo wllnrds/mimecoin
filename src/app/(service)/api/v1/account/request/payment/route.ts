@@ -17,10 +17,10 @@ export async function POST(request: NextRequest){
     }
 
     let { id, password, headline = null, details = null } : {
-        id : string,
-        password: string,
-        headline : string | null,
-        details : string | null,
+        id? : string,
+        password? : string,
+        headline? : string | null,
+        details? : string | null,
     } = await request.json();
 
     const order : PaymentOrder = await auth.namespace.getPaymentOrderById( id );

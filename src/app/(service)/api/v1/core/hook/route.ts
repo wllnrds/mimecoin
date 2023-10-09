@@ -15,7 +15,7 @@ export async function POST(request: NextRequest){
         },{ status : 401 })
     }
 
-    const { url } : { url : string } = await request.json();
+    const { url } : { url? : string } = await request.json();
 
     if( url == null || url == '' || !url.startsWith('https://') ){
         return NextResponse.json({

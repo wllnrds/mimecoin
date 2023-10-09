@@ -1,6 +1,7 @@
+import crypto from 'crypto';
+
 import { TokenAuth } from "@/lib/auth/token";
 import { NextResponse, NextRequest } from "next/server";
-import crypto from 'crypto';
 import { Actions, Logging } from "@/lib/core/logging";
 
 const encrypt = ( content : string, password : string ) => {
@@ -31,9 +32,9 @@ export async function POST(request: NextRequest){
     }
 
     const { name , email, birthday } : {
-        name : string ,
-        email : string,
-        birthday : string
+        name? : string ,
+        email? : string,
+        birthday? : string
     } = await request.json();
 
     try{

@@ -35,7 +35,8 @@ export default async function Page() {
     let tokens = await user.getTokens();
     let namespaces = await user.getNamespaces();
 
-    return <div className="w-full flex-1 p-6 flex flex-col gap-6 max-w-screen justify-start">
+    return (
+    <div className="w-full flex-1 p-6 flex flex-col gap-6 max-w-screen justify-start">
         <div className="flex gap-6 flex-col lg:flex-row">
             <Suspense fallback={<LimitsSqueleton />}><Limits /></Suspense>
         </div>
@@ -76,5 +77,6 @@ HMACSHA256(
                 </pre>
             </div>
         </div>
-    </div>;
+    </div>
+    );
 }

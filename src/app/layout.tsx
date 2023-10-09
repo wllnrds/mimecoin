@@ -1,16 +1,17 @@
-import '@/style/globals.scss'
+
+import type { Metadata } from 'next'
 
 import Script from 'next/script'
 import Provider from './providers'
-
 import 'moment/locale/pt-br'
- 
-import type { Metadata } from 'next'
+import '@/style/globals.scss'
+
 export const metadata: Metadata = {
   title: {
     template: "%s | Mimecoin",
     absolute: "Mimecoin",
   },
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
   openGraph: {
     images: ['/static/og.png'],
   },

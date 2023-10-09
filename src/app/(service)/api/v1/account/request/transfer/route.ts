@@ -9,18 +9,14 @@ export async function POST(request: NextRequest){
     try {
         auth = await UserAuth( request );
     } catch ( error : any ) {
-        return NextResponse.json({
-            status: 401,
-            message : error.message,
-            timestamp: new Date().getTime()
-        },{ status : 401 })
+        return NextResponse.json({ status: 401, message : error.message, timestamp: new Date().getTime() }, { status : 401 })
     }
 
     const { target, headline, details, amount } : {
-        target : string,
-        headline: string,
-        details : string, 
-        amount : number
+        target? : string,
+        headline?: string,
+        details? : string, 
+        amount? : number
     } = await request.json();
 
     try{
@@ -28,7 +24,7 @@ export async function POST(request: NextRequest){
             throw new Error("Must have target account.");
         }
 
-        if( amount <= 0 ){
+        if( amount && amount <= 0 ){
             throw new Error("Amount must be higher than 0");
         }
     }catch( error : any ){
@@ -83,8 +79,8 @@ export async function PATCH(request: NextRequest){
     }
 
     const { id, password } : {
-        id : string,
-        password: string
+        id? : string,
+        password? : string
     } = await request.json();
 
     try{
