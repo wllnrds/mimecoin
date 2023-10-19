@@ -25,9 +25,9 @@ export async function CreateNamespace( formdata : FormData ){
     } = {
         name: formdata.get('name')?.toString() || "",
         code: formdata.get('code')?.toString() || "",
-        precision: parseInt( formdata.get('codprecisione')?.toString() || "0" ),
+        precision: parseInt( formdata.get('precision')?.toString() || "0" ),
     }
-
+    
     let missing = [];
     if( newMime.name.length == 0 ){
         missing.push("nome")
