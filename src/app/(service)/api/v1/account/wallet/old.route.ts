@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       "classId":  classId,
       "genericType": "GENERIC_TYPE_UNSPECIFIED",
       "logo": {
-        "sourceUri": { "uri": "https://mimecoin.vercel.app/static/icon.png" }
+        "sourceUri": { "uri": "https://mimecoin.wlln.dev/static/icon.png" }
       },
       "cardTitle": { "defaultValue": { "language": "pt-BR", "value": "Mimecoin" } },
       "subheader": { "defaultValue": { "language": "pt-BR", "value": "Títular" } },
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
       "hexBackgroundColor": "#262626",
       "heroImage": {
           "sourceUri": {
-              "uri": "https://mimecoin.vercel.app/static/hero.png"
+              "uri": "https://mimecoin.wlln.dev/static/hero.png"
           }
       }
   }
@@ -207,7 +207,7 @@ const genericClass : any = {
     {
       'mainImage': {
         'sourceUri': {
-          'uri': 'https://mimecoin.vercel.app/static/hero.png'
+          'uri': 'https://mimecoin.wlln.dev/static/hero.png'
         },
         'contentDescription': {
           'defaultValue': {

@@ -127,7 +127,7 @@ paths:
                       passwordUrl:
                         type: string
                         description: Link to create password on account
-                        example: "https://mimecoin.vercel.app/userToken={Token}"
+                        example: "https://mimecoin.wlln.dev/userToken={Token}"
                   message:
                     type: string
                     default: "Account created"
