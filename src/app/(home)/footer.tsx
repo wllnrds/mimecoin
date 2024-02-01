@@ -9,16 +9,16 @@ export default function Footer() {
                     <Image src={ '/assets/logo-white.svg' } 
                         sizes="100vw"
                         alt="Minecoin"
-                        width={ 130 }
-                        height={ 30 }
+                        width={ 390 }
+                        height={ 90 }
                         style={{
-                        width: 'auto',
-                        height: '100%'
+                          width: 'auto',
+                          height: '2rem'
                         }} />
                 </h1>
             </Link>
             <div className="flex-1"></div>
-            <div className="w-[120px] flex flex-col">
+            <div className="w-[8rem] flex flex-col">
                 <ul className="space-y-1">
                     <li className="text-sm font-semibold">Mimecoin</li>
                     <li><Link href="/" className={ `hover:text-primary-900 text-xs` }>Página inicial</Link></li>
@@ -27,7 +27,7 @@ export default function Footer() {
                     <li><Link href="mailto:w.almeida.w@gmail.com" className={ `hover:text-primary-900 text-xs` } target="_blank">Contato</Link></li>
                 </ul>
             </div>
-            <div className="w-[120px] flex flex-col">
+            <div className="w-[8rem] flex flex-col">
                 <ul className="space-y-1">
                     <li className="text-sm font-semibold">Plataforma</li>
                     <li><Link href="/new/user" className={ `hover:text-primary-900 text-xs` }>Cadastro</Link></li>

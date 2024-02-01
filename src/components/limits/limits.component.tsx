@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 export function LimitsWidget({ precision = 0, total = 100, used = 0 }){
     const limit : number = used / Math.pow( 10, precision );
 
-    return <Card className="w-[200px] h-[200px] border-none bg-primary shadow">
+    return <Card className="w-[9rem] h-[9rem] border-none bg-primary shadow">
     <CardBody className="justify-center items-center pb-0">
       <CircularProgress
         classNames={{
@@ -44,7 +44,7 @@ export function Limit({ namespaces } : { namespaces : Array< { code : string, pi
 }
 
 export function LimitsSqueleton(){
-    return <Card className="w-full h-[240px] border-none bg-primary shadow">
+    return <Card className="w-full h-[22rem] border-none bg-primary shadow">
     <CardBody className="justify-center items-center pb-0">
       <CircularProgress
         classNames={{

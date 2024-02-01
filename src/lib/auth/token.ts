@@ -9,6 +9,7 @@ export async function TokenAuth(request: NextRequest) {
     }
 
     const auth = authorization.split(' ');
+    
     let token;
     switch (auth[0]) {
         case 'Bearer':

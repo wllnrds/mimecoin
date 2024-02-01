@@ -14,6 +14,7 @@ import {
 
 import { Namespaces } from "./namespaces.component";
 import { Limit } from "../limits/limits.component";
+import { Suspense } from "react";
 
 export async function Dashboard({ children }: { children: React.ReactNode }) {
     const session = await getServerSession(authOptions);

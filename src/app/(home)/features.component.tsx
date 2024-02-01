@@ -18,11 +18,11 @@ export default function HeaderMenu() {
           <Image src={ active ? '/assets/logo-white.svg' : '/assets/logo.svg' } 
             sizes="100vw"
             alt="Minecoin"
-            width={ 130 }
-            height={ 30 }
+            width={ 390 }
+            height={ 90 }
             style={{
               width: 'auto',
-              height: '100%'
+              height: '2rem'
             }} />
         </h1>
         <div className="flex-1"></div>
