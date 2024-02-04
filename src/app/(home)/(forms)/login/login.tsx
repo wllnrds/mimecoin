@@ -27,12 +27,16 @@ export default function LoginForm(){
         setError( '' )
 
         try {
-            const result = await signIn('credentials', { ...identity, redirect: false });
-            if( !result?.error && result?.ok )
-            redirect('/dashboard')
+            const result = await signIn('credentials', { ...identity, redirect: false })
+
+            if( result?.error ){
+                setError( "Login e/ou senha inválidos." )
+            }else if( result?.ok ){
+                redirect('/dashboard')
+            }
         } catch (error : any ) {
             console.error( error );
-            setError( "Login e/ou senha inválidos." )
+            setError( "Falha ao tentar fazer login." )
         }
 
         setLoading( false )
