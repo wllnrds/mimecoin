@@ -15,7 +15,7 @@ export function GenerateToken({ namespaces } : { namespaces : any }){
 
         await fetch('/dashboard/settings/token', {
             method: 'POST',
-            body: JSON.stringify( { namespace } )
+            body: JSON.stringify( { namespace : namespace || null } )
         }).then( async ( result ) => {
             const data = await result.json();
             if( data.status < 300 ){
