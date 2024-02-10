@@ -1,27 +1,34 @@
-'use client';
+// 'use client';
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+// import { usePathname, useSearchParams } from "next/navigation";
+// import { useCallback } from "react";
 
 export function AccountWidget({ data, precision } : { data : any | null, precision : number | 0 }) {
     if( !data ){
         return;
     }
 
-    const pathname = usePathname()
-    const searchParams = useSearchParams()!
+    const pathname = ""
+    const clearQueryString = () => ""
 
-    const clearQueryString = useCallback(
-        () => {
-          let params = new URLSearchParams(searchParams as any)
-          if(params.has('id')){
-            params.delete('id')
-          }
-          return params.toString()
-        },
-        [searchParams]
-    )
+    // const pathname = usePathname()
+    // const searchParams = useSearchParams()!
+
+    // const clearQueryString = useCallback(
+    //     () => {
+    //         try {
+    //             let params = new URLSearchParams(searchParams as any)
+    //             if(params.has('id')){
+    //               params.delete('id')
+    //             }
+    //             return params.toString()
+    //         } catch (error) {
+                
+    //         }
+    //     },
+    //     [searchParams]
+    // )
 
     return <div className="absolute px-4 top-0 left-0 sm:relative max-w-xl w-full">
         <div className="w-full bg-foreground-800 p-6 rounded-3xl shadow-2xl">

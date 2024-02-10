@@ -51,7 +51,7 @@ export async function POST(request: NextRequest){
             throw new Error("Name length must be at least 4.");
         }
     
-        if( !email.match( /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) ){
+        if( !email.match( /^[\w-\.\+]+@([\w-]+\.)+[\w-]{2,4}$/ ) ){
             throw new Error("E-mail not seems valid.");
         }
     
