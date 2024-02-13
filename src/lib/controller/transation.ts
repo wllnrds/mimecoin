@@ -1,3 +1,4 @@
+import { Namespace } from '@/lib/controller/namespace';
 import bcrypt from 'bcrypt'
 import { db } from "../database"
 import { TransactionStatus, TransactionType } from "../database/db"
@@ -274,6 +275,31 @@ export class Transaction{
         
         await db.transaction().execute( async (trx) => {
             const copies : Array<any> = [];
+
+            if( ['deposit','refund','bonus','cashback'].includes( this.type)){
+                const limits : any = trx.selectFrom("Namespace")
+                    .where("Namespace.code","is",this.namespaceCode)
+                    .innerJoin("NamespaceAccount","Namespace.code","NamespaceAccount.namespaceCode")
+                    .select((eb) => [
+                        "Namespace.id",
+                        "Namespace.code",
+                        eb.fn.sum("NamespaceAccount.balance").as("currentOffer"),
+                        eb.selectFrom("NamespaceLimit")
+                        .whereRef("NamespaceLimit.idNamespace","=","Namespace.id")
+                        .where( eb => eb.and([
+                            eb('active','=',true),
+                            eb.or([
+                                eb('expiresAt','>',new Date()),
+                                eb('expiresAt','is', null),
+                            ]),
+                        ])).select( gl => gl.fn.sum("NamespaceLimit.maxOffer").as("maxOffer")).groupBy("Namespace.id").as("maxLimit")
+                    ])
+                    .groupBy("Namespace.id")
+                
+                if( limits.currentOffer >= limits.maxLimit  ){
+                    throw new Error(`This namespace reached mint limit. Current offer is ${ limits.currentOffer } tokens.`);
+                }
+            }
 
             if( accountSource ){
                 await trx.updateTable('NamespaceAccount').set((eb)=>({
