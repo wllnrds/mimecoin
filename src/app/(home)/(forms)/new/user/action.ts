@@ -3,7 +3,6 @@
 import { User } from "@/lib/controller/user";
 
 export async function CreateUser( formdata : FormData ){
-    console.log( formdata )
     const newUser : {
         name: string,
         email: string,
